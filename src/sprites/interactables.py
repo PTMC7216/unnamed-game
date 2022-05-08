@@ -1,24 +1,26 @@
 import pygame as pg
+from src.utils import Spritesheet
+from .sprite import Sprite
 
 
 class Interactable:
     def __init__(self, game, x, y, interactable_name):
-        self.game = game
-
         interactable_dict = {
             "Wooden Chest": WoodenChest
         }
-
         interactable_dict[interactable_name](game, x, y)
 
 
-class ChestCon(pg.sprite.Sprite):
-    def __init__(self, game):
+class ChestCon(Sprite):
+    def __init__(self, game, x, y):
         self.game = game
         self._layer = -2
         self.adjustable_layer = False
-        pg.sprite.Sprite.__init__(self, self.game.interactables, self.game.all_sprites)
-        self.ident = "chest"
+        Sprite.__init__(self, game, x, y, self.game.interactables)
+
+        self.spritesheet = self.game.dcss1
+
+        self.subtype = "chest"
 
     def open(self):
         self.image = self.opened_img
@@ -26,14 +28,12 @@ class ChestCon(pg.sprite.Sprite):
 
 class WoodenChest(ChestCon):
     def __init__(self, game, x, y):
-        ChestCon.__init__(self, game)
+        super().__init__(game, x, y)
 
-        self.closed_img = self.game.dcss1.image_at(44, 46, 1, 1)
-        self.opened_img = self.game.dcss1.image_at(45, 46, 1, 1)
+        self.closed_img = self.spritesheet.image_at(44, 46, 1, 1)
+        self.opened_img = self.spritesheet.image_at(45, 46, 1, 1)
 
-        self.image = self.closed_img
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
+        self.imgrect_center(self.closed_img)
 
         self.name = "Wooden Chest"
 

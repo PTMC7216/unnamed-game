@@ -1,7 +1,7 @@
 import pygame as pg
+from .sprite import Sprite
+from src.allocs.stats import Stats
 from src.states.dialoguewin import DialogueWin
-from src.utils import Spritesheet
-from .stats import Stats
 
 
 class NPC:
@@ -10,51 +10,74 @@ class NPC:
 
         npc_dict = {
             "Green Square": GreenSquare,
+            "Yellow Square": YellowSquare,
             "Blue Square": BlueSquare
         }
 
         npc_dict[npc_name](game, x, y)
 
 
-class NPCCon(pg.sprite.Sprite, Stats):
-    def __init__(self, game):
+class NPCCon(Sprite, Stats):
+    def __init__(self, game, x, y):
         self.game = game
         self.adjustable_layer = True
-        pg.sprite.Sprite.__init__(self, self.game.npcs, self.game.all_sprites)
+        Sprite.__init__(self, game, x, y, self.game.npcs)
 
-        Stats.__init__(self)
-        self.hostility = 0
+        Stats.__init__(
+            self,
+            lvl=1,
+            hp=9,
+            strength=1,
+            dexterity=1,
+            agility=1,
+            vitality=1,
+            intelligence=1,
+            charisma=1,
+            alignment=5)
 
         self.dialogue_section = "check"
         self.dialogue_counter = 0
         self.dialogue_memory = []
 
-    def interaction(self):
+    def interact(self):
         self.game.select_sound.play()
         DialogueWin(self.game, self).enter_state()
 
 
+# Speaker type: only engages in dialogue
 class GreenSquare(NPCCon):
     def __init__(self, game, x, y):
-        NPCCon.__init__(self, game)
+        super().__init__(game, x, y)
 
+        # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((0, 150, 0))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        # self.spritesheet = Spritesheet(self.game, 'name.png')
-        # self.image = self.spritesheet.image_at(1, 0, 1, 1)
-        # self.rect = self.image.get_rect()
-        # self.rect.center = (x, y)
-
         self.name = "Green Square"
 
 
+# Trader type: can open a trade window through dialogue
+class YellowSquare(NPCCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+
+        # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
+        self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
+        self.image.fill((150, 150, 0))
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+        self.name = "Yellow Square"
+
+
+# Combatant type: only engages in combat
 class BlueSquare(NPCCon):
     def __init__(self, game, x, y):
-        NPCCon.__init__(self, game)
+        super().__init__(game, x, y)
 
+        # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((0, 0, 150))
         self.rect = self.image.get_rect()

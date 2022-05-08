@@ -50,7 +50,7 @@ class Game:
         self.npcs = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
         self.closed_doors = pg.sprite.Group()
-        self.open_doors = pg.sprite.Group()
+        self.opened_doors = pg.sprite.Group()
         self.interactables = pg.sprite.Group()
         self.items = pg.sprite.Group()
 

@@ -1,22 +1,33 @@
 import pygame as pg
+from .sprite import Sprite
+from src.allocs.stats import Stats
 from src.states.pausewin import PauseWin
-from src.utils import Spritesheet
-from .stats import Stats
 from math import ceil
 
 
-class Player(pg.sprite.Sprite, Stats):
+class Player(Sprite, Stats):
     def __init__(self, game, x, y):
         self.game = game
         self.adjustable_layer = True
-        pg.sprite.Sprite.__init__(self, self.game.player, self.game.all_sprites)
+        Sprite.__init__(self, game, x, y, self.game.player)
 
-        self.spritesheet = Spritesheet(self.game, 'dcss2.png')
-        self.image = self.spritesheet.image_at(1, 0, 1, 1)
-        self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.spritesheet = self.game.dcss2
 
-        Stats.__init__(self)
+        self.imgrect_center(self.spritesheet.image_at(1, 0, 1, 1))
+
+        Stats.__init__(
+            self,
+            lvl=1,
+            hp=9,
+            strength=1,
+            dexterity=1,
+            agility=1,
+            vitality=1,
+            intelligence=1,
+            charisma=1,
+            alignment=5)
+
+        self.combat_mode = False
 
         self.inventory = []
 
@@ -52,34 +63,35 @@ class Player(pg.sprite.Sprite, Stats):
                                      "dokill": False}
 
     def interact(self):
+        # TODO: shift key modifier for prioritizing certain actions during overlap
         if pg.sprite.spritecollide(**self.item_collision_kwargs):
-            items = pg.sprite.spritecollide(**self.item_collision_kwargs)
-            item = items[-1]
+            item = pg.sprite.spritecollide(**self.item_collision_kwargs)[-1]
             item.pickup()
 
         elif pg.sprite.spritecollide(**self.door_collision_kwargs):
-            doors = pg.sprite.spritecollide(**self.door_collision_kwargs)
-            door = doors[-1]
-            inventory_check = [item.name for item in self.inventory]
+            door = pg.sprite.spritecollide(**self.door_collision_kwargs)[-1]
             if door.key_req is None:
                 door.open()
                 print(f"Opened the {door.name.lower()}.")
-            elif door.key_req in inventory_check:
-                door.open()
-                print(f"Opened the {door.name.lower()} with the {door.key_req.lower()}.")
             else:
-                print(door.desc)
+                inventory_check = [item.name for item in self.inventory]
+                if door.key_req in inventory_check:
+                    door.open()
+                    print(f"Opened the {door.name.lower()} with the {door.key_req.lower()}.")
+                else:
+                    print(door.desc)
 
         elif pg.sprite.spritecollide(**self.interactable_collision_kwargs):
-            interactables = pg.sprite.spritecollide(**self.interactable_collision_kwargs)
-            interactable = interactables[-1]
-            if interactable.ident == "chest":
+            interactable = pg.sprite.spritecollide(**self.interactable_collision_kwargs)[-1]
+            if interactable.subtype == "chest":
                 interactable.open()
 
         elif pg.sprite.spritecollide(**self.npc_collision_kwargs):
-            npcs = pg.sprite.spritecollide(**self.npc_collision_kwargs)
-            npc = npcs[-1]
-            npc.interaction()
+            npc = pg.sprite.spritecollide(**self.npc_collision_kwargs)[-1]
+            if self.combat_mode:
+                self.attack(npc)
+            else:
+                npc.interact()
 
     def menu(self):
         self.game.select_sound.play()
@@ -106,7 +118,9 @@ class Player(pg.sprite.Sprite, Stats):
                 if event.key == pg.K_x:
                     self.menu()
                 if event.key == pg.K_LSHIFT:
-                    pass
+                    # TODO: sprite or ui indication of current mode
+                    self.combat_mode = not self.combat_mode
+                    print(self.combat_mode)
                 if event.key == pg.K_UP:
                     self.dy.insert(0, -self.movespeed)
                     self.direction.insert(0, 'up')
