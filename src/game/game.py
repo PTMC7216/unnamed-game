@@ -4,6 +4,7 @@ import states
 import sprites
 import tilemap
 from time import time
+from statistics import mean
 
 
 class Game:
@@ -77,14 +78,29 @@ class Game:
         self.clk = pg.time.Clock()
         self.time_base = 0
         self.dt = 0
+        self.dt_i = 0
+        self.dt_arr = [0] * 60
 
-    def get_dt(self):
+    def update_dt(self):
         now = time()
         self.dt = now - self.time_base
         self.time_base = now
 
+    def update_dt_avg(self):
+        self.dt_i += 1
+        if self.dt_i >= 60:
+            self.dt_i = 0
+        self.dt_arr[self.dt_i] = self.dt
+
+    def dt_trunc(self):
+        return utils.funcs.truncate(self.dt, 3)
+
+    def dt_truncavg(self):
+        return utils.funcs.truncate(mean(self.dt_arr), 3)
+
     def update(self):
-        self.get_dt()
+        self.update_dt()
+        self.update_dt_avg()
         self.state_stack[-1].update()
 
     def render(self):

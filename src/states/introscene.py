@@ -51,7 +51,7 @@ def game_intro(self):
     t0 = time()
     # intro loop
     while self.state == "Intro":
-        self.get_dt()
+        # self.game.dt
 
         t1 = time()
 

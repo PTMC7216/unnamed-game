@@ -19,7 +19,7 @@ class Stats:
         # TODO: confirmation to attack non-hostiles if alignment > 0
         self.alignment = alignment
 
-        self.movespeed = 400
+        self.movespeed = 300
 
         self.hand = [""] * 2
         self.accessory = [""] * 4

@@ -203,36 +203,42 @@ class Player(Sprite, Stats):
                 self.rect.x += 0
 
     def traversal(self):
+        dt = self.game.dt_truncavg()
+        if dt > 0.2:
+            dt = self.game.dt_trunc()
+
+        print(f"DT: {dt:<25} FLAT: {self.movespeed * dt:<25} DIAG: {(self.movespeed * 0.8) * dt}")
+
         # rounding negatives up with ceil(), while leaving positives to round down.
         # this counteracts the movement issues caused by pygame's default truncation.
         if self.dy and self.dx:
             if self.dy[0] < 0:
-                self.rect.y += ceil((self.dy[0] * 0.8) * self.game.dt)
+                self.rect.y += ceil((self.dy[0] * 0.8) * dt)
                 self.collisions('y')
             elif self.dy[0] > 0:
-                self.rect.y += (self.dy[0] * 0.8) * self.game.dt
+                self.rect.y += (self.dy[0] * 0.8) * dt
                 self.collisions('y')
             if self.dx[0] < 0:
-                self.rect.x += ceil((self.dx[0] * 0.8) * self.game.dt)
+                self.rect.x += ceil((self.dx[0] * 0.8) * dt)
                 self.collisions('x')
             elif self.dx[0] > 0:
-                self.rect.x += (self.dx[0] * 0.8) * self.game.dt
+                self.rect.x += (self.dx[0] * 0.8) * dt
                 self.collisions('x')
 
         elif self.dy:
             if self.dy[0] < 0:
-                self.rect.y += ceil(self.dy[0] * self.game.dt)
+                self.rect.y += ceil(self.dy[0] * dt)
                 self.collisions('y')
             elif self.dy[0] > 0:
-                self.rect.y += self.dy[0] * self.game.dt
+                self.rect.y += self.dy[0] * dt
                 self.collisions('y')
 
         elif self.dx:
             if self.dx[0] < 0:
-                self.rect.x += ceil(self.dx[0] * self.game.dt)
+                self.rect.x += ceil(self.dx[0] * dt)
                 self.collisions('x')
             elif self.dx[0] > 0:
-                self.rect.x += self.dx[0] * self.game.dt
+                self.rect.x += self.dx[0] * dt
                 self.collisions('x')
 
     def update(self):
