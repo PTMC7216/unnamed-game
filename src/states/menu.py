@@ -1,11 +1,14 @@
 import pygame as pg
+import src.utils as utils
 from .state import State
 
 
 class Menu(State):
     def __init__(self, game):
+        super().__init__(game)
         self.game = game
-        State.__init__(self, game)
+
+        self.framer = utils.Framer(self.game)
 
         self.keybind = {
             "esc": False,
@@ -16,6 +19,13 @@ class Menu(State):
             "z": False,
             "x": False
         }
+
+        self.selector_rect = pg.Rect(0, 0, 20, 20)
+        self.selector_offset = {"x": -90, "y": -2}
+
+        self.choices = []
+        self.index_spacing = 40
+        self.index = 0
 
     def check_events(self):
         for event in pg.event.get():
@@ -61,3 +71,23 @@ class Menu(State):
         if pg.key.get_pressed()[pg.K_RIGHT]:
             self.game.player.sprite.dx.insert(0, self.game.player.sprite.movespeed)
             self.game.player.sprite.direction.insert(0, 'right')
+
+    def position_selector(self, pos, offx, offy):
+        self.selector_offset = {"x": offx, "y": offy}
+        self.selector_rect.center = ((pos["x"] + self.selector_offset["x"]),
+                                     (pos["y"] + self.selector_offset["y"]))
+
+    def draw_selector(self, **kwargs):
+        utils.ptext.draw(">", center=self.selector_rect.center, **kwargs)
+
+    def move_selector(self):
+        if self.keybind["up"]:
+            self.game.selector_sound.play()
+            self.index = (self.index - 1) % len(self.choices)
+            self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
+                                         (self.index * self.index_spacing)
+        elif self.keybind["down"]:
+            self.game.selector_sound.play()
+            self.index = (self.index + 1) % len(self.choices)
+            self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
+                                         (self.index * self.index_spacing)

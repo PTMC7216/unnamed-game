@@ -8,53 +8,46 @@ from .pausewin import PauseWin
 
 class DialogueWin(Menu):
     def __init__(self, game, npc):
-        Menu.__init__(self, game)
+        super().__init__(game)
         self.game = game
         self.npc = npc
 
-        self.framer = utils.Framer(self.game)
+        self.name = "Dialogue Window"
+
         self.typewriter = utils.Typewriter(self.game)
 
-        self.main_frame = self.framer.make_centered_frame(1.2, 3.6)
+        self.frame = self.framer.make_lower_frame(1.2, 3.6)
         self.gap = 20
         self.padding = 15
 
-        self.portrait_win_surf = pg.Surface((self.main_frame.h, self.main_frame.h)).convert()
-        self.portrait_win_surf.fill((0, 0, 0))
-        self.portrait_win_rect = self.portrait_win_surf.get_rect(
-            topleft=(self.main_frame.x, self.main_frame.y))
-        self.portrait_pos = (self.portrait_win_rect.x + self.padding,
-                             self.portrait_win_rect.y + self.padding)
+        self.portrait_panel = \
+            self.framer.make_panel(self.frame.h, self.frame.h,
+                                   topleft=(self.frame.x, self.frame.y))
 
-        self.text_win_surf = pg.Surface((self.main_frame.w - self.main_frame.h - self.gap, self.main_frame.h)).convert()
-        self.text_win_surf.fill((0, 0, 0))
-        self.text_win_rect = self.text_win_surf.get_rect(
-            topleft=(self.main_frame.x + self.main_frame.h + self.gap, self.main_frame.y))
-        self.speaker_pos = {"x": self.text_win_rect.x + self.padding,
-                            "y": self.text_win_rect.y + self.padding}
-        self.text_pos = {"x": self.text_win_rect.x + self.padding,
-                         "y": self.text_win_rect.y + self.padding + 40}
-        self.choice1_pos = {"x": self.text_win_rect.x + self.padding,
-                            "y": self.text_win_rect.y + 120}
-        self.choice2_pos = {"x": self.text_win_rect.x + self.padding,
-                            "y": self.text_win_rect.y + 140}
-        self.choice3_pos = {"x": self.text_win_rect.x + self.padding,
-                            "y": self.text_win_rect.y + 160}
+        self.portrait_pos = self.framer.set_pos(self.portrait_panel, self.padding)
 
-        self.text_kwargs = {"width": self.text_win_rect.w - self.padding, "owidth": 1, "ocolor": (0, 0, 0)}
+        self.text_panel = \
+            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h,
+                                   topleft=(self.frame.x + self.frame.h + self.gap, self.frame.y))
+
+        self.speaker_pos = self.framer.set_pos(self.text_panel, self.padding)
+        self.text_pos = self.framer.set_pos(self.text_panel, self.padding, y=40)
+        self.pos0 = self.framer.set_pos(self.text_panel, self.padding, y=120)
+        self.pos1 = self.framer.set_pos(self.text_panel, self.padding, y=140)
+        self.pos2 = self.framer.set_pos(self.text_panel, self.padding, y=160)
+
+        self.position_selector(self.pos0, -25, -2)
+
+        self.choices = []
+        self.index_spacing = 20
+
+        self.text_kwargs = {"width": self.text_panel["rect"].w - self.padding, "owidth": 1, "ocolor": (0, 0, 0)}
         self.choice_kwargs = {"fontsize": 35, "owidth": 1, "ocolor": (0, 0, 0)}
-
-        self.selector_rect = pg.Rect(0, 0, 20, 20)
-        self.selector_offset = {"x": -25, "y": -2}
-        self.selector_rect.center = ((self.choice1_pos["x"] + self.selector_offset["x"]),
-                                     (self.choice1_pos["y"] + self.selector_offset["y"]))
 
         self.speaker = None
         self.portrait = None
         self.text = None
         self.text_index = 0
-        self.choices = []
-        self.choices_index = 0
         self.selecting = False
         self.c1 = None
         self.c2 = None
@@ -62,7 +55,6 @@ class DialogueWin(Menu):
         self.event_link = None
         self.link = None
         self.quiet_link = None
-
         self.dialogue = None
 
         self.get_dialogue()
@@ -70,7 +62,7 @@ class DialogueWin(Menu):
     def refresh_dialogue(self):
         self.text_index = 0
         self.choices = []
-        self.choices_index = 0
+        self.index = 0
         self.selecting = False
         self.c1 = None
         self.c2 = None
@@ -119,8 +111,8 @@ class DialogueWin(Menu):
                     f"{data[self.npc.dialogue_section]['portrait']}.jpg").convert()
                 # TODO: remove image scaling once ui size is decided
                 self.portrait = pg.transform.scale(self.portrait,
-                                                   (self.portrait_win_rect.w - self.padding * 2,
-                                                    self.portrait_win_rect.h - self.padding * 2))
+                                                   (self.portrait_panel["rect"].w - self.padding * 2,
+                                                    self.portrait_panel["rect"].h - self.padding * 2))
 
                 # TEXT
                 if "text" in data[self.npc.dialogue_section]:
@@ -212,12 +204,12 @@ class DialogueWin(Menu):
             self.exit_state()
 
     def select_choice(self):
-        if list(self.choices[self.choices_index].values())[0] == self.c1:
-            self.npc.dialogue_section = list(self.choices[self.choices_index])[0]
-        elif list(self.choices[self.choices_index].values())[0] == self.c2:
-            self.npc.dialogue_section = list(self.choices[self.choices_index])[0]
-        elif list(self.choices[self.choices_index].values())[0] == self.c3:
-            self.npc.dialogue_section = list(self.choices[self.choices_index])[0]
+        if list(self.choices[self.index].values())[0] == self.c1:
+            self.npc.dialogue_section = list(self.choices[self.index])[0]
+        elif list(self.choices[self.index].values())[0] == self.c2:
+            self.npc.dialogue_section = list(self.choices[self.index])[0]
+        elif list(self.choices[self.index].values())[0] == self.c3:
+            self.npc.dialogue_section = list(self.choices[self.index])[0]
         self.refresh_dialogue()
 
     def draw_selector(self):
@@ -228,42 +220,38 @@ class DialogueWin(Menu):
         if self.choices and self.selecting:
             if self.keybind["up"]:
                 self.game.selector_sound.play()
-                self.choices_index = (self.choices_index - 1) % len(self.choices)
-                self.selector_rect.centery = \
-                    (self.choice1_pos["y"] + self.selector_offset["y"]) + (self.choices_index * 20)
+                self.index = (self.index - 1) % len(self.choices)
+                self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
+                                             (self.index * self.index_spacing)
 
             elif self.keybind["down"]:
                 self.game.selector_sound.play()
-                self.choices_index = (self.choices_index + 1) % len(self.choices)
-                self.selector_rect.centery = \
-                    (self.choice1_pos["y"] + self.selector_offset["y"]) + (self.choices_index * 20)
+                self.index = (self.index + 1) % len(self.choices)
+                self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
+                                             (self.index * self.index_spacing)
 
     def update(self):
         self.check_events()
         self.move_selector()
-
         if self.keybind["z"]:
             self.advance_dialogue()
             self.game.select_sound.play()
-
         elif self.keybind["x"]:
             if not self.selecting:
                 self.advance_dialogue()
             self.game.select_sound.play()
-
         elif self.keybind["esc"]:
             self.game.select_sound.play()
-            PauseWin(self.game).enter_state()
-
+            self.exit_state()
         self.key_reset()
 
     def render(self):
         self.prev_state.render()
 
-        self.game.screen.blit(self.portrait_win_surf, self.portrait_win_rect)
-        self.game.screen.blit(self.portrait, self.portrait_pos)
+        self.game.screen.blit(self.portrait_panel["surf"], self.portrait_panel["rect"])
+        self.game.screen.blit(self.portrait, (self.portrait_pos["x"], self.portrait_pos["y"]))
 
-        self.game.screen.blit(self.text_win_surf, self.text_win_rect)
+        self.game.screen.blit(self.text_panel["surf"], self.text_panel["rect"])
 
         utils.ptext.draw(self.speaker, (self.speaker_pos["x"], self.speaker_pos["y"]),
                          **self.text_kwargs)
@@ -271,8 +259,8 @@ class DialogueWin(Menu):
         utils.ptext.draw(self.typewriter.print(self.dialogue), (self.text_pos["x"], self.text_pos["y"]),
                          **self.text_kwargs)
 
-        utils.ptext.draw(self.c1, (self.choice1_pos["x"], self.choice1_pos["y"]), **self.choice_kwargs)
-        utils.ptext.draw(self.c2, (self.choice2_pos["x"], self.choice2_pos["y"]), **self.choice_kwargs)
-        utils.ptext.draw(self.c3, (self.choice3_pos["x"], self.choice3_pos["y"]), **self.choice_kwargs)
+        utils.ptext.draw(self.c1, (self.pos0["x"], self.pos0["y"]), **self.choice_kwargs)
+        utils.ptext.draw(self.c2, (self.pos1["x"], self.pos1["y"]), **self.choice_kwargs)
+        utils.ptext.draw(self.c3, (self.pos2["x"], self.pos2["y"]), **self.choice_kwargs)
 
         self.draw_selector()

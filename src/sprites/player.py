@@ -2,6 +2,7 @@ import pygame as pg
 from .sprite import Sprite
 from src.allocs.stats import Stats
 from src.states.pausewin import PauseWin
+from src.states.notifywin import NotifyWin
 from math import ceil
 
 
@@ -29,6 +30,7 @@ class Player(Sprite, Stats):
 
         self.combat_mode = False
 
+        # TODO: add inventory limit or check before adding new items to inventory
         self.inventory = []
 
         self.dy = []
@@ -72,19 +74,17 @@ class Player(Sprite, Stats):
             door = pg.sprite.spritecollide(**self.door_collision_kwargs)[-1]
             if door.key_req is None:
                 door.open()
-                print(f"Opened the {door.name.lower()}.")
+                NotifyWin(self.game, f"Opened the {door.name.lower()}.", 1).enter_state()
             else:
-                inventory_check = [item.name for item in self.inventory]
-                if door.key_req in inventory_check:
-                    door.open()
-                    print(f"Opened the {door.name.lower()} with the {door.key_req.lower()}.")
-                else:
-                    print(door.desc)
+                NotifyWin(self.game, f"{door.desc}.", 1).enter_state()
 
         elif pg.sprite.spritecollide(**self.interactable_collision_kwargs):
             interactable = pg.sprite.spritecollide(**self.interactable_collision_kwargs)[-1]
             if interactable.subtype == "chest":
                 interactable.open()
+                # notice = [f"Opened the {interactable.name}.",
+                #           f"Found {interactable.contents}."]
+                # NotifyWin(self.game, notice, 1).enter_state()
 
         elif pg.sprite.spritecollide(**self.npc_collision_kwargs):
             npc = pg.sprite.spritecollide(**self.npc_collision_kwargs)[-1]
@@ -207,7 +207,7 @@ class Player(Sprite, Stats):
         if dt > 0.2:
             dt = self.game.dt_trunc()
 
-        print(f"DT: {dt:<25} FLAT: {self.movespeed * dt:<25} DIAG: {(self.movespeed * 0.8) * dt}")
+        # print(f"DT: {dt:<25} FLAT: {self.movespeed * dt:<25} DIAG: {(self.movespeed * 0.8) * dt}")
 
         # rounding negatives up with ceil(), while leaving positives to round down.
         # this counteracts the movement issues caused by pygame's default truncation.

@@ -38,7 +38,7 @@ class WoodenDoor(DoorCon):
         self.imgrect_topleft(self.closed_img)
 
         self.name = "Wooden Door"
-        self.desc = "This door is locked with brass."
+        self.desc = "This door is locked with brass"
         self.key_req = "Brass Key"
 
 
@@ -52,7 +52,7 @@ class WoodenDoubleDoorNS(DoorCon):
         self.imgrect_topleft(self.closed_img)
 
         self.name = "Wooden Double Door"
-        self.desc = "This door is locked with brass."
+        self.desc = "This door is locked with brass"
         self.key_req = "Brass Key"
 
 
@@ -66,5 +66,5 @@ class WoodenDoubleDoorWE(DoorCon):
         self.imgrect_topleft(self.closed_img)
 
         self.name = "Wooden Double Door"
-        self.desc = "This door is locked with brass."
+        self.desc = "This door is locked with brass"
         self.key_req = "Brass Key"

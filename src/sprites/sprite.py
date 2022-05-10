@@ -17,3 +17,6 @@ class Sprite(pg.sprite.Sprite):
     def imgrect_topleft(self, img):
         self.__imgrect(img)
         self.rect.topleft = (self.x, self.y)
+
+    def __repr__(self):
+        return self.name

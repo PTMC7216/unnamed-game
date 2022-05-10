@@ -8,7 +8,10 @@ class Overworld(State):
         self.game = game
         pg.mixer.music.unload()
 
+        self.name = "Overworld"
+
     def fog(self):
+        # TODO: implement overworld fog
         pass
 
     def update(self):

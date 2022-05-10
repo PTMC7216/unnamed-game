@@ -6,44 +6,28 @@ from .overworld import Overworld
 
 class MainMenu(Menu):
     def __init__(self, game):
+        super().__init__(game)
         self.game = game
-        Menu.__init__(self, game)
 
-        self.title_pos = {"x": self.game.screen_res["x"] // 2,
-                          "y": self.game.screen_res["y"] // 2 - 40}
+        self.name = "Main Menu"
 
-        self.start_pos = {"x": self.game.screen_res["x"] // 2,
-                          "y": self.game.screen_res["y"] // 2 + 50}
+        self.frame = self.framer.make_center_frame()
+        self.panel = self.framer.make_panel(self.frame.w, self.frame.h,
+                                            topleft=(self.frame.x, self.frame.y))
 
-        self.options_pos = {"x": self.game.screen_res["x"] // 2,
-                            "y": self.game.screen_res["y"] // 2 + 90}
+        self.pos_adj = {"x": self.panel["rect"].w // 2,
+                        "y": self.panel["rect"].h // 2}
 
-        self.credits_pos = {"x": self.game.screen_res["x"] // 2,
-                            "y": self.game.screen_res["y"] // 2 + 130}
+        self.title_pos = self.framer.set_pos(self.panel, x=self.pos_adj["x"], y=self.pos_adj["y"] - 40)
+        self.pos0 = self.framer.set_pos(self.panel, x=self.pos_adj["x"], y=self.pos_adj["y"] + 50)
+        self.pos1 = self.framer.set_pos(self.panel, x=self.pos_adj["x"], y=self.pos_adj["y"] + 90)
+        self.pos2 = self.framer.set_pos(self.panel, x=self.pos_adj["x"], y=self.pos_adj["y"] + 130)
+        self.pos3 = self.framer.set_pos(self.panel, x=self.pos_adj["x"], y=self.pos_adj["y"] + 170)
 
-        self.quit_pos = {"x": self.game.screen_res["x"] // 2,
-                         "y": self.game.screen_res["y"] // 2 + 170}
+        self.position_selector(self.pos0, -90, -2)
 
-        self.menu_options = ["Start Game", "Options", "Credits", "Quit Game"]
-        self.index = 0
-
-        self.selector_rect = pg.Rect(0, 0, 20, 20)
-        self.selector_offset = {"x": -90, "y": -2}
-        self.selector_rect.center = ((self.start_pos["x"] + self.selector_offset["x"]),
-                                     (self.start_pos["y"] + self.selector_offset["y"]))
-
-    def draw_selector(self):
-        utils.ptext.draw(">", center=self.selector_rect.center)
-
-    def move_selector(self):
-        if self.keybind["up"]:
-            self.game.selector_sound.play()
-            self.index = (self.index - 1) % len(self.menu_options)
-            self.selector_rect.centery = (self.start_pos["y"] + self.selector_offset["y"]) + (self.index * 40)
-        elif self.keybind["down"]:
-            self.game.selector_sound.play()
-            self.index = (self.index + 1) % len(self.menu_options)
-            self.selector_rect.centery = (self.start_pos["y"] + self.selector_offset["y"]) + (self.index * 40)
+        self.choices = ["Start Game", "Options", "Credits", "Quit Game"]
+        self.index_spacing = 40
 
     def update(self):
         self.check_events()
@@ -54,38 +38,40 @@ class MainMenu(Menu):
         self.key_reset()
 
     def render(self):
-        self.game.screen.blit(self.game.background, (0, 0))
+        self.game.screen.blit(self.panel["surf"], self.panel["rect"])
 
         utils.ptext.draw("Main Menu", center=(self.title_pos["x"], self.title_pos["y"]))
 
-        utils.ptext.draw("Start Game", center=(self.start_pos["x"], self.start_pos["y"]))
-        utils.ptext.draw("Options", center=(self.options_pos["x"], self.options_pos["y"]))
-        utils.ptext.draw("Credits", center=(self.credits_pos["x"], self.credits_pos["y"]))
-        utils.ptext.draw("Quit Game", center=(self.quit_pos["x"], self.quit_pos["y"]))
+        utils.ptext.draw(self.choices[0], center=(self.pos0["x"], self.pos0["y"]))
+        utils.ptext.draw(self.choices[1], center=(self.pos1["x"], self.pos1["y"]))
+        utils.ptext.draw(self.choices[2], center=(self.pos2["x"], self.pos2["y"]))
+        utils.ptext.draw(self.choices[3], center=(self.pos3["x"], self.pos3["y"]))
 
         self.draw_selector()
 
     def transition_state(self):
-        if self.menu_options[self.index] == "Start Game":
+        if self.choices[self.index] == "Start Game":
             self.movement_key_check()
             Overworld(self.game).enter_state()
 
-        elif self.menu_options[self.index] == "Options":
+        elif self.choices[self.index] == "Options":
             OptionsMenu(self.game).enter_state()
 
-        elif self.menu_options[self.index] == "Credits":
+        elif self.choices[self.index] == "Credits":
             CreditsMenu(self.game).enter_state()
 
-        elif self.menu_options[self.index] == "Quit Game":
+        elif self.choices[self.index] == "Quit Game":
             self.game.active = False
 
 
 class OptionsMenu(MainMenu):
     def __init__(self, game):
+        super().__init__(game)
         self.game = game
-        MainMenu.__init__(self, game)
 
-        self.menu_options = ["Volume", "Controls"]
+        self.name = "Options Menu"
+
+        self.choices = ["Volume", "Controls"]
         self.index = 0
 
     def update(self):
@@ -100,27 +86,29 @@ class OptionsMenu(MainMenu):
         self.key_reset()
 
     def render(self):
-        self.game.screen.blit(self.game.background, (0, 0))
+        self.game.screen.blit(self.panel["surf"], self.panel["rect"])
 
         utils.ptext.draw("Options", center=(self.title_pos["x"], self.title_pos["y"]))
 
-        utils.ptext.draw("Volume", center=(self.start_pos["x"], self.start_pos["y"]))
-        utils.ptext.draw("Controls", center=(self.options_pos["x"], self.options_pos["y"]))
+        utils.ptext.draw(self.choices[0], center=(self.pos0["x"], self.pos0["y"]))
+        utils.ptext.draw(self.choices[1], center=(self.pos1["x"], self.pos1["y"]))
 
         self.draw_selector()
 
     def transition_state(self):
-        if self.menu_options[self.index] == "Volume":
+        if self.choices[self.index] == "Volume":
             pass
-        elif self.menu_options[self.index] == "Controls":
+        elif self.choices[self.index] == "Controls":
             pass
 
 
 class CreditsMenu(MainMenu):
     def __init__(self, game):
-        MainMenu.__init__(self, game)
+        super().__init__(game)
 
-        self.menu_options = []
+        self.name = "Credits Menu"
+
+        self.choices = []
         self.index = 0
 
     def update(self):
@@ -131,10 +119,10 @@ class CreditsMenu(MainMenu):
         self.key_reset()
 
     def render(self):
-        self.game.screen.blit(self.game.background, (0, 0))
+        self.game.screen.blit(self.panel["surf"], self.panel["rect"])
 
         utils.ptext.draw("Credits", center=(self.title_pos["x"], self.title_pos["y"]))
 
-        utils.ptext.draw("tiles: crawl", center=(self.start_pos["x"], self.start_pos["y"]))
-        utils.ptext.draw("ptext: cosmologicon", center=(self.options_pos["x"], self.options_pos["y"]))
-        utils.ptext.draw("...", center=(self.credits_pos["x"], self.credits_pos["y"]))
+        utils.ptext.draw("tiles: crawl", center=(self.pos0["x"], self.pos0["y"]))
+        utils.ptext.draw("ptext: cosmologicon", center=(self.pos1["x"], self.pos1["y"]))
+        utils.ptext.draw("...", center=(self.pos2["x"], self.pos2["y"]))

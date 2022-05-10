@@ -1,17 +1,17 @@
 import pygame as pg
 import src.utils as utils
 from .menu import Menu
-from .inventorywin import InventoryWin
+from .invcontextwin import *
 
 
-class PauseWin(Menu):
+class InventoryWin(Menu):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
 
-        self.name = "Pause Window"
+        self.name = "Inventory Window"
 
-        self.frame = self.framer.make_center_frame(3, 2)
+        self.frame = self.framer.make_center_frame(2, 2)
         self.panel = self.framer.make_panel(self.frame.w, self.frame.h,
                                             topleft=(self.frame.x, self.frame.y))
 
@@ -26,8 +26,17 @@ class PauseWin(Menu):
 
         self.position_selector(self.pos0, -90, -2)
 
-        self.choices = ["Resume", "Inventory", "Status", "Quit"]
+        self.choices = ["- - -"] * 4
+        for i, item in enumerate(self.game.player.sprite.inventory):
+            self.choices[i] = item.name
         self.index_spacing = 40
+
+        self.text_kwargs = {"owidth": 1, "ocolor": (0, 0, 0)}
+
+    def refresh(self):
+        self.choices = ["- - -"] * 4
+        for i, item in enumerate(self.game.player.sprite.inventory):
+            self.choices[i] = item.name
 
     def update(self):
         self.check_events()
@@ -38,18 +47,18 @@ class PauseWin(Menu):
         elif self.keybind["x"]:
             self.game.select_sound.play()
             self.movement_key_check()
-            self.exit_state()
+            self.exit_states(2)
         elif self.keybind["esc"]:
             self.game.select_sound.play()
             self.movement_key_check()
-            self.exit_state()
+            self.exit_states(2)
         self.key_reset()
 
     def render(self):
-        self.prev_state.render()
+        self.prev2_state.render()
         self.game.screen.blit(self.panel["surf"], self.panel["rect"])
 
-        utils.ptext.draw("PAUSED", center=(self.title_pos["x"], self.title_pos["y"]))
+        utils.ptext.draw("INVENTORY", center=(self.title_pos["x"], self.title_pos["y"]))
 
         utils.ptext.draw(self.choices[0], center=(self.pos0["x"], self.pos0["y"]))
         utils.ptext.draw(self.choices[1], center=(self.pos1["x"], self.pos1["y"]))
@@ -59,19 +68,7 @@ class PauseWin(Menu):
         self.draw_selector()
 
     def transition_state(self):
-        if self.choices[self.index] == "Resume":
-            self.movement_key_check()
-            self.exit_state()
-
-        elif self.choices[self.index] == "Inventory":
-            InventoryWin(self.game).enter_state()
-
-        elif self.choices[self.index] == "Status":
-            # TODO: implement status window
-            pass
-
-        elif self.choices[self.index] == "Quit":
-            pg.mixer.music.load('./data/music/ominous1.ogg')
-            pg.mixer.music.play(-1, 0.0, 10000)
-            while len(self.game.state_stack) > 1:
-                self.game.state_stack.pop()
+        selection = self.choices[self.index]
+        for item in self.game.player.sprite.inventory:
+            if item.name == selection:
+                InvContextWin(self.game, item).enter_state()
