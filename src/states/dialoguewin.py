@@ -30,19 +30,23 @@ class DialogueWin(Menu):
             self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h,
                                    topleft=(self.frame.x + self.frame.h + self.gap, self.frame.y))
 
+        self.choices_panel = \
+            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.5,
+                                   bottomleft=(self.frame.x + self.frame.h + self.gap, self.frame.y - self.gap))
+
         self.speaker_pos = self.framer.set_pos(self.text_panel, self.padding)
         self.text_pos = self.framer.set_pos(self.text_panel, self.padding, y=40)
-        self.pos0 = self.framer.set_pos(self.text_panel, self.padding, y=120)
-        self.pos1 = self.framer.set_pos(self.text_panel, self.padding, y=140)
-        self.pos2 = self.framer.set_pos(self.text_panel, self.padding, y=160)
+        self.pos0 = self.framer.set_pos(self.choices_panel, self.padding, y=0)
+        self.pos1 = self.framer.set_pos(self.choices_panel, self.padding, y=30)
+        self.pos2 = self.framer.set_pos(self.choices_panel, self.padding, y=60)
 
-        self.position_selector(self.pos0, -25, -2)
+        self.position_selector(self.pos0, -11, -2)
 
         self.choices = []
-        self.index_spacing = 20
+        self.index_spacing = 30
 
-        self.text_kwargs = {"width": self.text_panel["rect"].w - self.padding, "owidth": 1, "ocolor": (0, 0, 0)}
-        self.choice_kwargs = {"fontsize": 35, "owidth": 1, "ocolor": (0, 0, 0)}
+        self.text_kwargs = {"width": self.text_panel["rect"].w - self.padding}
+        self.choice_kwargs = {"width": self.choices_panel["rect"].w - self.padding, "fontsize": 35}
 
         self.speaker = None
         self.portrait = None
@@ -252,15 +256,15 @@ class DialogueWin(Menu):
         self.game.screen.blit(self.portrait, (self.portrait_pos["x"], self.portrait_pos["y"]))
 
         self.game.screen.blit(self.text_panel["surf"], self.text_panel["rect"])
-
         utils.ptext.draw(self.speaker, (self.speaker_pos["x"], self.speaker_pos["y"]),
                          **self.text_kwargs)
-
         utils.ptext.draw(self.typewriter.print(self.dialogue), (self.text_pos["x"], self.text_pos["y"]),
                          **self.text_kwargs)
 
-        utils.ptext.draw(self.c1, (self.pos0["x"], self.pos0["y"]), **self.choice_kwargs)
-        utils.ptext.draw(self.c2, (self.pos1["x"], self.pos1["y"]), **self.choice_kwargs)
-        utils.ptext.draw(self.c3, (self.pos2["x"], self.pos2["y"]), **self.choice_kwargs)
+        if self.selecting:
+            self.game.screen.blit(self.choices_panel["surf"], self.choices_panel["rect"])
+            utils.ptext.draw(self.c1, (self.pos0["x"], self.pos0["y"]), **self.choice_kwargs)
+            utils.ptext.draw(self.c2, (self.pos1["x"], self.pos1["y"]), **self.choice_kwargs)
+            utils.ptext.draw(self.c3, (self.pos2["x"], self.pos2["y"]), **self.choice_kwargs)
 
         self.draw_selector()
