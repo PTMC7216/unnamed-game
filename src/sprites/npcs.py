@@ -35,6 +35,7 @@ class NPCCon(Sprite, Stats):
             charisma=1,
             alignment=5)
 
+        self.flags = []
         self.dialogue_section = "check"
         self.dialogue_counter = 0
         self.dialogue_memory = []

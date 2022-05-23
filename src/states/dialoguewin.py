@@ -90,22 +90,35 @@ class DialogueWin(Menu):
         dialogue_file = self.npc.name.lower().replace(" ", "")
         with open(f'./data/dialogues/{dialogue_file}.json', 'r') as f:
             data = json.loads(f.read())
+            priority = []
 
             # INTRO CHECK
             if self.npc.dialogue_section == "check":
                 for checker in data[self.npc.dialogue_section]:
 
                     if "event_item" in checker:
-                        if not self.game.player.sprite.inventory:
+                        if self.game.player.sprite.inventory:
+                            for item in self.game.player.sprite.inventory:
+                                if item.name == checker["event_item"]:
+                                    priority.append(checker["event_link"])
+                        else:
                             self.dialogue_base()
-                        for item in self.game.player.sprite.inventory:
-                            if item.name == checker["event_item"]:
-                                self.event_link = checker["event_link"]
-                                self.npc.dialogue_section = self.event_link
-                                self.refresh_dialogue()
-                                self.set_dialogue()
-                            else:
-                                self.dialogue_base()
+                            break
+
+                    if "event_other" in checker:
+                        if self.npc.flags:
+                            for flag in self.npc.flags:
+                                if flag == checker["event_other"]:
+                                    priority.append(checker["event_link"])
+                        else:
+                            self.dialogue_base()
+                            break
+
+                if priority:
+                    self.event_link = priority[-1]
+                    self.npc.dialogue_section = self.event_link
+                    self.refresh_dialogue()
+                    self.set_dialogue()
 
             else:
                 # IDENTITY
@@ -147,18 +160,30 @@ class DialogueWin(Menu):
 
                         if "counter" in command and self.npc.dialogue_counter < (command["counter"] - 1):
                             self.npc.dialogue_counter += 1
+                            break
 
                         if "memorize" in command:
                             if command["memorize"] not in self.npc.dialogue_memory:
                                 self.npc.dialogue_memory.append(command["memorize"])
 
                         if "event_item" in command:
-                            for item in self.game.player.sprite.inventory:
-                                if item.name == command["event_item"]:
-                                    self.npc.dialogue_counter = 0
-                                    self.npc.dialogue_section = command["event_link"]
-                                    self.refresh_dialogue()
-                                    self.set_dialogue()
+                            if self.game.player.sprite.inventory:
+                                for item in self.game.player.sprite.inventory:
+                                    if item.name == command["event_item"]:
+                                        priority.append(command["event_link"])
+
+                        if "event_other" in command:
+                            if self.npc.flags:
+                                for flag in self.npc.flags:
+                                    if flag == command["event_other"]:
+                                        priority.append(command["event_link"])
+
+                        if priority:
+                            self.event_link = priority[-1]
+                            self.npc.dialogue_counter = 0
+                            self.npc.dialogue_section = self.event_link
+                            self.refresh_dialogue()
+                            self.set_dialogue()
 
                         if "link" in command:
                             self.npc.dialogue_counter = 0
