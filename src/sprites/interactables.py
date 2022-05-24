@@ -1,6 +1,7 @@
 import pygame as pg
 from src.utils import Spritesheet
 from .sprite import Sprite
+from src.states.notifywin import NotifyWin
 
 
 class Interactable:
@@ -23,6 +24,9 @@ class ChestCon(Sprite):
         self.subtype = "chest"
 
     def open(self):
+        NotifyWin(self.game, 1,
+                  f"Opened the {self.name.lower()}.",
+                  f"It's empty.").enter_state()
         self.image = self.opened_img
 
 
@@ -36,4 +40,3 @@ class WoodenChest(ChestCon):
         self.imgrect_center(self.closed_img)
 
         self.name = "Wooden Chest"
-

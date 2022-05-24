@@ -74,9 +74,9 @@ class Player(Sprite, Stats):
             door = pg.sprite.spritecollide(**self.door_collision_kwargs)[-1]
             if door.key_req is None:
                 door.open()
-                NotifyWin(self.game, f"Opened the {door.name.lower()}.", 1).enter_state()
+                NotifyWin(self.game, 1, f"Opened the {door.name.lower()}.").enter_state()
             else:
-                NotifyWin(self.game, f"{door.desc}.", 1).enter_state()
+                NotifyWin(self.game, 1, f"{door.desc}.").enter_state()
 
         elif pg.sprite.spritecollide(**self.interactable_collision_kwargs):
             interactable = pg.sprite.spritecollide(**self.interactable_collision_kwargs)[-1]

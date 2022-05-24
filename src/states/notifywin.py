@@ -4,11 +4,12 @@ from .menu import Menu
 
 
 class NotifyWin(Menu):
-    def __init__(self, game, notice, state_exits):
+    def __init__(self, game, state_exits, *notices):
         super().__init__(game)
         self.game = game
-        self.notice = notice
         self.state_exits = state_exits
+        self.notices = notices
+        self.notice = 0
 
         self.name = "Notification Window"
 
@@ -21,17 +22,23 @@ class NotifyWin(Menu):
 
         self.text_kwargs = {"width": self.panel["rect"].w - self.pad}
 
-        # TODO: implement multi-page capabilities, akin to DialogueWin
+        # TODO: implement choices
 
     def update(self):
         self.check_events()
+
         if self.keybind["z"] or self.keybind["x"] or self.keybind["esc"]:
-            self.game.select_sound.play()
-            self.movement_key_check()
-            self.exit_states(self.state_exits)
+            if len(self.notices) > 0 and self.notice < len(self.notices) - 1:
+                self.game.select_sound.play()
+                self.notice += 1
+            else:
+                self.game.select_sound.play()
+                self.movement_key_check()
+                self.exit_states(self.state_exits)
 
         self.key_reset()
 
     def render(self):
         self.game.screen.blit(self.panel["surf"], self.panel["rect"])
-        utils.ptext.draw(self.notice, (self.notification_pos["x"], self.notification_pos["y"]), **self.text_kwargs)
+        utils.ptext.draw(self.notices[self.notice], (self.notification_pos["x"], self.notification_pos["y"]),
+                         **self.text_kwargs)

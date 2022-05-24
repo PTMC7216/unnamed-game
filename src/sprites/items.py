@@ -29,12 +29,12 @@ class ItemCon(Sprite):
     def pickup(self):
         self.kill()
         self.game.player.sprite.inventory.append(self)
-        NotifyWin(self.game, f"{self.name} added to inventory.", 1).enter_state()
+        NotifyWin(self.game, 1, f"{self.name} added to inventory.").enter_state()
 
     def use(self):
         if not self.usable:
             notice = f"Can't use the {self.name}."
-            NotifyWin(self.game, notice, 1).enter_state()
+            NotifyWin(self.game, 1, notice).enter_state()
         else:
             if self.subtype == "consumable":
                 pass
@@ -49,23 +49,23 @@ class ItemCon(Sprite):
                     door = pg.sprite.spritecollide(**kwargs)[-1]
                     if door.key_req == self.name:
                         notice = f"Opened the {door.name.lower()} with the {self.name.lower()}."
-                        NotifyWin(self.game, notice, 4).enter_state()
+                        NotifyWin(self.game, 4, notice).enter_state()
                         door.open()
                     elif door.key_req != self.name:
                         notice = f"The {self.name.lower()} doesn't fit."
-                        NotifyWin(self.game, notice, 2).enter_state()
+                        NotifyWin(self.game, 2, notice).enter_state()
                 else:
                     notice = f"Nothing to use the {self.name.lower()} on."
-                    NotifyWin(self.game, notice, 1).enter_state()
+                    NotifyWin(self.game, 1, notice).enter_state()
 
             else:
                 notice = f"Used the {self.name}, but nothing happened."
-                NotifyWin(self.game, notice, 2).enter_state()
+                NotifyWin(self.game, 2, notice).enter_state()
 
     def equip(self):
         if not self.equipable:
             notice = f"Can't equip the {self.name}."
-            NotifyWin(self.game, notice, 1).enter_state()
+            NotifyWin(self.game, 1, notice).enter_state()
         elif not self.equipped:
             if self.subtype == "weapon":
                 self.game.player.sprite.hand[0] = self
@@ -76,10 +76,10 @@ class ItemCon(Sprite):
             self.equipped = not self.equipped
             self.game.player.sprite.update_substats()
             notice = f"Equipped the {self.name}."
-            NotifyWin(self.game, notice, 2).enter_state()
+            NotifyWin(self.game, 2, notice).enter_state()
         else:
             notice = f"The {self.name} is already equipped."
-            NotifyWin(self.game, notice, 1).enter_state()
+            NotifyWin(self.game, 1, notice).enter_state()
 
     def unequip(self):
         if self.equipped:
@@ -94,11 +94,11 @@ class ItemCon(Sprite):
             self.equipped = not self.equipped
             self.game.player.sprite.update_substats()
             notice = f"Unequipped the {self.name}."
-            NotifyWin(self.game, notice, 2).enter_state()
+            NotifyWin(self.game, 2, notice).enter_state()
 
     def examine(self):
         notice = self.desc
-        NotifyWin(self.game, notice, 1).enter_state()
+        NotifyWin(self.game, 1, notice).enter_state()
 
     def drop(self):
         if self.equipped:
@@ -121,7 +121,7 @@ class ItemCon(Sprite):
                 self.game.state_stack[i].refresh()
 
         notice = f"Dropped the {self.name}."
-        NotifyWin(self.game, notice, 2).enter_state()
+        NotifyWin(self.game, 2, notice).enter_state()
         Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, self.name)
 
 

@@ -82,7 +82,7 @@ class InvContextWin(Menu):
         elif self.choices[self.index] == "Equip":
             if not self.item.equipable:
                 notice = f"Can't equip the {self.item.name}."
-                NotifyWin(self.game, notice, 1).enter_state()
+                NotifyWin(self.game, 1, notice).enter_state()
             else:
                 self.choices[1] = "Unequip"
                 self.item.equip()
@@ -90,7 +90,7 @@ class InvContextWin(Menu):
         elif self.choices[self.index] == "Unequip":
             if not self.item.equipped:
                 notice = f"The {self.item.name} is already unequipped."
-                NotifyWin(self.game, notice, 1).enter_state()
+                NotifyWin(self.game, 1, notice).enter_state()
             else:
                 self.choices[1] = "Equip"
                 self.item.unequip()

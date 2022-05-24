@@ -27,12 +27,6 @@ class DoorCon(Sprite):
         self.add(self.game.opened_doors, self.game.all_sprites)
         self.image = self.opened_img
 
-    def set_flag(self, npc_name, flag_name):
-        for npc in self.game.npcs.sprites():
-            if npc.name == npc_name and flag_name not in npc.flags:
-                npc.flags.append(flag_name)
-                break
-
 
 class WoodenDoor(DoorCon):
     def __init__(self, game, x, y):

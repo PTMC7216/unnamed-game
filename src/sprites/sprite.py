@@ -6,6 +6,9 @@ class Sprite(pg.sprite.Sprite):
         self.game, self.x, self.y = game, x, y
         pg.sprite.Sprite.__init__(self, spritegroup, self.game.all_sprites)
 
+    def __repr__(self):
+        return self.name
+
     def __imgrect(self, img):
         self.image = img
         self.rect = self.image.get_rect()
@@ -18,5 +21,8 @@ class Sprite(pg.sprite.Sprite):
         self.__imgrect(img)
         self.rect.topleft = (self.x, self.y)
 
-    def __repr__(self):
-        return self.name
+    def set_flag(self, npc_name, flag_name):
+        for npc in self.game.npcs.sprites():
+            if npc.name == npc_name and flag_name not in npc.flags:
+                npc.flags.append(flag_name)
+                break
