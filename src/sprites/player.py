@@ -30,8 +30,8 @@ class Player(Sprite, Stats):
 
         self.combat_mode = False
 
-        # TODO: add inventory limit or check before adding new items to inventory
         self.inventory = []
+        self.inventory_size = 4
 
         self.dy = []
         self.dx = []
@@ -64,6 +64,14 @@ class Player(Sprite, Stats):
                                      "group": self.game.npcs,
                                      "dokill": False}
 
+    def inv_add(self, item):
+        if len(self.inventory) < 4:
+            item.kill()
+            self.inventory.append(item)
+            NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
+        else:
+            NotifyWin(self.game, 1, f"Inventory full.").enter_state()
+
     def interact(self):
         # TODO: shift key modifier for prioritizing certain actions during overlap
         if pg.sprite.spritecollide(**self.item_collision_kwargs):
@@ -82,9 +90,6 @@ class Player(Sprite, Stats):
             interactable = pg.sprite.spritecollide(**self.interactable_collision_kwargs)[-1]
             if interactable.subtype == "chest":
                 interactable.open()
-                # notice = [f"Opened the {interactable.name}.",
-                #           f"Found {interactable.contents}."]
-                # NotifyWin(self.game, notice, 1).enter_state()
 
         elif pg.sprite.spritecollide(**self.npc_collision_kwargs):
             npc = pg.sprite.spritecollide(**self.npc_collision_kwargs)[-1]
@@ -118,9 +123,7 @@ class Player(Sprite, Stats):
                 if event.key == pg.K_x:
                     self.menu()
                 if event.key == pg.K_LSHIFT:
-                    # TODO: sprite or ui indication of current mode
-                    self.combat_mode = not self.combat_mode
-                    print(self.combat_mode)
+                    pass
                 if event.key == pg.K_UP:
                     self.dy.insert(0, -self.movespeed)
                     self.direction.insert(0, 'up')
@@ -206,8 +209,6 @@ class Player(Sprite, Stats):
         dt = self.game.dt_truncavg()
         if dt > 0.2:
             dt = self.game.dt_trunc()
-
-        # print(f"DT: {dt:<25} FLAT: {self.movespeed * dt:<25} DIAG: {(self.movespeed * 0.8) * dt}")
 
         # rounding negatives up with ceil(), while leaving positives to round down.
         # this counteracts the movement issues caused by pygame's default truncation.

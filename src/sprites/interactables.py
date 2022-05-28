@@ -1,6 +1,7 @@
 import pygame as pg
 from src.utils import Spritesheet
 from .sprite import Sprite
+from .items import Item
 from src.states.notifywin import NotifyWin
 
 
@@ -19,15 +20,29 @@ class ChestCon(Sprite):
         self.adjustable_layer = False
         Sprite.__init__(self, game, x, y, self.game.interactables)
 
+        self.x = x
+        self.y = y
+
         self.spritesheet = self.game.dcss1
 
         self.subtype = "chest"
+        self.opened = False
+        self.contents = None
 
     def open(self):
-        NotifyWin(self.game, 1,
-                  f"Opened the {self.name.lower()}.",
-                  f"It's empty.").enter_state()
-        self.image = self.opened_img
+        if not self.opened:
+            self.opened = True
+            self.image = self.opened_img
+
+            if self.contents:
+                NotifyWin(self.game, 1,
+                          f"Opened the {self.name.lower()}.",
+                          f"Found {self.contents}").enter_state()
+                Item(self.game, self.x, self.y, self.contents)
+            else:
+                NotifyWin(self.game, 1,
+                          f"Opened the {self.name.lower()}.",
+                          f"It's empty.").enter_state()
 
 
 class WoodenChest(ChestCon):
@@ -40,3 +55,5 @@ class WoodenChest(ChestCon):
         self.imgrect_center(self.closed_img)
 
         self.name = "Wooden Chest"
+
+        self.contents = "Brass Key"

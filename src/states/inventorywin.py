@@ -26,7 +26,7 @@ class InventoryWin(Menu):
 
         self.position_selector(self.pos0, -90, -2)
 
-        self.choices = ["- - -"] * 4
+        self.choices = ["- - -"] * self.game.player.sprite.inventory_size
         for i, item in enumerate(self.game.player.sprite.inventory):
             self.choices[i] = item.name
         self.index_spacing = 40
@@ -72,3 +72,13 @@ class InventoryWin(Menu):
         for item in self.game.player.sprite.inventory:
             if item.name == selection:
                 InvContextWin(self.game, item).enter_state()
+                break
+
+
+class TransferWin(InventoryWin):
+    # TODO: Open a transferral window for opened chests and traders,
+    #  allowing for transferrals between chest/trader and player inventories
+    def __init__(self):
+        super().__init__(InventoryWin)
+
+        self.name = "Transfer Window"

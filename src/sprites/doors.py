@@ -7,8 +7,8 @@ class Door:
         door_dict = {
             "Wooden Door": WoodenDoor,
             "Wooden Door Event": WoodenDoorEvent,
-            "Wooden Double Door NS": WoodenDoubleDoorNS,
-            "Wooden Double Door WE": WoodenDoubleDoorWE
+            "Wooden Gate NS": WoodenGateNS,
+            "Wooden Gate WE": WoodenGateWE
         }
         door_dict[door_name](game, x, y)
 
@@ -53,7 +53,7 @@ class WoodenDoorEvent(WoodenDoor):
         self.image = self.opened_img
 
 
-class WoodenDoubleDoorNS(DoorCon):
+class WoodenGateNS(DoorCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
@@ -62,12 +62,12 @@ class WoodenDoubleDoorNS(DoorCon):
 
         self.imgrect_topleft(self.closed_img)
 
-        self.name = "Wooden Double Door"
-        self.desc = "This door is locked with brass"
+        self.name = "Wooden Gate"
+        self.desc = "This gate is locked with brass"
         self.key_req = "Brass Key"
 
 
-class WoodenDoubleDoorWE(DoorCon):
+class WoodenGateWE(DoorCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
@@ -76,6 +76,6 @@ class WoodenDoubleDoorWE(DoorCon):
 
         self.imgrect_topleft(self.closed_img)
 
-        self.name = "Wooden Double Door"
-        self.desc = "This door is locked with brass"
+        self.name = "Wooden Gate"
+        self.desc = "This gate is locked with brass"
         self.key_req = "Brass Key"

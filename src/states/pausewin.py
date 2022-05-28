@@ -2,6 +2,7 @@ import pygame as pg
 import src.utils as utils
 from .menu import Menu
 from .inventorywin import InventoryWin
+from .statuswin import StatusWin
 
 
 class PauseWin(Menu):
@@ -67,8 +68,7 @@ class PauseWin(Menu):
             InventoryWin(self.game).enter_state()
 
         elif self.choices[self.index] == "Status":
-            # TODO: implement status window
-            pass
+            StatusWin(self.game).enter_state()
 
         elif self.choices[self.index] == "Quit":
             pg.mixer.music.load('./data/music/ominous1.ogg')

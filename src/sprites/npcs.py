@@ -21,7 +21,7 @@ class NPCCon(Sprite, Stats):
     def __init__(self, game, x, y):
         self.game = game
         self.adjustable_layer = True
-        Sprite.__init__(self, game, x, y, self.game.npcs)
+        Sprite.__init__(self, game, x, y, game.npcs)
 
         Stats.__init__(
             self,
@@ -43,6 +43,10 @@ class NPCCon(Sprite, Stats):
     def interact(self):
         self.game.select_sound.play()
         DialogueWin(self.game, self).enter_state()
+
+    def relocate(self, x, y):
+        # TODO: create a Tiled object at the location an npc should relocate to, and send its position to this function
+        self.rect.center = (x, y)
 
 
 # Speaker type: only engages in dialogue

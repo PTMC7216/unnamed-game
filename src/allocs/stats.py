@@ -6,7 +6,7 @@ class Stats:
 
         # equipment
         self.hand = [""] * 2
-        self.accessory = [""] * 4
+        self.accessory = [""] * 2
         self.head = ""
         self.torso = ""
         self.gloves = ""

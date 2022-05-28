@@ -28,8 +28,11 @@ class Game:
 
         # general sounds
         self.selector_sound = pg.mixer.Sound('./data/sounds/selector.ogg')
-        self.selector_sound.set_volume(0.5)
         self.select_sound = pg.mixer.Sound('./data/sounds/select.ogg')
+
+        # volume
+        self.selector_sound.set_volume(0.0)
+        self.select_sound.set_volume(0.0)
 
         # general spritesheets
         self.dcss1 = utils.Spritesheet(self, 'dcss1.png')
@@ -48,6 +51,7 @@ class Game:
         # sprite groups
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.player = pg.sprite.GroupSingle()
+        self.entity = pg.sprite.GroupSingle()
         self.npcs = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
         self.closed_doors = pg.sprite.Group()
@@ -59,6 +63,8 @@ class Game:
         for tile_object in self.map.tmxdata.objects:
             if tile_object.name == 'player':
                 sprites.Player(self, tile_object.x, tile_object.y)
+            if tile_object.type == 'entity':
+                sprites.Entity(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
             if tile_object.type == 'npc':
                 sprites.NPC(self, tile_object.x, tile_object.y, tile_object.name)
             if tile_object.type == 'obstacle':

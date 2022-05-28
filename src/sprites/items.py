@@ -27,9 +27,7 @@ class ItemCon(Sprite):
         self.usable = False
 
     def pickup(self):
-        self.kill()
-        self.game.player.sprite.inventory.append(self)
-        NotifyWin(self.game, 1, f"{self.name} added to inventory.").enter_state()
+        self.game.player.sprite.inv_add(self)
 
     def use(self):
         if not self.usable:
@@ -119,6 +117,7 @@ class ItemCon(Sprite):
         for i, name in enumerate(self.game.state_stack):
             if repr(name) == "Inventory Window":
                 self.game.state_stack[i].refresh()
+                break
 
         notice = f"Dropped the {self.name}."
         NotifyWin(self.game, 2, notice).enter_state()
