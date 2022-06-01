@@ -84,7 +84,7 @@ class ItemCon(Sprite):
             if self.subtype == "weapon":
                 for i, item in enumerate(self.game.player.sprite.hand):
                     if item == self:
-                        self.game.player.sprite.hand[i] = ""
+                        self.game.player.sprite.hand[i] = "None"
             elif self.subtype == "armor":
                 pass
             elif self.subtype == "accessory":

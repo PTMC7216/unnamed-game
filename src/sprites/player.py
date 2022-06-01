@@ -12,14 +12,17 @@ class Player(Sprite, Stats):
         self.adjustable_layer = True
         Sprite.__init__(self, game, x, y, self.game.player)
 
+        self.name = "Nameless"
+        self.title = ". . ."
         self.spritesheet = self.game.dcss2
 
         self.imgrect_center(self.spritesheet.image_at(1, 0, 1, 1))
 
         Stats.__init__(
             self,
-            lvl=1,
+            lv=1,
             hp=9,
+            mp=0,
             strength=1,
             dexterity=1,
             agility=1,

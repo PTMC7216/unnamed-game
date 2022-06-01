@@ -2,19 +2,19 @@ import math
 
 
 class Stats:
-    def __init__(self, lvl, hp, strength, dexterity, agility, vitality, intelligence, charisma, alignment):
+    def __init__(self, lv, hp, mp, strength, dexterity, agility, vitality, intelligence, charisma, alignment):
 
         # equipment
-        self.hand = [""] * 2
-        self.accessory = [""] * 2
-        self.head = ""
-        self.torso = ""
-        self.gloves = ""
-        self.legs = ""
-        self.boots = ""
+        self.hand = ["None"] * 2
+        self.accessory = ["None"] * 2
+        self.head = "None"
+        self.torso = "None"
+        self.hands = "None"
+        self.legs = "None"
+        self.feet = "None"
 
         # stats
-        self.lvl = lvl
+        self.lv = lv
         self.strength = strength
         self.dexterity = dexterity
         self.agility = agility
@@ -22,6 +22,8 @@ class Stats:
         self.intelligence = intelligence
         self.charisma = charisma
         self.hp = self.hp_mod(hp)
+        self.mp = mp
+        self.unallocated = 0
         # good: >9, neutral: 1-9, evil: <1
         # TODO: confirmation to attack non-hostiles if alignment > 0
         self.alignment = alignment

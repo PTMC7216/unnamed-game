@@ -25,8 +25,9 @@ class NPCCon(Sprite, Stats):
 
         Stats.__init__(
             self,
-            lvl=1,
+            lv=1,
             hp=9,
+            mp=0,
             strength=1,
             dexterity=1,
             agility=1,

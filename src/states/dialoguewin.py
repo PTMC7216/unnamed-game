@@ -122,7 +122,11 @@ class DialogueWin(Menu):
 
             else:
                 # IDENTITY
-                self.speaker = data[self.npc.dialogue_section]['speaker']
+                if data[self.npc.dialogue_section]['speaker'] == "Player":
+                    self.speaker = self.game.player.sprite.name
+                else:
+                    self.speaker = data[self.npc.dialogue_section]['speaker']
+
                 self.portrait = pg.image.load(
                     f"./data/images/portraits/"
                     f"{data[self.npc.dialogue_section]['portrait']}.jpg").convert()
