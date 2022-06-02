@@ -35,7 +35,7 @@ class Stats:
     def attack_power_update(self):
         power = 0
         for item in self.hand:
-            if item != "":
+            if item != "None":
                 power += item.damage
         power += math.pow(self.strength, 1.4)
         self.attack_power = power

@@ -52,6 +52,7 @@ class Game:
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.player = pg.sprite.GroupSingle()
         self.entity = pg.sprite.GroupSingle()
+        self.cleaner = pg.sprite.GroupSingle()
         self.npcs = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
         self.closed_doors = pg.sprite.Group()
@@ -65,6 +66,8 @@ class Game:
                 sprites.Player(self, tile_object.x, tile_object.y)
             if tile_object.type == 'entity':
                 sprites.Entity(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
+            if tile_object.type == 'cleaner':
+                sprites.Cleaner(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
             if tile_object.type == 'npc':
                 sprites.NPC(self, tile_object.x, tile_object.y, tile_object.name)
             if tile_object.type == 'obstacle':

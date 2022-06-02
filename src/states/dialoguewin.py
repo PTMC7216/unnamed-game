@@ -59,6 +59,10 @@ class DialogueWin(Menu):
         self.event_link = None
         self.link = None
         self.quiet_link = None
+        self.dropper = False
+        self.taker = False
+        self.to_drop = None
+        self.to_take = None
         self.dialogue = None
 
         self.get_dialogue()
@@ -97,7 +101,7 @@ class DialogueWin(Menu):
                 for checker in data[self.npc.dialogue_section]:
 
                     if "event_item" in checker:
-                        if self.game.player.sprite.inventory:
+                        if self.game.player.sprite.inventory and checker["event_item"] != "pass":
                             for item in self.game.player.sprite.inventory:
                                 if item.name == checker["event_item"]:
                                     priority.append(checker["event_link"])
@@ -106,7 +110,7 @@ class DialogueWin(Menu):
                             break
 
                     if "event_other" in checker:
-                        if self.npc.flags:
+                        if self.npc.flags and checker["event_other"] != "pass":
                             for flag in self.npc.flags:
                                 if flag == checker["event_other"]:
                                     priority.append(checker["event_link"])
@@ -197,6 +201,16 @@ class DialogueWin(Menu):
                             self.npc.dialogue_counter = 0
                             self.quiet_link = command["quiet_link"]
 
+                        if "give" in command:
+                            self.npc.dialogue_counter = 0
+                            self.dropper = True
+                            self.to_drop = command["give"]
+
+                        if "take" in command:
+                            self.npc.dialogue_counter = 0
+                            self.taker = True
+                            self.to_take = command["take"]
+
     def advance_dialogue(self):
         # if still typewriting, instantly display full text block
         if self.typewriter.i < len(self.typewriter.text_block):
@@ -229,12 +243,20 @@ class DialogueWin(Menu):
 
         elif self.text_index == (len(self.text) - 1) and self.quiet_link:
             self.npc.dialogue_section = self.quiet_link
+            self.transferrals()
             self.movement_key_check()
             self.exit_state()
 
         else:
+            self.transferrals()
             self.movement_key_check()
             self.exit_state()
+
+    def transferrals(self):
+        if self.dropper:
+            self.npc.drop_item(self.to_drop)
+        elif self.taker:
+            self.npc.take_item(self.to_take)
 
     def select_choice(self):
         if list(self.choices[self.index].values())[0] == self.c1:

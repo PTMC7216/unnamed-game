@@ -1,5 +1,6 @@
 import pygame as pg
 from .sprite import Sprite
+from .items import Item
 from src.allocs.stats import Stats
 from src.states.pausewin import PauseWin
 from src.states.notifywin import NotifyWin

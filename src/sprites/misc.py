@@ -25,6 +25,16 @@ class Entity(pg.sprite.Sprite):
         pass
 
 
+class Cleaner(pg.sprite.Sprite):
+    def __init__(self, game, x, y, w, h):
+        self.game = game
+        super().__init__(self.game.cleaner)
+
+        self.rect = pg.Rect(x, y, w, h)
+        self.x = x
+        self.y = y
+
+
 class Obstacles(pg.sprite.Sprite):
     def __init__(self, game, x, y, w, h):
         self.game = game

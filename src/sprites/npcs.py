@@ -1,5 +1,6 @@
 import pygame as pg
 from .sprite import Sprite
+from .items import Item
 from src.allocs.stats import Stats
 from src.states.dialoguewin import DialogueWin
 
@@ -41,6 +42,33 @@ class NPCCon(Sprite, Stats):
         self.dialogue_counter = 0
         self.dialogue_memory = []
 
+        self.inventory = []
+
+    def apply_inventory(self):
+        for i, itemname in enumerate(self.inventory):
+            Item(self.game, self.game.cleaner.sprite.x, self.game.cleaner.sprite.y, itemname)
+            item = pg.sprite.spritecollide(self.game.cleaner.sprite, self.game.items, True)[0]
+            self.inventory[i] = item
+
+    def drop_item(self, name):
+        for item in self.inventory:
+            if item.name == name:
+                self.inventory.remove(item)
+                Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, item.name)
+                break
+
+    def drop_all(self):
+        for item in self.inventory:
+            self.inventory.remove(item)
+            Item(self.game, self.centerx, self.centery, item.name)
+
+    def take_item(self, name):
+        for item in self.game.player.sprite.inventory:
+            if item.name == name:
+                self.game.player.sprite.inventory.remove(item)
+                self.inventory.append(item)
+                break
+
     def interact(self):
         self.game.select_sound.play()
         DialogueWin(self.game, self).enter_state()
@@ -62,6 +90,9 @@ class GreenSquare(NPCCon):
         self.rect.center = (x, y)
 
         self.name = "Green Square"
+
+        self.inventory = []
+        self.apply_inventory()
 
 
 # Trader type: can open a trade window through dialogue

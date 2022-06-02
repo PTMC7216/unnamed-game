@@ -32,6 +32,8 @@ class Overworld(State):
                 pg.draw.rect(self.game.screen, (255, 255, 255), self.game.camera.apply_rect(npc.rect), 1)
             for entity in self.game.entity:
                 pg.draw.rect(self.game.screen, (255, 255, 255), self.game.camera.apply_rect(entity.rect), 1)
+            for cleaner in self.game.cleaner:
+                pg.draw.rect(self.game.screen, (255, 255, 255), self.game.camera.apply_rect(cleaner.rect), 1)
             for obstacle in self.game.obstacles:
                 pg.draw.rect(self.game.screen, (255, 255, 255), self.game.camera.apply_rect(obstacle.rect), 1)
             for closed_door in self.game.closed_doors:
