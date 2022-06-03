@@ -48,11 +48,12 @@ class Game:
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
 
-        # sprite groups
+        # groups
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.player = pg.sprite.GroupSingle()
         self.entity = pg.sprite.GroupSingle()
         self.cleaner = pg.sprite.GroupSingle()
+        self.relocators = []
         self.npcs = pg.sprite.Group()
         self.obstacles = pg.sprite.Group()
         self.closed_doors = pg.sprite.Group()
@@ -61,23 +62,25 @@ class Game:
         self.items = pg.sprite.Group()
 
         # tiles
-        for tile_object in self.map.tmxdata.objects:
-            if tile_object.name == 'player':
-                sprites.Player(self, tile_object.x, tile_object.y)
-            if tile_object.type == 'entity':
-                sprites.Entity(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-            if tile_object.type == 'cleaner':
-                sprites.Cleaner(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-            if tile_object.type == 'npc':
-                sprites.NPC(self, tile_object.x, tile_object.y, tile_object.name)
-            if tile_object.type == 'obstacle':
-                sprites.Obstacles(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-            if tile_object.type == 'door':
-                sprites.Door(self, tile_object.x, tile_object.y, tile_object.name)
-            if tile_object.type == 'interactable':
-                sprites.Interactable(self, tile_object.x, tile_object.y, tile_object.name)
-            if tile_object.type == 'item':
-                sprites.Item(self, tile_object.x, tile_object.y, tile_object.name)
+        for tile in self.map.tmxdata.objects:
+            if tile.name == 'player':
+                sprites.Player(self, tile.x, tile.y)
+            if tile.type == 'entity':
+                sprites.Entity(self, tile.x, tile.y, tile.width, tile.height)
+            if tile.type == 'cleaner':
+                sprites.Cleaner(self, tile.x, tile.y, tile.width, tile.height)
+            if tile.type == 'relocator':
+                sprites.Relocator(self, tile.x, tile.y, tile.width, tile.height, tile.name)
+            if tile.type == 'npc':
+                sprites.NPC(self, tile.x, tile.y, tile.name)
+            if tile.type == 'obstacle':
+                sprites.Obstacles(self, tile.x, tile.y, tile.width, tile.height)
+            if tile.type == 'door':
+                sprites.Door(self, tile.x, tile.y, tile.name)
+            if tile.type == 'interactable':
+                sprites.Interactable(self, tile.x, tile.y, tile.name)
+            if tile.type == 'item':
+                sprites.Item(self, tile.x, tile.y, tile.name)
 
         # camera & rect borders
         self.camera = tilemap.Camera(self)

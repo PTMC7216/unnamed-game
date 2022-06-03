@@ -16,13 +16,18 @@ class Entity(pg.sprite.Sprite):
         self.dialogue_counter = 0
         self.dialogue_memory = []
 
+        self.relocation = 0
+
     def interact(self):
         self.game.select_sound.play()
         DialogueWin(self.game, self).enter_state()
 
     def relocate(self):
-        # TODO: finish relocate func in NPCCon, then copy it here
-        pass
+        for relocator in self.game.relocators:
+            if self.name in relocator.name:
+                if self.relocation == relocator.relocation:
+                    self.rect = Rect(relocator.x, relocator.y, relocator.w, relocator.h)
+                    break
 
 
 class Cleaner(pg.sprite.Sprite):
@@ -31,8 +36,28 @@ class Cleaner(pg.sprite.Sprite):
         super().__init__(self.game.cleaner)
 
         self.rect = pg.Rect(x, y, w, h)
-        self.x = x
-        self.y = y
+        self.x, self.y = x, y
+
+
+class Relocator:
+    def __init__(self, game, x, y, w, h, name):
+        self.game = game
+        self.x, self.y = x, y
+        self.w, self.h = w, h
+        self.name = name
+
+        nums = []
+        contained = False
+        for char in self.name:
+            if char == "(":
+                contained = True
+            elif contained and char.isdigit():
+                nums.append(char)
+            elif char == ")":
+                contained = False
+        self.relocation = "".join(nums)
+
+        self.game.relocators.append(self)
 
 
 class Obstacles(pg.sprite.Sprite):

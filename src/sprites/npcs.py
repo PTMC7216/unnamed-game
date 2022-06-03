@@ -44,6 +44,8 @@ class NPCCon(Sprite, Stats):
 
         self.inventory = []
 
+        self.relocation = 0
+
     def apply_inventory(self):
         for i, itemname in enumerate(self.inventory):
             Item(self.game, self.game.cleaner.sprite.x, self.game.cleaner.sprite.y, itemname)
@@ -73,9 +75,12 @@ class NPCCon(Sprite, Stats):
         self.game.select_sound.play()
         DialogueWin(self.game, self).enter_state()
 
-    def relocate(self, x, y):
-        # TODO: create a Tiled object at the location an npc should relocate to, and send its position to this function
-        self.rect.center = (x, y)
+    def relocate(self):
+        for relocator in self.game.relocators:
+            if self.name in relocator.name:
+                if self.relocation == relocator.relocation:
+                    self.rect.center = (relocator.x, relocator.y)
+                    break
 
 
 # Speaker type: only engages in dialogue
