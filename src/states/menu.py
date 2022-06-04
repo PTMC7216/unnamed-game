@@ -24,7 +24,7 @@ class Menu(State):
         self.selector_offset = {"x": -90, "y": -2}
 
         self.choices = []
-        self.index_spacing = 40
+        self.c_spacing = 40
         self.index = 0
 
     def check_events(self):
@@ -85,9 +85,9 @@ class Menu(State):
             self.game.selector_sound.play()
             self.index = (self.index - 1) % len(self.choices)
             self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
-                                         (self.index * self.index_spacing)
+                                         (self.index * self.c_spacing)
         elif self.keybind["down"]:
             self.game.selector_sound.play()
             self.index = (self.index + 1) % len(self.choices)
             self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
-                                         (self.index * self.index_spacing)
+                                         (self.index * self.c_spacing)

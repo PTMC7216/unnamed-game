@@ -114,7 +114,6 @@ class Player(Sprite, Stats):
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                # TODO: display a quit confirmation window
                 self.game.active = False
 
             if event.type == pg.KEYDOWN:

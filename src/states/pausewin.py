@@ -3,6 +3,7 @@ import src.utils as utils
 from .menu import Menu
 from .inventorywin import InventoryWin
 from .statuswin import StatusWin
+from .notifywin import NotifyChoiceWin
 
 
 class PauseWin(Menu):
@@ -29,6 +30,8 @@ class PauseWin(Menu):
 
         self.choices = ["Resume", "Inventory", "Status", "Quit"]
         self.index_spacing = 40
+
+        self.notify_flags = []
 
     def update(self):
         self.check_events()
@@ -71,7 +74,7 @@ class PauseWin(Menu):
             StatusWin(self.game).enter_state()
 
         elif self.choices[self.index] == "Quit":
-            pg.mixer.music.load('./data/music/ominous1.ogg')
-            pg.mixer.music.play(-1, 0.0, 10000)
-            while len(self.game.state_stack) > 1:
-                self.game.state_stack.pop()
+            NotifyChoiceWin(self.game, self.name,
+                            ("No", "Return"), ("Yes", "Quit"), 1, "Quit to main menu?").enter_state()
+
+

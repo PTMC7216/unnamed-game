@@ -30,6 +30,7 @@ class DialogueWin(Menu):
             self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h,
                                    topleft=(self.frame.x + self.frame.h + self.gap, self.frame.y))
 
+        # TODO: Allow 4th choice
         self.choices_panel = \
             self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.5,
                                    bottomleft=(self.frame.x + self.frame.h + self.gap, self.frame.y - self.gap))

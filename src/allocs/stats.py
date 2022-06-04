@@ -25,7 +25,7 @@ class Stats:
         self.mp = mp
         self.unallocated = 0
         # good: >9, neutral: 1-9, evil: <1
-        # TODO: confirmation to attack non-hostiles if alignment > 0
+        # TODO: confirmation via NotifyChoiceWin to attack non-hostiles if alignment > 0
         self.alignment = alignment
         self.movespeed = 300
 

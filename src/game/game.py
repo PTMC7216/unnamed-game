@@ -44,6 +44,7 @@ class Game:
         self.state_stack.append(states.MainMenu(self))
 
         # maps
+        # TODO: merge tilesheets into /maps/tsx, then redirect tsx image sources
         self.map = tilemap.TiledMap('map1.tmx')
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
