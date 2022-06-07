@@ -30,7 +30,6 @@ class DialogueWin(Menu):
             self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h,
                                    topleft=(self.frame.x + self.frame.h + self.gap, self.frame.y))
 
-        # TODO: Allow 4th choice
         self.choices_panel = \
             self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.5,
                                    bottomleft=(self.frame.x + self.frame.h + self.gap, self.frame.y - self.gap))
@@ -40,6 +39,7 @@ class DialogueWin(Menu):
         self.pos0 = self.framer.set_pos(self.choices_panel, self.padding, y=0)
         self.pos1 = self.framer.set_pos(self.choices_panel, self.padding, y=30)
         self.pos2 = self.framer.set_pos(self.choices_panel, self.padding, y=60)
+        self.pos3 = self.framer.set_pos(self.choices_panel, self.padding, y=90)
 
         self.position_selector(self.pos0, -11, -2)
 
@@ -57,6 +57,7 @@ class DialogueWin(Menu):
         self.c1 = None
         self.c2 = None
         self.c3 = None
+        self.c4 = None
         self.event_link = None
         self.link = None
         self.quiet_link = None
@@ -76,6 +77,7 @@ class DialogueWin(Menu):
         self.c1 = None
         self.c2 = None
         self.c3 = None
+        self.c4 = None
         self.event_link = None
         self.link = None
         self.quiet_link = None
@@ -231,12 +233,11 @@ class DialogueWin(Menu):
             if len(self.choices) == 1:
                 self.c1 = list(self.choices[0].values())[0]
             elif len(self.choices) == 2:
-                self.c1 = list(self.choices[0].values())[0]
-                self.c2 = list(self.choices[1].values())[0]
+                self.c1, self.c2 = [list(self.choices[i].values())[0] for i in range(2)]
             elif len(self.choices) == 3:
-                self.c1 = list(self.choices[0].values())[0]
-                self.c2 = list(self.choices[1].values())[0]
-                self.c3 = list(self.choices[2].values())[0]
+                self.c1, self.c2, self.c3 = [list(self.choices[i].values())[0] for i in range(3)]
+            elif len(self.choices) == 4:
+                self.c1, self.c2, self.c3, self.c4 = [list(self.choices[i].values())[0] for i in range(4)]
 
         elif self.text_index == (len(self.text) - 1) and self.link:
             self.npc.dialogue_section = self.link
@@ -260,12 +261,7 @@ class DialogueWin(Menu):
             self.npc.take_item(self.to_take)
 
     def select_choice(self):
-        if list(self.choices[self.index].values())[0] == self.c1:
-            self.npc.dialogue_section = list(self.choices[self.index])[0]
-        elif list(self.choices[self.index].values())[0] == self.c2:
-            self.npc.dialogue_section = list(self.choices[self.index])[0]
-        elif list(self.choices[self.index].values())[0] == self.c3:
-            self.npc.dialogue_section = list(self.choices[self.index])[0]
+        self.npc.dialogue_section = list(self.choices[self.index])[0]
         self.refresh_dialogue()
 
     def draw_selector(self):
@@ -318,5 +314,6 @@ class DialogueWin(Menu):
             utils.ptext.draw(self.c1, (self.pos0["x"], self.pos0["y"]), **self.choice_kwargs)
             utils.ptext.draw(self.c2, (self.pos1["x"], self.pos1["y"]), **self.choice_kwargs)
             utils.ptext.draw(self.c3, (self.pos2["x"], self.pos2["y"]), **self.choice_kwargs)
+            utils.ptext.draw(self.c4, (self.pos3["x"], self.pos3["y"]), **self.choice_kwargs)
 
         self.draw_selector()
