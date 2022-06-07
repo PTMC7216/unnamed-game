@@ -27,7 +27,7 @@ class MainMenu(Menu):
         self.position_selector(self.pos0, -90, -2)
 
         self.choices = ["Start Game", "Options", "Credits", "Quit Game"]
-        self.index_spacing = 40
+        self.c_spacing = 40
 
     def update(self):
         self.check_events()

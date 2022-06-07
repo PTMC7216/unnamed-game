@@ -64,6 +64,7 @@ class StatusWin(Menu):
         self.position_selector(self.col1["pos"], -15, -2)
 
         self.choices = self.cols[self.col]
+        self.c_spacing = 30
         self.index_spacing = 30
 
         self.text_kwargs = {"fontsize": 35}

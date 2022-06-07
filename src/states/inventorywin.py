@@ -29,7 +29,7 @@ class InventoryWin(Menu):
         self.choices = ["- - -"] * self.game.player.sprite.inventory_size
         for i, item in enumerate(self.game.player.sprite.inventory):
             self.choices[i] = item.name
-        self.index_spacing = 40
+        self.c_spacing = 40
 
         self.text_kwargs = {"owidth": 1, "ocolor": (0, 0, 0)}
 

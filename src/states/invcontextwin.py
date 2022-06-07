@@ -27,7 +27,7 @@ class InvContextWin(Menu):
         self.position_selector(self.pos0, -60, -2)
 
         self.choices = ["Use", "Equip", "Examine", "Drop"]
-        self.index_spacing = 25
+        self.c_spacing = 25
 
         if self.item.usable:
             self.usable_color = (255, 255, 255)

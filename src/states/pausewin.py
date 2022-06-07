@@ -29,7 +29,7 @@ class PauseWin(Menu):
         self.position_selector(self.pos0, -90, -2)
 
         self.choices = ["Resume", "Inventory", "Status", "Quit"]
-        self.index_spacing = 40
+        self.c_spacing = 40
 
         self.notify_flags = []
 
@@ -76,5 +76,3 @@ class PauseWin(Menu):
         elif self.choices[self.index] == "Quit":
             NotifyChoiceWin(self.game, self.name,
                             ("No", "Return"), ("Yes", "Quit"), 1, "Quit to main menu?").enter_state()
-
-
