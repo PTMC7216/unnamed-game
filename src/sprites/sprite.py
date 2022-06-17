@@ -4,7 +4,7 @@ import pygame as pg
 class Sprite(pg.sprite.Sprite):
     def __init__(self, game, x, y, spritegroup):
         self.game, self.x, self.y = game, x, y
-        pg.sprite.Sprite.__init__(self, spritegroup, self.game.all_sprites)
+        super().__init__(spritegroup, self.game.all_sprites)
 
     def __repr__(self):
         return self.name

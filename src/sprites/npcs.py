@@ -119,6 +119,8 @@ class BlueSquare(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
+        # TODO: Repetitive movement for testing purposes
+
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((0, 0, 150))

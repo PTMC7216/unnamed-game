@@ -1,8 +1,8 @@
 import pygame as pg
-import utils
-import states
-import sprites
-import tilemap
+import src.utils as utils
+import src.states as states
+import src.sprites as sprites
+import src.tilemap as tilemap
 from time import time
 from statistics import mean
 
@@ -44,8 +44,7 @@ class Game:
         self.state_stack.append(states.MainMenu(self))
 
         # maps
-        # TODO: merge tilesheets into /maps/tsx, then redirect tsx image sources
-        self.map = tilemap.TiledMap('map1.tmx')
+        self.map = tilemap.TiledMap('./data/maps/map1.tmx')
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
 
@@ -61,6 +60,7 @@ class Game:
         self.opened_doors = pg.sprite.Group()
         self.interactables = pg.sprite.Group()
         self.items = pg.sprite.Group()
+        self.fog = pg.sprite.Group()
 
         # tiles
         for tile in self.map.tmxdata.objects:
@@ -82,6 +82,8 @@ class Game:
                 sprites.Interactable(self, tile.x, tile.y, tile.name)
             if tile.type == 'item':
                 sprites.Item(self, tile.x, tile.y, tile.name)
+        for coord in self.map.fog_xy:
+            sprites.Fog(self, coord[0], coord[1])
 
         # camera & rect borders
         self.camera = tilemap.Camera(self)

@@ -4,10 +4,13 @@ import pytmx
 
 class TiledMap:
     def __init__(self, filename):
-        tm = pytmx.load_pygame(f'./data/maps/{filename}', pixelalpha=True)
+        tm = pytmx.load_pygame(filename, pixelalpha=True)  # f'./data/maps/{filename}'
         self.width = tm.width * tm.tilewidth
         self.height = tm.height * tm.tileheight
         self.tmxdata = tm
+
+        self.fog_surf = pg.Surface((tm.tilewidth, tm.tileheight))
+        self.fog_xy = []
 
     def render(self, surface):
         ti = self.tmxdata.get_tile_image_by_gid
@@ -18,8 +21,11 @@ class TiledMap:
                     if tile:
                         surface.blit(tile, (x * self.tmxdata.tilewidth,
                                             y * self.tmxdata.tileheight))
+                        self.fog_xy.append((x * self.tmxdata.tilewidth,
+                                            y * self.tmxdata.tileheight))
 
     def make_map(self):
-        temp_surface = pg.Surface((self.width, self.height))
-        self.render(temp_surface)
-        return temp_surface
+        surf = pg.Surface((self.width, self.height))
+        self.render(surf)
+        self.fog_xy = list(set(self.fog_xy))
+        return surf

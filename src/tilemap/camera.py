@@ -9,7 +9,7 @@ class Camera:
         self.height = self.game.map.height
         self.camera = pg.Rect(0, 0, self.width, self.height)
 
-    def apply(self, entity):
+    def apply_sprite(self, entity):
         return entity.rect.move(self.camera.topleft)
 
     def apply_rect(self, rect):

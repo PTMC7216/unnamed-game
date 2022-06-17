@@ -51,20 +51,20 @@ class Player(Sprite, Stats):
         self.frames = len(self.up) - 1
         self.frame = 0
 
-        self.item_collision_kwargs = {"sprite": self.game.player.sprite,
+        self.item_collision_kwargs = {"sprite": self,
                                       "group": self.game.items,
                                       "dokill": False}
 
-        self.door_collision_kwargs = {"sprite": self.game.player.sprite,
+        self.door_collision_kwargs = {"sprite": self,
                                       "group": self.game.closed_doors,
                                       "dokill": False,
                                       "collided": pg.sprite.collide_rect_ratio(1.1)}
 
-        self.interactable_collision_kwargs = {"sprite": self.game.player.sprite,
+        self.interactable_collision_kwargs = {"sprite": self,
                                               "group": self.game.interactables,
                                               "dokill": False}
 
-        self.npc_collision_kwargs = {"sprite": self.game.player.sprite,
+        self.npc_collision_kwargs = {"sprite": self,
                                      "group": self.game.npcs,
                                      "dokill": False}
 
