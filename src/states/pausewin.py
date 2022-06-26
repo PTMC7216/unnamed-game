@@ -14,7 +14,7 @@ class PauseWin(Menu):
         self.name = "Pause Window"
 
         self.frame = self.framer.make_center_frame(3, 2)
-        self.panel = self.framer.make_panel(self.frame.w, self.frame.h,
+        self.panel = self.framer.make_panel(self.frame.w, self.frame.h, (10, 10, 10),
                                             topleft=(self.frame.x, self.frame.y))
 
         self.pos_adj = {"x": self.panel["rect"].w // 2,
@@ -75,4 +75,4 @@ class PauseWin(Menu):
 
         elif self.choices[self.index] == "Quit":
             NotifyChoiceWin(self.game, self.name,
-                            ("No", "Return"), ("Yes", "Quit"), 1, "Quit to main menu?").enter_state()
+                            "No", "Yes", 0, 1, "Quit to main menu?").enter_state()

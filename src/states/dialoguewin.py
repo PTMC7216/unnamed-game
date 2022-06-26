@@ -21,17 +21,17 @@ class DialogueWin(Menu):
         self.padding = 15
 
         self.portrait_panel = \
-            self.framer.make_panel(self.frame.h, self.frame.h,
+            self.framer.make_panel(self.frame.h, self.frame.h, (10, 10, 10),
                                    topleft=(self.frame.x, self.frame.y))
 
         self.portrait_pos = self.framer.set_pos(self.portrait_panel, self.padding)
 
         self.text_panel = \
-            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h,
+            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h, (10, 10, 10),
                                    topleft=(self.frame.x + self.frame.h + self.gap, self.frame.y))
 
         self.choices_panel = \
-            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.5,
+            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.5, (10, 10, 10),
                                    bottomleft=(self.frame.x + self.frame.h + self.gap, self.frame.y - self.gap))
 
         self.speaker_pos = self.framer.set_pos(self.text_panel, self.padding)

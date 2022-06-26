@@ -10,9 +10,9 @@ class NPC:
         self.game = game
 
         npc_dict = {
-            "Green Square": GreenSquare,
-            "Yellow Square": YellowSquare,
-            "Blue Square": BlueSquare
+            "Green Test": GreenTest,
+            "Yellow Test": YellowTest,
+            "Blue Test": BlueTest
         }
 
         npc_dict[npc_name](game, x, y)
@@ -83,8 +83,7 @@ class NPCCon(Sprite, Stats):
                     break
 
 
-# Speaker type: only engages in dialogue
-class GreenSquare(NPCCon):
+class GreenTest(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
@@ -94,14 +93,12 @@ class GreenSquare(NPCCon):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        self.name = "Green Square"
+        self.name = "Green Test"
 
-        self.inventory = []
         self.apply_inventory()
 
 
-# Trader type: can open a trade window through dialogue
-class YellowSquare(NPCCon):
+class YellowTest(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
@@ -111,15 +108,12 @@ class YellowSquare(NPCCon):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        self.name = "Yellow Square"
+        self.name = "Yellow Test"
 
 
-# Combatant type: only engages in combat
-class BlueSquare(NPCCon):
+class BlueTest(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
-        # TODO: Repetitive movement for testing purposes
 
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
@@ -127,4 +121,18 @@ class BlueSquare(NPCCon):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        self.name = "Blue Square"
+        self.name = "Blue Test"
+
+    #     self.base_time = 0
+    #     self.vel = 1
+    #
+    # def update(self):
+    #     current_time = pg.time.get_ticks()
+    #     if current_time - self.base_time > 1000:
+    #         self.base_time = current_time
+    #         if self.vel == 1:
+    #             self.vel = -1
+    #         else:
+    #             self.vel = 1
+    #
+    #     self.rect.x += self.vel

@@ -7,6 +7,7 @@ class Item:
     def __init__(self, game, x, y, item_name):
         item_dict = {
             "Brass Key": BrassKey,
+            "Iron Key": IronKey,
             "Rusted Sword": RustedSword
         }
         item_dict[item_name](game, x, y)
@@ -19,7 +20,7 @@ class ItemCon(Sprite):
         self.adjustable_layer = False
         Sprite.__init__(self, game, x, y, self.game.items)
 
-        self.spritesheet = self.game.extra1
+        self.spritesheet = self.game.item_sheet
 
         self.subtype = "item"
         self.equipped = False
@@ -196,6 +197,15 @@ class BrassKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
-        self.imgrect_center(self.spritesheet.image_at(4, 3, 1, 1))
+        self.imgrect_center(self.spritesheet.image_at(0, 3, 1, 1))
         self.name = "Brass Key"
         self.desc = "An ordinary brass key."
+
+
+class IronKey(KeyCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+
+        self.imgrect_center(self.spritesheet.image_at(0, 4, 1, 1))
+        self.name = "Iron Key"
+        self.desc = "A heavy iron key."

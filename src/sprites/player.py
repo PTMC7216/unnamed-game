@@ -15,9 +15,10 @@ class Player(Sprite, Stats):
 
         self.name = "Nameless"
         self.title = ". . ."
-        self.spritesheet = self.game.dcss2
+        self.spritesheet = self.game.player_sheet
 
         self.imgrect_center(self.spritesheet.image_at(1, 0, 1, 1))
+        self.rect.inflate_ip(-2, -2)  # TODO: Reposition rect
 
         Stats.__init__(
             self,
@@ -92,8 +93,7 @@ class Player(Sprite, Stats):
 
         elif pg.sprite.spritecollide(**self.interactable_collision_kwargs):
             interactable = pg.sprite.spritecollide(**self.interactable_collision_kwargs)[-1]
-            if interactable.subtype == "chest":
-                interactable.open()
+            interactable.interact()
 
         elif pg.sprite.spritecollide(**self.npc_collision_kwargs):
             npc = pg.sprite.spritecollide(**self.npc_collision_kwargs)[-1]

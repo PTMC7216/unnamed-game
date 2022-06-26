@@ -32,8 +32,8 @@ class WoodenDoor(DoorCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
-        self.closed_img = self.game.dcss1.image_at(23, 11, 1, 1)
-        self.opened_img = self.game.dcss1.image_at(27, 11, 1, 1)
+        self.closed_img = self.game.other_sheet.image_at(0, 0, 1, 1)
+        self.opened_img = self.game.other_sheet.image_at(0, 1, 1, 1)
 
         self.imgrect_topleft(self.closed_img)
 
@@ -47,7 +47,7 @@ class WoodenDoorEvent(WoodenDoor):
         super().__init__(game, x, y)
 
     def open(self):
-        self.set_flag("Green Square", "door opened")
+        self.set_flag("Yellow Test", "door opened")
         self.kill()
         self.add(self.game.opened_doors, self.game.all_sprites)
         self.image = self.opened_img
@@ -57,8 +57,8 @@ class WoodenGateNS(DoorCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
-        self.closed_img = self.game.dcss1.image_at(45, 11, 2, 1)
-        self.opened_img = self.game.dcss1.image_at(48, 11, 2, 1)
+        self.closed_img = self.game.other_sheet.image_at(1, 0, 2, 1)
+        self.opened_img = self.game.other_sheet.image_at(1, 1, 2, 1)
 
         self.imgrect_topleft(self.closed_img)
 
@@ -71,8 +71,8 @@ class WoodenGateWE(DoorCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
 
-        self.closed_img = self.game.dcss2.image_at(31, 0, 1, 2)
-        self.opened_img = self.game.dcss2.image_at(34, 0, 1, 2)
+        self.closed_img = self.game.other_sheet.image_at(3, 0, 1, 2)
+        self.opened_img = self.game.other_sheet.image_at(4, 0, 1, 2)
 
         self.imgrect_topleft(self.closed_img)
 

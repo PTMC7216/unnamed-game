@@ -35,9 +35,9 @@ class Game:
         self.select_sound.set_volume(0.0)
 
         # general spritesheets
-        self.dcss1 = utils.Spritesheet(self, 'dcss1.png')
-        self.dcss2 = utils.Spritesheet(self, 'dcss2.png')
-        self.extra1 = utils.Spritesheet(self, 'extra1.png')
+        self.player_sheet = utils.Spritesheet(self, 'player_sheet.png')
+        self.item_sheet = utils.Spritesheet(self, 'item_sheet.png')
+        self.other_sheet = utils.Spritesheet(self, 'other_sheet.png')
 
         # state stack
         self.state_stack = []
@@ -82,8 +82,8 @@ class Game:
                 sprites.Interactable(self, tile.x, tile.y, tile.name)
             if tile.type == 'item':
                 sprites.Item(self, tile.x, tile.y, tile.name)
-        for coord in self.map.fog_xy:
-            sprites.Fog(self, coord[0], coord[1])
+        # for coord in self.map.fog_xy:
+        #     sprites.Fog(self, coord[0], coord[1])
 
         # camera & rect borders
         self.camera = tilemap.Camera(self)

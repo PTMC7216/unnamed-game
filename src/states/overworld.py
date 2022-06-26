@@ -17,29 +17,33 @@ class Overworld(State):
         self.fin_pos = None
 
     def line_of_sight(self):
+        self.src_pos = self.game.player.sprite.rect.center
+
         rects = [obstacle.rect for obstacle in self.game.obstacles] + \
                 [door.rect for door in self.game.closed_doors]
-
-        self.src_pos = (self.game.player.sprite.rect.centerx,
-                        self.game.player.sprite.rect.centery)
 
         for i in range(self.rays):
             self.fin_pos = (self.radius * math.cos(2 * math.pi / self.rays * i) + self.src_pos[0],
                             self.radius * math.sin(2 * math.pi / self.rays * i) + self.src_pos[1])
 
             for rect in rects:
-                self.ray_collision((rect.topleft, rect.topright), 0, 4)
-                self.ray_collision((rect.topright, rect.bottomright), -4, 0)
-                self.ray_collision((rect.bottomright, rect.bottomleft), 0, -4)
-                self.ray_collision((rect.bottomleft, rect.topleft), 4, 0)
+                self.ray_collision((rect.topleft, rect.topright), 0, 2)
+                self.ray_collision((rect.topright, rect.bottomright), -2, 0)
+                self.ray_collision((rect.bottomright, rect.bottomleft), 0, -2)
+                self.ray_collision((rect.bottomleft, rect.topleft), 2, 0)
 
-            # pg.draw.line(self.game.screen, 'white', self.src_pos, self.fin_pos)
+            # TODO: Complete fog implementation
             for fog in self.game.fog.sprites():
                 clipped_line = fog.rect.clipline(self.src_pos, self.fin_pos)
                 if clipped_line:
                     fog.kill()
+                # if clipped_line:
+                #     fog.in_los()
+                # else:
+                #     fog.out_los()
 
-            # self.bresenham_plot(*self.src_pos, *self.fin_pos)
+            # self.bresenham_plot(int(self.src_pos[0]), int(self.src_pos[1]),
+            #                     int(self.fin_pos[0]), int(self.fin_pos[1]))
 
     # https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
     def ray_collision(self, rect_edge: tuple, xmod: int, ymod: int):
@@ -68,8 +72,6 @@ class Overworld(State):
                 self.bresenham_plot_high(x1, y1, x0, y0)
             else:
                 self.bresenham_plot_high(x0, y0, x1, y1)
-
-    # noinspection PyMethodMayBeStatic
     def bresenham_plot_low(self, x0, y0, x1, y1):
         dx = x1 - x0
         dy = y1 - y0
@@ -82,17 +84,13 @@ class Overworld(State):
 
         for x in range(x0, x1):
             if x % 32 == 0 and not self.src_pos[0] - 32 < x < self.src_pos[0] + 32:
-                # pg.draw.rect(self.game.screen, (111, 1, 1), (x, y, 1, 1))
-                for fog in self.game.fog.sprites():
-                    if fog.rect.collidepoint(x, y):
-                        fog.kill()
+                pg.draw.rect(self.game.screen, (125, 1, 1), (x, y, 1, 1))
             if d > 0:
                 y = y + yi
                 d = d + (2 * (dy - dx))
             else:
                 d = d + 2 * dy
 
-    # noinspection PyMethodMayBeStatic
     def bresenham_plot_high(self, x0, y0, x1, y1):
         dx = x1 - x0
         dy = y1 - y0
@@ -105,10 +103,7 @@ class Overworld(State):
 
         for y in range(y0, y1):
             if y % 32 == 0 and not self.src_pos[1] - 32 < y < self.src_pos[1] + 32:
-                # pg.draw.rect(self.game.screen, (111, 1, 1), (x, y, 1, 1))
-                for fog in self.game.fog.sprites():
-                    if fog.rect.collidepoint(x, y):
-                        fog.kill()
+                pg.draw.rect(self.game.screen, (125, 1, 1), (x, y, 1, 1))
             if d > 0:
                 x = x + xi
                 d = d + (2 * (dx - dy))
@@ -120,13 +115,13 @@ class Overworld(State):
         self.game.camera.update(self.game.player.sprite)
 
     def render(self):
+        # self.line_of_sight()
+
         self.game.screen.blit(self.game.map_img, self.game.camera.apply_rect(self.game.map_rect))
         for sprite in self.game.all_sprites:
             self.game.screen.blit(sprite.image, self.game.camera.apply_sprite(sprite))
             if sprite.adjustable_layer:
                 self.game.all_sprites.change_layer(sprite, sprite.rect.bottom)
-
-        self.line_of_sight()
 
         if self.game.draw_debug:
             pg.draw.rect(self.game.screen, (255, 255, 255),

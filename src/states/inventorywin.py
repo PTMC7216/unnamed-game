@@ -12,7 +12,7 @@ class InventoryWin(Menu):
         self.name = "Inventory Window"
 
         self.frame = self.framer.make_center_frame(2, 2)
-        self.panel = self.framer.make_panel(self.frame.w, self.frame.h,
+        self.panel = self.framer.make_panel(self.frame.w, self.frame.h, (10, 10, 10),
                                             topleft=(self.frame.x, self.frame.y))
 
         self.pos_adj = {"x": self.panel["rect"].w // 2,
