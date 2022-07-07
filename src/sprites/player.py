@@ -18,7 +18,20 @@ class Player(Sprite, Stats):
         self.spritesheet = self.game.player_sheet
 
         self.imgrect_center(self.spritesheet.image_at(1, 0, 1, 1))
-        self.rect.inflate_ip(-2, -2)  # TODO: Reposition rect
+        self.image = pg.transform.scale(self.image, (30, 30))
+        self.rect.inflate_ip(-2, -2)
+
+        self.up = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 3, 1, 1, 3, -1)]
+        self.down = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 0, 1, 1, 3, -1)]
+        self.left = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 1, 1, 1, 3, -1)]
+        self.right = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 2, 1, 1, 3, -1)]
+
+        self.anim_timer = pg.time.get_ticks()
+        self.direction = []
+        self.last_direction = None
+        self.cooldown = 175
+        self.frames = len(self.up) - 1
+        self.frame = 0
 
         Stats.__init__(
             self,
@@ -40,17 +53,6 @@ class Player(Sprite, Stats):
 
         self.dy = []
         self.dx = []
-
-        self.anim_timer = pg.time.get_ticks()
-        self.up = self.spritesheet.image_strip(0, 3, 1, 1, 3, -1)
-        self.down = self.spritesheet.image_strip(0, 0, 1, 1, 3, -1)
-        self.left = self.spritesheet.image_strip(0, 1, 1, 1, 3, -1)
-        self.right = self.spritesheet.image_strip(0, 2, 1, 1, 3, -1)
-        self.direction = []
-        self.last_direction = None
-        self.cooldown = 175
-        self.frames = len(self.up) - 1
-        self.frame = 0
 
         self.item_collision_kwargs = {"sprite": self,
                                       "group": self.game.items,
