@@ -5,15 +5,6 @@ from .items import Item
 from src.states.notifywin import NotifyWin, NotifyChoiceWin
 
 
-class Interactable:
-    def __init__(self, game, x, y, interactable_name):
-        interactable_dict = {
-            "Origin Space": OriginSpace,
-            "Wooden Chest": WoodenChest
-        }
-        interactable_dict[interactable_name](game, x, y)
-
-
 class SpaceCon(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -99,3 +90,13 @@ class IronChest(ChestCon):
         self.name = "Iron Chest"
 
         self.contents = None
+
+
+class Interactable:
+    interactable_dict = {
+        "Origin Space": OriginSpace,
+        "Wooden Chest": WoodenChest
+    }
+
+    def __init__(self, game, x, y, interactable_name):
+        self.interactable_dict[interactable_name](game, x, y)

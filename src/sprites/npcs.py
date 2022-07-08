@@ -5,19 +5,6 @@ from src.allocs.stats import Stats
 from src.states.dialoguewin import DialogueWin
 
 
-class NPC:
-    def __init__(self, game, x, y, npc_name):
-        self.game = game
-
-        npc_dict = {
-            "Green Test": GreenTest,
-            "Yellow Test": YellowTest,
-            "Blue Test": BlueTest
-        }
-
-        npc_dict[npc_name](game, x, y)
-
-
 class NPCCon(Sprite, Stats):
     def __init__(self, game, x, y):
         self.game = game
@@ -136,3 +123,15 @@ class BlueTest(NPCCon):
     #             self.vel = 1
     #
     #     self.rect.x += self.vel
+
+
+class NPC:
+    npc_dict = {
+        "Green Test": GreenTest,
+        "Yellow Test": YellowTest,
+        "Blue Test": BlueTest
+    }
+
+    def __init__(self, game, x, y, npc_name):
+        self.game = game
+        self.npc_dict[npc_name](game, x, y)

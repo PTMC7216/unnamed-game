@@ -2,17 +2,6 @@ import pygame as pg
 from .sprite import Sprite
 
 
-class Door:
-    def __init__(self, game, x, y, door_name):
-        door_dict = {
-            "Wooden Door": WoodenDoor,
-            "Wooden Door Event": WoodenDoorEvent,
-            "Wooden Gate NS": WoodenGateNS,
-            "Wooden Gate WE": WoodenGateWE
-        }
-        door_dict[door_name](game, x, y)
-
-
 class DoorCon(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -79,3 +68,15 @@ class WoodenGateWE(DoorCon):
         self.name = "Wooden Gate"
         self.desc = "This gate is locked with brass"
         self.key_req = "Brass Key"
+
+
+class Door:
+    door_dict = {
+        "Wooden Door": WoodenDoor,
+        "Wooden Door Event": WoodenDoorEvent,
+        "Wooden Gate NS": WoodenGateNS,
+        "Wooden Gate WE": WoodenGateWE
+    }
+
+    def __init__(self, game, x, y, door_name):
+        self.door_dict[door_name](game, x, y)

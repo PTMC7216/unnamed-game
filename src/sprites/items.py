@@ -3,16 +3,6 @@ from .sprite import Sprite
 from src.states.notifywin import NotifyWin
 
 
-class Item:
-    def __init__(self, game, x, y, item_name):
-        item_dict = {
-            "Brass Key": BrassKey,
-            "Iron Key": IronKey,
-            "Rusted Sword": RustedSword
-        }
-        item_dict[item_name](game, x, y)
-
-
 class ItemCon(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -209,3 +199,14 @@ class IronKey(KeyCon):
         self.imgrect_center(self.spritesheet.image_at(0, 4, 1, 1))
         self.name = "Iron Key"
         self.desc = "A heavy iron key."
+
+
+class Item:
+    item_dict = {
+        "Brass Key": BrassKey,
+        "Iron Key": IronKey,
+        "Rusted Sword": RustedSword
+    }
+
+    def __init__(self, game, x, y, item_name):
+        self.item_dict[item_name](game, x, y)
