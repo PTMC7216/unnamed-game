@@ -77,7 +77,7 @@ class Game:
             if tile.type == 'obstacle':
                 sprites.Obstacles(self, tile.x, tile.y, tile.width, tile.height)
             if tile.type == 'door':
-                sprites.Door(self, tile.x, tile.y, tile.name)
+                sprites.Door(self, tile.x, tile.y, tile.name, tile.properties)
             if tile.type == 'interactable':
                 sprites.Interactable(self, tile.x, tile.y, tile.name)
             if tile.type == 'item':
