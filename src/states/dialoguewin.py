@@ -134,10 +134,9 @@ class DialogueWin(Menu):
                 else:
                     self.speaker = data[self.npc.dialogue_section]['speaker']
 
+                # TODO: remove image scaling once ui size is decided & preload images
                 self.portrait = pg.image.load(
-                    f"./data/images/portraits/"
-                    f"{data[self.npc.dialogue_section]['portrait']}.jpg").convert()
-                # TODO: remove image scaling once ui size is decided
+                    f"./data/images/portraits/{data[self.npc.dialogue_section]['portrait']}.jpg").convert()
                 self.portrait = pg.transform.scale(self.portrait,
                                                    (self.portrait_panel["rect"].w - self.padding * 2,
                                                     self.portrait_panel["rect"].h - self.padding * 2))

@@ -5,14 +5,12 @@ from src.states.notifywin import NotifyWin
 
 class ItemCon(Sprite):
     def __init__(self, game, x, y):
-        self.game = game
-        self._layer = -1
-        self.adjustable_layer = False
-        Sprite.__init__(self, game, x, y, self.game.items)
+        self._layer, self.adjustable_layer = -1, False
+        super().__init__(game, x, y, game.items)
 
-        self.spritesheet = self.game.item_sheet
+        self.spritesheet = game.item_sheet
 
-        self.subtype = "item"
+        self.category = "item"
         self.equipped = False
         self.equipable = False
         self.usable = False
@@ -22,82 +20,82 @@ class ItemCon(Sprite):
 
     def use(self):
         if not self.usable:
-            notice = f"Can't use the {self.name}."
-            NotifyWin(self.game, 1, notice).enter_state()
+            NotifyWin(self.game, 1, f"Can't use the {self.name}.").enter_state()
+
         else:
-            if self.subtype == "consumable":
+            if self.category == "consumable":
                 pass
 
-            elif self.subtype == "reusable":
+            elif self.category == "reusable":
                 pass
 
-            elif self.subtype == "key":
-                kwargs = {"sprite": self.game.player.sprite, "group": self.game.closed_doors,
-                          "dokill": False, "collided": pg.sprite.collide_rect_ratio(1.1)}
-                if pg.sprite.spritecollide(**kwargs):
-                    door = pg.sprite.spritecollide(**kwargs)[-1]
-                    if door.key_req == self.name:
-                        notice = f"Opened the {door.name.lower()} with the {self.name.lower()}."
-                        NotifyWin(self.game, 4, notice).enter_state()
-                        door.open()
-                    elif door.key_req != self.name:
-                        notice = f"The {self.name.lower()} doesn't fit."
-                        NotifyWin(self.game, 2, notice).enter_state()
+            elif self.category == "key":
+                if pg.sprite.spritecollide(**self.game.player.sprite.door_collision_kwargs):
+                    self.__use_key("door", **self.game.player.sprite.door_collision_kwargs)
+                elif pg.sprite.spritecollide(**self.game.player.sprite.interactable_collision_kwargs):
+                    self.__use_key("chest", **self.game.player.sprite.interactable_collision_kwargs)
                 else:
-                    notice = f"Nothing to use the {self.name.lower()} on."
-                    NotifyWin(self.game, 1, notice).enter_state()
+                    NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
             else:
-                notice = f"Used the {self.name}, but nothing happened."
-                NotifyWin(self.game, 2, notice).enter_state()
+                NotifyWin(self.game, 2, f"Used the {self.name}, but nothing happened.").enter_state()
+
+    def __use_key(self, category, **collision_kwargs):
+        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
+        if obj.category == category:
+            if obj.key_req == self.name:
+                notice = f"Opened the {obj.name.lower()} with the {self.name.lower()}."
+                NotifyWin(self.game, 4, notice).enter_state()
+                obj.open()
+            elif obj.key_req is None:
+                NotifyWin(self.game, 2, f"The {obj.name.lower()} is already unlocked.").enter_state()
+            elif obj.key_req != self.name:
+                NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
+        else:
+            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
     def equip(self):
         if not self.equipable:
-            notice = f"Can't equip the {self.name}."
-            NotifyWin(self.game, 1, notice).enter_state()
+            NotifyWin(self.game, 1, f"Can't equip the {self.name}.").enter_state()
         elif not self.equipped:
-            if self.subtype == "weapon":
+            if self.category == "weapon":
                 self.game.player.sprite.hand[0] = self
-            elif self.subtype == "armor":
+            elif self.category == "armor":
                 pass
-            elif self.subtype == "accessory":
+            elif self.category == "accessory":
                 pass
             self.equipped = not self.equipped
             self.game.player.sprite.update_substats()
-            notice = f"Equipped the {self.name}."
-            NotifyWin(self.game, 2, notice).enter_state()
+            NotifyWin(self.game, 2, f"Equipped the {self.name}.").enter_state()
         else:
-            notice = f"The {self.name} is already equipped."
-            NotifyWin(self.game, 1, notice).enter_state()
+            NotifyWin(self.game, 1, f"The {self.name} is already equipped.").enter_state()
 
     def unequip(self):
         if self.equipped:
-            if self.subtype == "weapon":
+            if self.category == "weapon":
                 for i, item in enumerate(self.game.player.sprite.hand):
                     if item == self:
                         self.game.player.sprite.hand[i] = "None"
-            elif self.subtype == "armor":
+            elif self.category == "armor":
                 pass
-            elif self.subtype == "accessory":
+            elif self.category == "accessory":
                 pass
             self.equipped = not self.equipped
             self.game.player.sprite.update_substats()
-            notice = f"Unequipped the {self.name}."
-            NotifyWin(self.game, 2, notice).enter_state()
+            NotifyWin(self.game, 2, f"Unequipped the {self.name}.").enter_state()
 
     def examine(self):
-        notice = self.desc
-        NotifyWin(self.game, 1, notice).enter_state()
+        NotifyWin(self.game, 1, self.desc).enter_state()
 
     def drop(self):
         if self.equipped:
-            if self.subtype == "weapon":
+            if self.category == "weapon":
                 for i, item in enumerate(self.game.player.sprite.hand):
                     if item == self:
                         self.game.player.sprite.hand[i] = ""
-            elif self.subtype == "armor":
+            elif self.category == "armor":
                 pass
-            elif self.subtype == "accessory":
+            elif self.category == "accessory":
                 pass
             self.equipped = not self.equipped
             self.game.player.sprite.update_substats()
@@ -110,15 +108,14 @@ class ItemCon(Sprite):
                 self.game.state_stack[i].refresh()
                 break
 
-        notice = f"Dropped the {self.name}."
-        NotifyWin(self.game, 2, notice).enter_state()
+        NotifyWin(self.game, 2, f"Dropped the {self.name}.").enter_state()
         Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, self.name)
 
 
 class ConsumableCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "consumable"
+        self.category = "consumable"
         self.equipable = False
         self.usable = True
 
@@ -126,7 +123,7 @@ class ConsumableCon(ItemCon):
 class ReusableCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "reusable"
+        self.category = "reusable"
         self.equipable = False
         self.usable = True
 
@@ -134,7 +131,7 @@ class ReusableCon(ItemCon):
 class WeaponCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "weapon"
+        self.category = "weapon"
         self.equipable = True
         self.usable = False
 
@@ -142,7 +139,7 @@ class WeaponCon(ItemCon):
 class ArmorCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "armor"
+        self.category = "armor"
         self.equipable = True
         self.usable = False
 
@@ -150,7 +147,7 @@ class ArmorCon(ItemCon):
 class AccessoryCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "accessory"
+        self.category = "accessory"
         self.equipable = True
         self.usable = False
 
@@ -158,7 +155,7 @@ class AccessoryCon(ItemCon):
 class KeyCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "key"
+        self.category = "key"
         self.equipable = False
         self.usable = True
 
@@ -166,7 +163,7 @@ class KeyCon(ItemCon):
 class StoryCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        self.subtype = "story"
+        self.category = "story"
         self.equipable = False
         self.usable = False
 

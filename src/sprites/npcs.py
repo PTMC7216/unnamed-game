@@ -7,7 +7,6 @@ from src.states.dialoguewin import DialogueWin
 
 class NPCCon(Sprite, Stats):
     def __init__(self, game, x, y):
-        self.game = game
         self.adjustable_layer = True
         Sprite.__init__(self, game, x, y, game.npcs)
 

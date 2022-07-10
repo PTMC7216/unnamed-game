@@ -79,7 +79,7 @@ class Game:
             if tile.type == 'door':
                 sprites.Door(self, tile.x, tile.y, tile.name, tile.properties)
             if tile.type == 'interactable':
-                sprites.Interactable(self, tile.x, tile.y, tile.name)
+                sprites.Interactable(self, tile.x, tile.y, tile.name, tile.properties)
             if tile.type == 'item':
                 sprites.Item(self, tile.x, tile.y, tile.name)
         # for coord in self.map.fog_xy:

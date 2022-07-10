@@ -72,6 +72,7 @@ class Overworld(State):
                 self.bresenham_plot_high(x1, y1, x0, y0)
             else:
                 self.bresenham_plot_high(x0, y0, x1, y1)
+
     def bresenham_plot_low(self, x0, y0, x1, y1):
         dx = x1 - x0
         dy = y1 - y0

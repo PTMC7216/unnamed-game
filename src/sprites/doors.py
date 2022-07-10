@@ -1,22 +1,32 @@
 import pygame as pg
 from .sprite import Sprite
+from src.states.notifywin import NotifyWin
 
 
 class DoorCon(Sprite):
     def __init__(self, game, x, y, props):
-        self.game = game
-        self._layer = self.game.map_rect[3]
-        self.adjustable_layer = True
-        Sprite.__init__(self, game, x, y, self.game.closed_doors)
+        self._layer, self.adjustable_layer = game.map_rect[3], True
+        super().__init__(game, x, y, game.closed_doors)
 
-        self.key_req = props["key_req"]
-        if self.key_req is not None:
-            self.desc = f"This door is locked with {self.key_req.split()[0].lower()}"
+        self.category = "door"
+        self.key_req = None
+
+        if props:
+            if props["key_req"]:
+                self.key_req = props["key_req"]
+                self.desc = f"This door is locked with {self.key_req.split()[0].lower()}"
 
     def open(self):
         self.kill()
         self.add(self.game.opened_doors, self.game.all_sprites)
         self.image = self.opened_img
+
+    def interact(self):
+        if self.key_req is None:
+            self.open()
+            NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
+        else:
+            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
 
 
 class WoodenDoor(DoorCon):

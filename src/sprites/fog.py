@@ -4,12 +4,10 @@ from .sprite import Sprite
 
 class Fog(Sprite):
     def __init__(self, game, x, y):
-        self.game = game
-        self._layer = self.game.map_rect[3] + 1
-        self.adjustable_layer = False
-        super().__init__(game, x, y, self.game.fog)
+        self._layer, self.adjustable_layer = game.map_rect[3] + 1, False
+        super().__init__(game, x, y, game.fog)
 
-        img = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
+        img = pg.Surface((game.tilesize, game.tilesize)).convert()
         img.fill((0, 0, 0))
         img.set_colorkey((1, 1, 1))
         self.imgrect_topleft(img)

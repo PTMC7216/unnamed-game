@@ -9,13 +9,12 @@ from math import ceil
 
 class Player(Sprite, Stats):
     def __init__(self, game, x, y):
-        self.game = game
         self.adjustable_layer = True
-        Sprite.__init__(self, game, x, y, self.game.player)
+        Sprite.__init__(self, game, x, y, game.player)
 
         self.name = "Nameless"
         self.title = ". . ."
-        self.spritesheet = self.game.player_sheet
+        self.spritesheet = game.player_sheet
 
         self.imgrect_center(self.spritesheet.image_at(1, 0, 1, 1))
         self.image = pg.transform.scale(self.image, (30, 30))
@@ -54,22 +53,13 @@ class Player(Sprite, Stats):
         self.dy = []
         self.dx = []
 
-        self.item_collision_kwargs = {"sprite": self,
-                                      "group": self.game.items,
-                                      "dokill": False}
+        self.item_collision_kwargs = {"sprite": self, "group": self.game.items, "dokill": False}
 
-        self.door_collision_kwargs = {"sprite": self,
-                                      "group": self.game.closed_doors,
-                                      "dokill": False,
+        self.door_collision_kwargs = {"sprite": self, "group": self.game.closed_doors, "dokill": False,
                                       "collided": pg.sprite.collide_rect_ratio(1.1)}
+        self.interactable_collision_kwargs = {"sprite": self, "group": self.game.interactables, "dokill": False}
 
-        self.interactable_collision_kwargs = {"sprite": self,
-                                              "group": self.game.interactables,
-                                              "dokill": False}
-
-        self.npc_collision_kwargs = {"sprite": self,
-                                     "group": self.game.npcs,
-                                     "dokill": False}
+        self.npc_collision_kwargs = {"sprite": self, "group": self.game.npcs, "dokill": False}
 
     def inv_add(self, item):
         if len(self.inventory) < 4:
@@ -87,11 +77,7 @@ class Player(Sprite, Stats):
 
         elif pg.sprite.spritecollide(**self.door_collision_kwargs):
             door = pg.sprite.spritecollide(**self.door_collision_kwargs)[-1]
-            if door.key_req is None:
-                door.open()
-                NotifyWin(self.game, 1, f"Opened the {door.name.lower()}.").enter_state()
-            else:
-                NotifyWin(self.game, 1, f"{door.desc}.").enter_state()
+            door.interact()
 
         elif pg.sprite.spritecollide(**self.interactable_collision_kwargs):
             interactable = pg.sprite.spritecollide(**self.interactable_collision_kwargs)[-1]
