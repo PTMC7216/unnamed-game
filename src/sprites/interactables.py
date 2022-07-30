@@ -5,13 +5,28 @@ from .items import Item
 from src.states.notifywin import NotifyWin, NotifyChoiceWin
 
 
+class SwitchCon(Sprite):
+    def __init__(self, game, x, y, props):
+        self._layer, self.adjustable_layer = -2, False
+        super().__init__(game, x, y, game.interactables)
+        self.spritesheet = game.other_sheet
+        self.category = "switch"
+
+
+class GreenCrystalSwitch(SwitchCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        self.active_img = self.spritesheet.image_at(6, 2, 1, 1)
+        self.inert_img = self.spritesheet.image_at(5, 2, 1, 1)
+        self.imgrect_center(self.active_img)
+        self.name = "Green Crystal"
+
+
 class PortalCon(Sprite):
     def __init__(self, game, x, y, props):
         self._layer, self.adjustable_layer = -2, False
         super().__init__(game, x, y, spritegroup)
-
         self.spritesheet = game.other_sheet
-
         self.category = "portal"
 
 
@@ -24,9 +39,7 @@ class SpaceCon(Sprite):
     def __init__(self, game, x, y, props):
         self._layer, self.adjustable_layer = -2, False
         super().__init__(game, x, y, game.interactables)
-
         self.spritesheet = game.other_sheet
-
         self.category = "space"
         self.variance = 0
         self.step = 0
@@ -35,10 +48,8 @@ class SpaceCon(Sprite):
 class OriginSpace(SpaceCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-
         img = self.spritesheet.image_at(7, 0, 1, 1)
         self.imgrect_center(img)
-
         self.name = "Origin Space"
 
     def interact(self):
@@ -49,9 +60,7 @@ class ChestCon(Sprite):
     def __init__(self, game, x, y, props):
         self._layer, self.adjustable_layer = -2, False
         super().__init__(game, x, y, game.interactables)
-
         self.spritesheet = game.other_sheet
-
         self.category = "chest"
         self.opened = False
         self.key_req = None
@@ -86,28 +95,20 @@ class ChestCon(Sprite):
 class WoodenChest(ChestCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-
         self.closed_img = self.spritesheet.image_at(5, 0, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 0, 1, 1)
-
         self.imgrect_center(self.closed_img)
-
         self.name = "Wooden Chest"
-
         self.contents = None
 
 
 class IronChest(ChestCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-
         self.closed_img = self.spritesheet.image_at(5, 1, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 1, 1, 1)
-
         self.imgrect_center(self.closed_img)
-
         self.name = "Iron Chest"
-
         self.contents = None
 
 

@@ -10,11 +10,17 @@ class DoorCon(Sprite):
 
         self.category = "door"
         self.key_req = None
+        self.shielded = False
+        self.shield_type = None
 
         if props:
-            if props["key_req"]:
+            if "key_req" in props:
                 self.key_req = props["key_req"]
                 self.desc = f"This door is locked with {self.key_req.split()[0].lower()}"
+
+            if "shield_type" in props:
+                self.shield_type = props["shield_type"]
+                self.desc = f"This door is shielded by a layer of {self.shield_type.lower()} energy"
 
     def open(self):
         self.kill()
@@ -22,11 +28,14 @@ class DoorCon(Sprite):
         self.image = self.opened_img
 
     def interact(self):
-        if self.key_req is None:
-            self.open()
-            NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
-        else:
+        if self.shielded:
             NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+        else:
+            if self.key_req is None:
+                self.open()
+                NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
+            else:
+                NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
 
 
 class WoodenDoor(DoorCon):
@@ -67,12 +76,24 @@ class WoodenGateWE(DoorCon):
         self.name = "Wooden Gate"
 
 
+class EnergyDoor(DoorCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        if self.shield_type == "green":
+            self.closed_img = self.game.other_sheet.image_at(0, 3, 1, 1)
+        self.opened_img = self.game.other_sheet.image_at(0, 1, 1, 1)
+        self.imgrect_topleft(self.closed_img)
+        self.name = "Force Door"
+        self.shielded = True
+
+
 class Door:
     door_dict = {
         "Wooden Door": WoodenDoor,
         "Wooden Door Event": WoodenDoorEvent,
         "Wooden Gate NS": WoodenGateNS,
-        "Wooden Gate WE": WoodenGateWE
+        "Wooden Gate WE": WoodenGateWE,
+        "Energy Door": EnergyDoor,
     }
 
     def __init__(self, game, x, y, door_name, props):
