@@ -7,11 +7,8 @@ class DoorCon(Sprite):
     def __init__(self, game, x, y, props):
         self._layer, self.adjustable_layer = game.map_rect[3], True
         super().__init__(game, x, y, game.closed_doors)
-
         self.category = "door"
         self.key_req = None
-        self.shielded = False
-        self.shield_type = None
 
         if props:
             if "key_req" in props:
@@ -28,14 +25,11 @@ class DoorCon(Sprite):
         self.image = self.opened_img
 
     def interact(self):
-        if self.shielded:
-            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+        if self.key_req is None:
+            self.open()
+            NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
         else:
-            if self.key_req is None:
-                self.open()
-                NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
-            else:
-                NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
 
 
 class WoodenDoor(DoorCon):
@@ -85,6 +79,10 @@ class EnergyDoor(DoorCon):
         self.imgrect_topleft(self.closed_img)
         self.name = "Force Door"
         self.shielded = True
+
+    def interact(self):
+        if self.shielded:
+            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
 
 
 class Door:

@@ -43,10 +43,10 @@ class NotifyWin(Menu):
 
 
 class NotifyChoiceWin(NotifyWin):
-    def __init__(self, game, category, c1, c2, step, state_exits, *notices):
+    def __init__(self, game, obj, c1, c2, step, state_exits, *notices):
         super().__init__(game, state_exits, *notices)
 
-        self.category = category
+        self.obj = obj
         self.c1 = c1
         self.c2 = c2
         self.step = step
@@ -110,7 +110,7 @@ class NotifyChoiceWin(NotifyWin):
             utils.ptext.draw(">", self.selector_rect.center)
 
     def flag_handler(self):
-        if self.category == "Pause Window":
+        if self.obj == "Pause Window":
             if self.flag == "Yes":
                 self.game.select_sound.play()
                 pg.mixer.music.load('./data/music/ominous1.ogg')
@@ -121,3 +121,21 @@ class NotifyChoiceWin(NotifyWin):
                 self.game.select_sound.play()
                 self.movement_key_check()
                 self.exit_states(self.state_exits)
+
+        if self.obj == "Crystal Switch":
+            if self.flag == "Do nothing":
+                self.game.select_sound.play()
+                self.movement_key_check()
+                self.exit_states(self.state_exits)
+            elif self.flag == "Touch it":
+                self.game.select_sound.play()
+                interactable = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
+                for door in self.game.closed_doors:
+                    if door.name == "Force Door" and door.shield_type == interactable.crystal_type:
+                        door.shielded = False
+                        door.open()
+                        interactable.active = False
+                        interactable.image = interactable.inert_img
+                        break
+                self.movement_key_check()
+                NotifyWin(self.game, 2, "The energy within the crystal fades away.").enter_state()

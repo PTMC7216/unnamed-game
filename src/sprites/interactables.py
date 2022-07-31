@@ -12,14 +12,31 @@ class SwitchCon(Sprite):
         self.spritesheet = game.other_sheet
         self.category = "switch"
 
+        if props:
+            if "crystal_type" in props:
+                self.crystal_type = props["crystal_type"]
 
-class GreenCrystalSwitch(SwitchCon):
+    def interact(self):
+        NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+
+
+class CrystalSwitch(SwitchCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        self.active_img = self.spritesheet.image_at(6, 2, 1, 1)
+        if self.crystal_type == "green":
+            self.active_img = self.spritesheet.image_at(6, 2, 1, 1)
         self.inert_img = self.spritesheet.image_at(5, 2, 1, 1)
         self.imgrect_center(self.active_img)
-        self.name = "Green Crystal"
+        self.name = "Crystal Switch"
+        self.active = True
+
+    def interact(self):
+        if self.active:
+            NotifyChoiceWin(self.game, self.name,
+                            "Do nothing", "Touch it", 0, 1,
+                            f"{self.crystal_type.capitalize()} energy swirls within this crystal").enter_state()
+        else:
+            NotifyWin(self.game, 1, "The crystal is empty.").enter_state()
 
 
 class PortalCon(Sprite):
@@ -114,6 +131,7 @@ class IronChest(ChestCon):
 
 class Interactable:
     interactable_dict = {
+        "Crystal Switch": CrystalSwitch,
         "Map Portal": MapPortal,
         "Origin Space": OriginSpace,
         "Wooden Chest": WoodenChest,
