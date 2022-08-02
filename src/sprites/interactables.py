@@ -25,6 +25,8 @@ class CrystalSwitch(SwitchCon):
         super().__init__(game, x, y, props)
         if self.crystal_type == "green":
             self.active_img = self.spritesheet.image_at(6, 2, 1, 1)
+        elif self.crystal_type == "red":
+            self.active_img = self.spritesheet.image_at(7, 2, 1, 1)
         self.inert_img = self.spritesheet.image_at(5, 2, 1, 1)
         self.imgrect_center(self.active_img)
         self.name = "Crystal Switch"

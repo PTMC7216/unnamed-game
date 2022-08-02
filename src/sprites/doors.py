@@ -9,6 +9,7 @@ class DoorCon(Sprite):
         super().__init__(game, x, y, game.closed_doors)
         self.category = "door"
         self.key_req = None
+        self.shielded = False
 
         if props:
             if "key_req" in props:
@@ -19,13 +20,18 @@ class DoorCon(Sprite):
                 self.shield_type = props["shield_type"]
                 self.desc = f"This door is shielded by a layer of {self.shield_type.lower()} energy"
 
+            if "orientation" in props:
+                self.orientation = props["orientation"]
+
     def open(self):
         self.kill()
         self.add(self.game.opened_doors, self.game.all_sprites)
         self.image = self.opened_img
 
     def interact(self):
-        if self.key_req is None:
+        if self.shielded:
+            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+        elif self.key_req is None:
             self.open()
             NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
         else:
@@ -52,20 +58,15 @@ class WoodenDoorEvent(WoodenDoor):
         self.image = self.opened_img
 
 
-class WoodenGateNS(DoorCon):
+class WoodenGate(DoorCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        self.closed_img = self.game.other_sheet.image_at(1, 0, 2, 1)
-        self.opened_img = self.game.other_sheet.image_at(1, 1, 2, 1)
-        self.imgrect_topleft(self.closed_img)
-        self.name = "Wooden Gate"
-
-
-class WoodenGateWE(DoorCon):
-    def __init__(self, game, x, y, props):
-        super().__init__(game, x, y, props)
-        self.closed_img = self.game.other_sheet.image_at(3, 0, 1, 2)
-        self.opened_img = self.game.other_sheet.image_at(4, 0, 1, 2)
+        if self.orientation == "ns":
+            self.closed_img = self.game.other_sheet.image_at(3, 0, 1, 2)
+            self.opened_img = self.game.other_sheet.image_at(4, 0, 1, 2)
+        elif self.orientation == "we":
+            self.closed_img = self.game.other_sheet.image_at(1, 0, 2, 1)
+            self.opened_img = self.game.other_sheet.image_at(1, 1, 2, 1)
         self.imgrect_topleft(self.closed_img)
         self.name = "Wooden Gate"
 
@@ -75,23 +76,43 @@ class EnergyDoor(DoorCon):
         super().__init__(game, x, y, props)
         if self.shield_type == "green":
             self.closed_img = self.game.other_sheet.image_at(0, 3, 1, 1)
+        elif self.shield_type == "red":
+            self.closed_img = self.game.other_sheet.image_at(0, 5, 1, 1)
         self.opened_img = self.game.other_sheet.image_at(0, 1, 1, 1)
         self.imgrect_topleft(self.closed_img)
         self.name = "Force Door"
         self.shielded = True
 
-    def interact(self):
-        if self.shielded:
-            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+
+class EnergyGate(DoorCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        if self.orientation == "ns":
+            if self.shield_type == "green":
+                self.closed_img = self.game.other_sheet.image_at(4, 2, 1, 2)
+            elif self.shield_type == "red":
+                self.closed_img = self.game.other_sheet.image_at(4, 4, 1, 2)
+            self.opened_img = self.game.other_sheet.image_at(4, 0, 1, 2)
+
+        elif self.orientation == "we":
+            if self.shield_type == "green":
+                self.closed_img = self.game.other_sheet.image_at(1, 3, 2, 1)
+            elif self.shield_type == "red":
+                self.closed_img = self.game.other_sheet.image_at(1, 5, 2, 1)
+            self.opened_img = self.game.other_sheet.image_at(1, 1, 2, 1)
+
+        self.imgrect_topleft(self.closed_img)
+        self.name = "Force Gate"
+        self.shielded = True
 
 
 class Door:
     door_dict = {
         "Wooden Door": WoodenDoor,
         "Wooden Door Event": WoodenDoorEvent,
-        "Wooden Gate NS": WoodenGateNS,
-        "Wooden Gate WE": WoodenGateWE,
+        "Wooden Gate": WoodenGate,
         "Energy Door": EnergyDoor,
+        "Energy Gate": EnergyGate
     }
 
     def __init__(self, game, x, y, door_name, props):

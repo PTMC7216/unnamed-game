@@ -130,8 +130,9 @@ class NotifyChoiceWin(NotifyWin):
             elif self.flag == "Touch it":
                 self.game.select_sound.play()
                 interactable = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
+                door_names = {"Force Door", "Force Gate"}
                 for door in self.game.closed_doors:
-                    if door.name == "Force Door" and door.shield_type == interactable.crystal_type:
+                    if door.name in door_names and door.shield_type == interactable.crystal_type:
                         door.shielded = False
                         door.open()
                         interactable.active = False
