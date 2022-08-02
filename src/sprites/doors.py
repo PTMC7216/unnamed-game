@@ -14,11 +14,14 @@ class DoorCon(Sprite):
         if props:
             if "key_req" in props:
                 self.key_req = props["key_req"]
-                self.desc = f"This door is locked with {self.key_req.split()[0].lower()}"
+                if self.key_req == "Rusted Key":
+                    self.desc = f"The door is held shut by a rusted lock"
+                else:
+                    self.desc = f"The door is locked with {self.key_req.split()[0].lower()}"
 
             if "shield_type" in props:
                 self.shield_type = props["shield_type"]
-                self.desc = f"This door is shielded by a layer of {self.shield_type.lower()} energy"
+                self.desc = f"The door is shielded by a layer of {self.shield_type.lower()} energy"
 
             if "orientation" in props:
                 self.orientation = props["orientation"]

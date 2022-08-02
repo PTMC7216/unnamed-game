@@ -171,35 +171,40 @@ class StoryCon(ItemCon):
 class RustedSword(WeaponCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
-        self.damage = 1
-
         self.imgrect_center(self.spritesheet.image_at(0, 7, 1, 1))
+        self.damage = 1
         self.name = "Rusted Sword"
         self.desc = f"A rusty sword.\n" \
                     f"Damage: {self.damage}"
 
 
+class RustedKey(KeyCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(0, 0, 1, 1))
+        self.name = "Rusted Key"
+        self.desc = "A heavy key covered in rust."
+
+
 class BrassKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
-        self.imgrect_center(self.spritesheet.image_at(0, 3, 1, 1))
+        self.imgrect_center(self.spritesheet.image_at(0, 1, 1, 1))
         self.name = "Brass Key"
-        self.desc = "An ordinary brass key."
+        self.desc = "A shiny brass key."
 
 
 class IronKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
-        self.imgrect_center(self.spritesheet.image_at(0, 4, 1, 1))
+        self.imgrect_center(self.spritesheet.image_at(0, 2, 1, 1))
         self.name = "Iron Key"
         self.desc = "A heavy iron key."
 
 
 class Item:
     item_dict = {
+        "Rusted Key": RustedKey,
         "Brass Key": BrassKey,
         "Iron Key": IronKey,
         "Rusted Sword": RustedSword

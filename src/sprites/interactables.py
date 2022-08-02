@@ -24,10 +24,10 @@ class CrystalSwitch(SwitchCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         if self.crystal_type == "green":
-            self.active_img = self.spritesheet.image_at(6, 2, 1, 1)
+            self.active_img = self.spritesheet.image_at(6, 3, 1, 1)
         elif self.crystal_type == "red":
-            self.active_img = self.spritesheet.image_at(7, 2, 1, 1)
-        self.inert_img = self.spritesheet.image_at(5, 2, 1, 1)
+            self.active_img = self.spritesheet.image_at(7, 3, 1, 1)
+        self.inert_img = self.spritesheet.image_at(5, 3, 1, 1)
         self.imgrect_center(self.active_img)
         self.name = "Crystal Switch"
         self.active = True
@@ -86,29 +86,43 @@ class ChestCon(Sprite):
         self.contents = None
 
         if props:
-            if props["key_req"]:
+            if "contents" in props:
+                self.contents = props["contents"]
+
+            if "key_req" in props:
                 self.key_req = props["key_req"]
-                self.desc = f"This chest is locked with {self.key_req.split()[0].lower()}"
+                self.desc = f"It's locked with {self.key_req.split()[0].lower()}"
+
+            if "opened" in props:
+                self.opened = props["opened"]
 
     def open(self):
         self.opened = True
         self.image = self.opened_img
 
     def interact(self):
+        notices = []
+        switch = False
+
         if not self.opened:
             if self.key_req is None:
                 self.open()
-                if self.contents:
-                    NotifyWin(self.game, 1,
-                              f"Opened the {self.name.lower()}.",
-                              f"Found {self.contents}").enter_state()
-                    Item(self.game, self.x, self.y, self.contents)
-                else:
-                    NotifyWin(self.game, 1,
-                              f"Opened the {self.name.lower()}.",
-                              f"It's empty.").enter_state()
+                switch = True
+                notices.append(f"Opened the {self.name.lower()}.")
             else:
                 NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+
+        if self.opened:
+            if not switch:
+                notices.append(f"Looked inside the {self.name.lower()}.")
+            if self.contents:
+                notices.append(f"Found {self.contents}.")
+                NotifyWin(self.game, 1, *notices).enter_state()
+                Item(self.game, self.x, self.y, self.contents)
+                self.contents = None
+            else:
+                notices.append("It's empty.")
+                NotifyWin(self.game, 1, *notices).enter_state()
 
 
 class WoodenChest(ChestCon):
@@ -116,9 +130,8 @@ class WoodenChest(ChestCon):
         super().__init__(game, x, y, props)
         self.closed_img = self.spritesheet.image_at(5, 0, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 0, 1, 1)
-        self.imgrect_center(self.closed_img)
+        self.imgrect_topleft(self.closed_img if not self.opened else self.opened_img)
         self.name = "Wooden Chest"
-        self.contents = None
 
 
 class IronChest(ChestCon):
@@ -126,9 +139,17 @@ class IronChest(ChestCon):
         super().__init__(game, x, y, props)
         self.closed_img = self.spritesheet.image_at(5, 1, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 1, 1, 1)
-        self.imgrect_center(self.closed_img)
+        self.imgrect_topleft(self.closed_img if not self.opened else self.opened_img)
         self.name = "Iron Chest"
-        self.contents = None
+
+
+class CoffinChest(ChestCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        self.closed_img = self.spritesheet.image_at(5, 2, 1, 1)
+        self.opened_img = self.spritesheet.image_at(6, 2, 1, 1)
+        self.imgrect_topleft(self.closed_img if not self.opened else self.opened_img)
+        self.name = "Coffin"
 
 
 class Interactable:
@@ -137,7 +158,8 @@ class Interactable:
         "Map Portal": MapPortal,
         "Origin Space": OriginSpace,
         "Wooden Chest": WoodenChest,
-        "Iron Chest": IronChest
+        "Iron Chest": IronChest,
+        "Coffin Chest": CoffinChest
     }
 
     def __init__(self, game, x, y, interactable_name, props):

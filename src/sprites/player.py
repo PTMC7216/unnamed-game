@@ -16,7 +16,7 @@ class Player(Sprite, Stats):
         self.title = ". . ."
         self.spritesheet = game.player_sheet
 
-        self.imgrect_center(self.spritesheet.image_at(1, 0, 1, 1))
+        self.imgrect_topleft(self.spritesheet.image_at(1, 0, 1, 1))
         self.image = pg.transform.scale(self.image, (30, 30))
         self.rect.inflate_ip(-2, -2)
 
