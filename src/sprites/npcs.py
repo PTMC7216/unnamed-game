@@ -69,44 +69,37 @@ class NPCCon(Sprite, Stats):
                     break
 
 
-class GreenTest(NPCCon):
+class Fennel(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((0, 150, 0))
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
-
-        self.name = "Green Test"
-
+        self.rect.topleft = (x, y)
+        self.name = "Fennel"
         self.apply_inventory()
 
 
 class YellowTest(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((150, 150, 0))
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
-
+        self.rect.topleft = (x, y)
         self.name = "Yellow Test"
 
 
 class BlueTest(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((0, 0, 150))
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
-
+        self.rect.topleft = (x, y)
         self.name = "Blue Test"
 
     #     self.base_time = 0
@@ -126,7 +119,7 @@ class BlueTest(NPCCon):
 
 class NPC:
     npc_dict = {
-        "Green Test": GreenTest,
+        "Fennel": Fennel,
         "Yellow Test": YellowTest,
         "Blue Test": BlueTest
     }

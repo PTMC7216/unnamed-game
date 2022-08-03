@@ -28,7 +28,7 @@ class CrystalSwitch(SwitchCon):
         elif self.crystal_type == "red":
             self.active_img = self.spritesheet.image_at(7, 3, 1, 1)
         self.inert_img = self.spritesheet.image_at(5, 3, 1, 1)
-        self.imgrect_center(self.active_img)
+        self.imgrect_topleft(self.active_img)
         self.name = "Crystal Switch"
         self.active = True
 
@@ -38,7 +38,7 @@ class CrystalSwitch(SwitchCon):
                             "Do nothing", "Touch it", 0, 1,
                             f"{self.crystal_type.capitalize()} energy swirls within this crystal").enter_state()
         else:
-            NotifyWin(self.game, 1, "The crystal is empty.").enter_state()
+            NotifyWin(self.game, 1, "The crystal is powerless.").enter_state()
 
 
 class PortalCon(Sprite):
@@ -68,7 +68,7 @@ class OriginSpace(SpaceCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         img = self.spritesheet.image_at(7, 0, 1, 1)
-        self.imgrect_center(img)
+        self.imgrect_topleft(img)
         self.name = "Origin Space"
 
     def interact(self):

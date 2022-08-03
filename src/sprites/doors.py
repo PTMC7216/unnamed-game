@@ -10,6 +10,7 @@ class DoorCon(Sprite):
         self.category = "door"
         self.key_req = None
         self.shielded = False
+        self.jammed = False
 
         if props:
             if "key_req" in props:
@@ -26,19 +27,25 @@ class DoorCon(Sprite):
             if "orientation" in props:
                 self.orientation = props["orientation"]
 
+            if "jammed" in props:
+                self.jammed = props["jammed"]
+
     def open(self):
         self.kill()
         self.add(self.game.opened_doors, self.game.all_sprites)
         self.image = self.opened_img
 
     def interact(self):
-        if self.shielded:
-            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
-        elif self.key_req is None:
-            self.open()
-            NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
+        if self.jammed:
+            NotifyWin(self.game, 1, "The door is jammed.").enter_state()
         else:
-            NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+            if self.shielded:
+                NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+            elif self.key_req is None:
+                self.open()
+                NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
+            else:
+                NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
 
 
 class WoodenDoor(DoorCon):
