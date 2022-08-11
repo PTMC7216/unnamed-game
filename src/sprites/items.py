@@ -37,6 +37,12 @@ class ItemCon(Sprite):
                 else:
                     NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
+            elif self.category == "orb":
+                if pg.sprite.spritecollide(**self.game.player.sprite.door_collision_kwargs):
+                    self.__use_orb("door", **self.game.player.sprite.door_collision_kwargs)
+                else:
+                    NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
+
             else:
                 NotifyWin(self.game, 2, f"Used the {self.name}, but nothing happened.").enter_state()
 
@@ -51,6 +57,22 @@ class ItemCon(Sprite):
                 NotifyWin(self.game, 2, f"The {obj.name.lower()} is already unlocked.").enter_state()
             elif obj.key_req != self.name:
                 NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
+        else:
+            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
+
+    def __use_orb(self, category, **collision_kwargs):
+        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
+        if obj.category == category:
+            if obj.rune_type == self.orb_type or self.orb_type == "all":
+                notice = f"The runes fade away and the {obj.name.split()[-1].lower()} swings open."
+                NotifyWin(self.game, 4, notice).enter_state()
+                obj.open()
+            elif obj.rune_type != self.orb_type:
+                notice = f"The {obj.rune_type} runes fail to react to the orb."
+                NotifyWin(self.game, 2, notice).enter_state()
+            elif obj.rune_type is None:
+                notice = f"There are no runes sealing this {obj.name.split()[-1].lower()}."
+                NotifyWin(self.game, 2, notice).enter_state()
         else:
             NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
@@ -92,7 +114,7 @@ class ItemCon(Sprite):
             if self.category == "weapon":
                 for i, item in enumerate(self.game.player.sprite.hand):
                     if item == self:
-                        self.game.player.sprite.hand[i] = ""
+                        self.game.player.sprite.hand[i] = "None"
             elif self.category == "armor":
                 pass
             elif self.category == "accessory":
@@ -136,6 +158,16 @@ class WeaponCon(ItemCon):
         self.usable = False
 
 
+class RustedSword(WeaponCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(0, 7, 1, 1))
+        self.damage = 1
+        self.name = "Rusted Sword"
+        self.desc = f"A rusty sword.\n" \
+                    f"Damage: {self.damage}"
+
+
 class ArmorCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
@@ -160,24 +192,6 @@ class KeyCon(ItemCon):
         self.usable = True
 
 
-class StoryCon(ItemCon):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
-        self.category = "story"
-        self.equipable = False
-        self.usable = False
-
-
-class RustedSword(WeaponCon):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
-        self.imgrect_center(self.spritesheet.image_at(0, 7, 1, 1))
-        self.damage = 1
-        self.name = "Rusted Sword"
-        self.desc = f"A rusty sword.\n" \
-                    f"Damage: {self.damage}"
-
-
 class RustedKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
@@ -191,7 +205,7 @@ class BrassKey(KeyCon):
         super().__init__(game, x, y)
         self.imgrect_center(self.spritesheet.image_at(0, 1, 1, 1))
         self.name = "Brass Key"
-        self.desc = "A shiny brass key."
+        self.desc = "A simple brass key."
 
 
 class IronKey(KeyCon):
@@ -202,11 +216,67 @@ class IronKey(KeyCon):
         self.desc = "A heavy iron key."
 
 
+class AurichalcumKey(KeyCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(0, 5, 1, 1))
+        self.name = "Aurichalcum Key"
+        self.desc = "A fine red metal key."
+
+
+class OrbCon(ItemCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.category = "orb"
+        self.equipable = False
+        self.usable = True
+
+
+class BlueOrb(OrbCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(1, 2, 1, 1))
+        self.orb_type = "blue"
+        self.name = "Blue Orb"
+        self.desc = "A shining blue orb."
+
+
+class YellowOrb(OrbCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(1, 3, 1, 1))
+        self.orb_type = "yellow"
+        self.name = "Yellow Orb"
+        self.desc = "A shining yellow orb."
+
+
+class BrilliantOrb(OrbCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(1, 4, 1, 1))
+        self.orb_type = "all"
+        self.name = "Brilliant Orb"
+        self.desc = "The energy within this orb appears limitless. \n\n" \
+                    "It continuously shifts through every color in the visible spectrum."
+
+
+class StoryCon(ItemCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.category = "story"
+        self.equipable = False
+        self.usable = False
+
+
 class Item:
     item_dict = {
         "Rusted Key": RustedKey,
         "Brass Key": BrassKey,
         "Iron Key": IronKey,
+        "Aurichalcum Key": AurichalcumKey,
+        "Blue Orb": BlueOrb,
+        "Yellow Orb": YellowOrb,
+        "Brilliant Orb": BrilliantOrb,
         "Rusted Sword": RustedSword
     }
 

@@ -11,10 +11,18 @@ class SwitchCon(Sprite):
         super().__init__(game, x, y, game.interactables)
         self.spritesheet = game.other_sheet
         self.category = "switch"
+        self.event = False
+        self.flagged_npc = None
+        self.flagged_desc = None
 
         if props:
             if "crystal_type" in props:
                 self.crystal_type = props["crystal_type"]
+
+            if "event" in props:
+                self.event = True
+                self.flagged_npc = props["flagged_npc"]
+                self.flagged_desc = props["flagged_desc"]
 
     def interact(self):
         NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
@@ -72,6 +80,7 @@ class OriginSpace(SpaceCon):
         self.name = "Origin Space"
 
     def interact(self):
+        # TODO: Origin Space interaction
         pass
 
 

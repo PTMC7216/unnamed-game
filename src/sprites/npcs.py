@@ -10,6 +10,8 @@ class NPCCon(Sprite, Stats):
         self.adjustable_layer = True
         Sprite.__init__(self, game, x, y, game.npcs)
 
+        self.spritesheet = game.npc_sheet
+
         Stats.__init__(
             self,
             lv=1,
@@ -42,13 +44,13 @@ class NPCCon(Sprite, Stats):
         for item in self.inventory:
             if item.name == name:
                 self.inventory.remove(item)
-                Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, item.name)
+                Item(self.game, self.rect.centerx, self.rect.centery, item.name)
                 break
 
     def drop_all(self):
         for item in self.inventory:
             self.inventory.remove(item)
-            Item(self.game, self.centerx, self.centery, item.name)
+            Item(self.game, self.rect.centerx, self.rect.centery, item.name)
 
     def take_item(self, name):
         for item in self.game.player.sprite.inventory:
@@ -69,15 +71,12 @@ class NPCCon(Sprite, Stats):
                     break
 
 
-class Fennel(NPCCon):
+class Head(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
-        # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
-        self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
-        self.image.fill((0, 150, 0))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.name = "Fennel"
+        self.imgrect_topleft(self.spritesheet.image_at(2, 0, 1, 1))
+        self.name = "Head"
+        self.inventory = ["Blue Orb"]
         self.apply_inventory()
 
 
@@ -119,7 +118,7 @@ class BlueTest(NPCCon):
 
 class NPC:
     npc_dict = {
-        "Fennel": Fennel,
+        "Head": Head,
         "Yellow Test": YellowTest,
         "Blue Test": BlueTest
     }

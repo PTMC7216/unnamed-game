@@ -36,6 +36,7 @@ class Game:
 
         # general spritesheets
         self.player_sheet = utils.Spritesheet(self, 'player_sheet.png')
+        self.npc_sheet = utils.Spritesheet(self, 'npc_sheet.png')
         self.item_sheet = utils.Spritesheet(self, 'item_sheet.png')
         self.other_sheet = utils.Spritesheet(self, 'other_sheet.png')
 

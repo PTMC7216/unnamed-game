@@ -111,25 +111,32 @@ class NotifyChoiceWin(NotifyWin):
 
     def flag_handler(self):
         if self.obj == "Pause Window":
+
             if self.flag == "Yes":
                 self.game.select_sound.play()
                 pg.mixer.music.load('./data/music/ominous1.ogg')
                 pg.mixer.music.play(-1, 0.0, 10000)
                 while len(self.game.state_stack) > 1:
                     self.game.state_stack.pop()
+
             elif self.flag == "No":
                 self.game.select_sound.play()
                 self.movement_key_check()
                 self.exit_states(self.state_exits)
 
         if self.obj == "Crystal Switch":
+
             if self.flag == "Do nothing":
                 self.game.select_sound.play()
                 self.movement_key_check()
                 self.exit_states(self.state_exits)
+
             elif self.flag == "Touch it":
                 self.game.select_sound.play()
                 interactable = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
+                if interactable.event:
+                    interactable.set_flag(interactable.flagged_npc, interactable.flagged_desc)
+
                 door_names = {"Force Door", "Force Gate"}
                 for door in self.game.closed_doors:
                     if door.name in door_names and door.shield_type == interactable.crystal_type:
@@ -138,5 +145,6 @@ class NotifyChoiceWin(NotifyWin):
                         interactable.active = False
                         interactable.image = interactable.inert_img
                         break
+
                 self.movement_key_check()
                 NotifyWin(self.game, 2, "The energy within the crystal fades away.").enter_state()
