@@ -96,6 +96,8 @@ class NotifyChoiceWin(NotifyWin):
                 self.notice += 1
             else:
                 self.game.select_sound.play()
+                self.movement_key_check()
+                self.exit_states(self.state_exits)
 
         self.key_reset()
 
@@ -137,7 +139,7 @@ class NotifyChoiceWin(NotifyWin):
                 if interactable.event:
                     interactable.set_flag(interactable.flagged_npc, interactable.flagged_desc)
 
-                door_names = {"Force Door", "Force Gate"}
+                door_names = {"Energy Door", "Energy Gate"}
                 for door in self.game.closed_doors:
                     if door.name in door_names and door.shield_type == interactable.crystal_type:
                         door.shielded = False
@@ -148,3 +150,21 @@ class NotifyChoiceWin(NotifyWin):
 
                 self.movement_key_check()
                 NotifyWin(self.game, 2, "The energy within the crystal fades away.").enter_state()
+
+        if self.obj == "Tele Portal":
+
+            if self.flag == "Do nothing":
+                self.game.select_sound.play()
+                self.movement_key_check()
+                self.exit_states(self.state_exits)
+
+            elif self.flag == "Reach in":
+                self.game.select_sound.play()
+                touched = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
+                for interactable in self.game.interactables:
+                    if interactable.category == "portal" and interactable.identifier == touched.target:
+                        self.game.player.sprite.rect.center = interactable.rect.center
+                        break
+
+                self.movement_key_check()
+                NotifyWin(self.game, 2, "You are pulled into the swirling mass. . .").enter_state()

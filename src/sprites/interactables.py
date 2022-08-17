@@ -5,10 +5,16 @@ from .items import Item
 from src.states.notifywin import NotifyWin, NotifyChoiceWin
 
 
-class SwitchCon(Sprite):
-    def __init__(self, game, x, y, props):
+class InteractableCon(Sprite):
+    def __init__(self, game, x, y, _):
         self._layer, self.adjustable_layer = -2, False
         super().__init__(game, x, y, game.interactables)
+        self.category = "interactable"
+
+
+class SwitchCon(InteractableCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
         self.category = "switch"
         self.event = False
@@ -16,16 +22,13 @@ class SwitchCon(Sprite):
         self.flagged_desc = None
 
         if props:
-            if "crystal_type" in props:
-                self.crystal_type = props["crystal_type"]
-
             if "event" in props:
                 self.event = True
                 self.flagged_npc = props["flagged_npc"]
                 self.flagged_desc = props["flagged_desc"]
 
-    def interact(self):
-        NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+            if "crystal_type" in props:
+                self.crystal_type = props["crystal_type"]
 
 
 class CrystalSwitch(SwitchCon):
@@ -49,12 +52,33 @@ class CrystalSwitch(SwitchCon):
             NotifyWin(self.game, 1, "The crystal is powerless.").enter_state()
 
 
-class PortalCon(Sprite):
+class PortalCon(InteractableCon):
     def __init__(self, game, x, y, props):
-        self._layer, self.adjustable_layer = -2, False
-        super().__init__(game, x, y, spritegroup)
+        super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
         self.category = "portal"
+        self.indentifier = None
+        self.target = None
+
+        if props:
+            if "identifier" in props:
+                self.identifier = props["identifier"]
+
+            if "target" in props:
+                self.target = props["target"]
+
+
+class TelePortal(PortalCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        img = self.game.other_sheet.image_at(5, 4, 1, 1)
+        self.imgrect_topleft(img)
+        self.name = "Tele Portal"
+
+    def interact(self):
+        NotifyChoiceWin(self.game, self.name,
+                        "Do nothing", "Reach in", 0, 1,
+                        f"A dark, swirling mass.").enter_state()
 
 
 class MapPortal(PortalCon):
@@ -62,10 +86,9 @@ class MapPortal(PortalCon):
         super().__init__(game, x, y, props)
 
 
-class SpaceCon(Sprite):
+class SpaceCon(InteractableCon):
     def __init__(self, game, x, y, props):
-        self._layer, self.adjustable_layer = -2, False
-        super().__init__(game, x, y, game.interactables)
+        super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
         self.category = "space"
         self.variance = 0
@@ -84,10 +107,9 @@ class OriginSpace(SpaceCon):
         pass
 
 
-class ChestCon(Sprite):
+class ChestCon(InteractableCon):
     def __init__(self, game, x, y, props):
-        self._layer, self.adjustable_layer = -2, False
-        super().__init__(game, x, y, game.interactables)
+        super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
         self.category = "chest"
         self.opened = False
@@ -165,6 +187,7 @@ class Interactable:
     interactable_dict = {
         "Crystal Switch": CrystalSwitch,
         "Map Portal": MapPortal,
+        "Tele Portal": TelePortal,
         "Origin Space": OriginSpace,
         "Wooden Chest": WoodenChest,
         "Iron Chest": IronChest,

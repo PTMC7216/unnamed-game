@@ -139,7 +139,7 @@ class EnergyDoor(DoorCon):
             self.closed_img = self.game.other_sheet.image_at(0, 5, 1, 1)
         self.opened_img = self.game.other_sheet.image_at(0, 1, 1, 1)
         self.imgrect_topleft(self.closed_img)
-        self.name = "Force Door"
+        self.name = "Energy Door"
         self.shielded = True
 
 
@@ -161,7 +161,7 @@ class EnergyGate(DoorCon):
             self.opened_img = self.game.other_sheet.image_at(1, 1, 2, 1)
 
         self.imgrect_topleft(self.closed_img)
-        self.name = "Force Gate"
+        self.name = "Energy Gate"
         self.shielded = True
 
 
