@@ -59,6 +59,7 @@ class PortalCon(InteractableCon):
         self.category = "portal"
         self.indentifier = None
         self.target = None
+        self.prompt = False
 
         if props:
             if "identifier" in props:
@@ -66,6 +67,9 @@ class PortalCon(InteractableCon):
 
             if "target" in props:
                 self.target = props["target"]
+
+            if "prompt" in props:
+                self.prompt = True
 
 
 class TelePortal(PortalCon):
@@ -76,9 +80,16 @@ class TelePortal(PortalCon):
         self.name = "Tele Portal"
 
     def interact(self):
-        NotifyChoiceWin(self.game, self.name,
-                        "Do nothing", "Reach in", 0, 1,
-                        f"A dark, swirling mass.").enter_state()
+        if self.prompt:
+            NotifyChoiceWin(self.game, self.name,
+                            "Do nothing", "Reach in", 0, 1,
+                            f"A dark, swirling mass.").enter_state()
+        else:
+            touched = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
+            for interactable in self.game.interactables:
+                if interactable.category == "portal" and interactable.identifier == touched.target:
+                    self.game.player.sprite.rect.center = interactable.rect.center
+                    break
 
 
 class MapPortal(PortalCon):
