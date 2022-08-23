@@ -97,25 +97,33 @@ class MapPortal(PortalCon):
         super().__init__(game, x, y, props)
 
 
-class SpaceCon(InteractableCon):
+class ScriptCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
-        self.category = "space"
+        self.category = "script"
         self.variance = 0
         self.step = 0
 
+    def interact(self):
+        # TODO: script interactions
+        pass
 
-class OriginSpace(SpaceCon):
+
+class SpaceScript(ScriptCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         img = self.spritesheet.image_at(7, 0, 1, 1)
         self.imgrect_topleft(img)
-        self.name = "Origin Space"
+        self.name = "Space Script"
 
-    def interact(self):
-        # TODO: Origin Space interaction
-        pass
+
+class ObeliskScript(ScriptCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        img = self.spritesheet.image_at(8, 0, 1, 1)
+        self.imgrect_topleft(img)
+        self.name = "Obelisk Script"
 
 
 class ChestCon(InteractableCon):
@@ -199,7 +207,8 @@ class Interactable:
         "Crystal Switch": CrystalSwitch,
         "Map Portal": MapPortal,
         "Tele Portal": TelePortal,
-        "Origin Space": OriginSpace,
+        "Space Script": SpaceScript,
+        "Obelisk Script": ObeliskScript,
         "Wooden Chest": WoodenChest,
         "Iron Chest": IronChest,
         "Coffin Chest": CoffinChest
