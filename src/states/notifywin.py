@@ -126,7 +126,7 @@ class NotifyChoiceWin(NotifyWin):
                 self.movement_key_check()
                 self.exit_states(self.state_exits)
 
-        if self.obj == "Crystal Switch":
+        elif self.obj == "Crystal Switch":
 
             if self.flag == "Do nothing":
                 self.game.select_sound.play()
@@ -151,7 +151,7 @@ class NotifyChoiceWin(NotifyWin):
                 self.movement_key_check()
                 NotifyWin(self.game, 2, "The energy within the crystal fades away.").enter_state()
 
-        if self.obj == "Tele Portal":
+        elif self.obj == "Tele Portal":
 
             if self.flag == "Do nothing":
                 self.game.select_sound.play()
@@ -161,10 +161,13 @@ class NotifyChoiceWin(NotifyWin):
             elif self.flag == "Reach in":
                 self.game.select_sound.play()
                 touched = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
-                for interactable in self.game.interactables:
-                    if interactable.category == "portal" and interactable.identifier == touched.target:
-                        self.game.player.sprite.rect.center = interactable.rect.center
-                        break
-
-                self.movement_key_check()
-                NotifyWin(self.game, 2, "You are pulled into the swirling mass. . .").enter_state()
+                if touched.target is None:
+                    self.movement_key_check()
+                    NotifyWin(self.game, 2, "You are pushed away from the swirling mass.").enter_state()
+                else:
+                    for interactable in self.game.interactables:
+                        if interactable.category == "portal" and interactable.identifier == touched.target:
+                            self.game.player.sprite.rect.center = interactable.rect.center
+                            break
+                    self.movement_key_check()
+                    NotifyWin(self.game, 2, "You are pulled into the swirling mass. . .").enter_state()

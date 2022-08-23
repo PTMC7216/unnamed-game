@@ -216,6 +216,24 @@ class IronKey(KeyCon):
         self.desc = "A heavy iron key."
 
 
+class MagicKey(KeyCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(0, 3, 1, 1))
+        self.name = "Magic Key"
+        self.desc = "A faintly humming blue key. \n\n" \
+                    "It feels unusually fragile."
+        # TODO: single-use
+
+
+class AdamantiteKey(KeyCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(0, 4, 1, 1))
+        self.name = "Adamant Key"
+        self.desc = "A jagged green metal key."
+
+
 class AurichalcumKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
@@ -230,6 +248,7 @@ class OrbCon(ItemCon):
         self.category = "orb"
         self.equipable = False
         self.usable = True
+        # TODO: orb charges
 
 
 class BlueOrb(OrbCon):
@@ -273,6 +292,8 @@ class Item:
         "Rusted Key": RustedKey,
         "Brass Key": BrassKey,
         "Iron Key": IronKey,
+        "Magic Key": MagicKey,
+        "Adamantite Key": AdamantiteKey,
         "Aurichalcum Key": AurichalcumKey,
         "Blue Orb": BlueOrb,
         "Yellow Orb": YellowOrb,

@@ -22,8 +22,8 @@ class DoorCon(Sprite):
                 self.key_req = props["key_req"]
                 if self.key_req == "Rusted Key":
                     self.desc = f"The door is held shut by a rusted lock"
-                elif self.key_req == "Aurichalcum Key":
-                    self.desc = f"The door is held shut by a red metal lock"
+                elif self.key_req == "Magic Key":
+                    self.desc = f"The door is held shut by a faintly humming blue lock"
                 else:
                     self.desc = f"The door is locked with {self.key_req.split()[0].lower()}"
 
