@@ -105,10 +105,6 @@ class ScriptCon(InteractableCon):
         self.variance = 0
         self.step = 0
 
-    def interact(self):
-        # TODO: script interactions
-        pass
-
 
 class SpaceScript(ScriptCon):
     def __init__(self, game, x, y, props):
@@ -116,14 +112,6 @@ class SpaceScript(ScriptCon):
         img = self.spritesheet.image_at(7, 0, 1, 1)
         self.imgrect_topleft(img)
         self.name = "Space Script"
-
-
-class ObeliskScript(ScriptCon):
-    def __init__(self, game, x, y, props):
-        super().__init__(game, x, y, props)
-        img = self.spritesheet.image_at(8, 0, 1, 1)
-        self.imgrect_topleft(img)
-        self.name = "Obelisk Script"
 
 
 class ChestCon(InteractableCon):
@@ -168,7 +156,7 @@ class ChestCon(InteractableCon):
             if self.contents:
                 notices.append(f"Found {self.contents}.")
                 NotifyWin(self.game, 1, *notices).enter_state()
-                Item(self.game, self.x, self.y, self.contents)
+                Item(self.game, self.rect.centerx, self.rect.centery, self.contents)
                 self.contents = None
             else:
                 notices.append("It's empty.")
@@ -208,7 +196,6 @@ class Interactable:
         "Map Portal": MapPortal,
         "Tele Portal": TelePortal,
         "Space Script": SpaceScript,
-        "Obelisk Script": ObeliskScript,
         "Wooden Chest": WoodenChest,
         "Iron Chest": IronChest,
         "Coffin Chest": CoffinChest

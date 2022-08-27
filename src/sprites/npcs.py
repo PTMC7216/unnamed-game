@@ -3,6 +3,7 @@ from .sprite import Sprite
 from .items import Item
 from src.allocs.stats import Stats
 from src.states.dialoguewin import DialogueWin
+from src.states.notifywin import NotifyWin
 
 
 class NPCCon(Sprite, Stats):
@@ -80,6 +81,32 @@ class Head(NPCCon):
         self.apply_inventory()
 
 
+class Obelisk(NPCCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_topleft(self.spritesheet.image_at(0, 4, 1, 1))
+        self.name = "Obelisk"
+        self.variance = 0
+        self.step = 0
+
+    def interact(self):
+        strings = {0: ["An immaculate obelisk hovers silently atop a metal plate."],
+                   1: ["Despite being suspended in the air, it appears perfectly motionless."],
+                   2: ["You admire the obelisk.",
+                       "It fills you with a deep curiosity."],
+                   3: ["You scrutinize the obelisk.",
+                       "Voices slowly begin to manifest in your mind."],
+                   5: ["The voices are gone."],
+                   6: ["The obelisk."]}
+
+        if self.step == 4:
+            DialogueWin(self.game, self).enter_state()
+        elif self.step < len(strings.keys()) + 1:
+            NotifyWin(self.game, 1, *strings.get(self.step)).enter_state()
+            if self.step < len(strings.keys()):
+                self.step += 1
+
+
 class YellowTest(NPCCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
@@ -119,6 +146,7 @@ class BlueTest(NPCCon):
 class NPC:
     npc_dict = {
         "Head": Head,
+        "Obelisk": Obelisk,
         "Yellow Test": YellowTest,
         "Blue Test": BlueTest
     }

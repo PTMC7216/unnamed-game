@@ -230,7 +230,7 @@ class AdamantiteKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
         self.imgrect_center(self.spritesheet.image_at(0, 4, 1, 1))
-        self.name = "Adamant Key"
+        self.name = "Adamantite Key"
         self.desc = "A jagged green metal key."
 
 
