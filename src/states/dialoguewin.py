@@ -213,6 +213,10 @@ class DialogueWin(Menu):
                             self.taker = True
                             self.to_take = command["take"]
 
+                        if "set_step" in command:
+                            self.npc.dialogue_counter = 0
+                            self.npc.step = command["set_step"]
+
     def advance_dialogue(self):
         # if still typewriting, instantly display full text block
         if self.typewriter.i < len(self.typewriter.text_block):
