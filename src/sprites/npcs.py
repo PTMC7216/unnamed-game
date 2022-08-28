@@ -89,21 +89,22 @@ class Obelisk(NPCCon):
         self.variance = 0
         self.step = 0
 
-    def interact(self):
-        strings = {0: ["An immaculate obelisk hovers silently atop a metal plate."],
-                   1: ["Despite being suspended in the air, it appears perfectly motionless."],
-                   2: ["You admire the obelisk.",
-                       "It fills you with a deep curiosity."],
-                   3: ["You scrutinize the obelisk.",
-                       "Voices slowly begin to manifest in your mind."],
-                   5: ["The voices are gone."],
-                   6: ["The obelisk."]}
+        self.strings = {0: ["An immaculate obelisk hovers silently atop a metal plate."],
+                        1: ["Despite being suspended in the air, it appears perfectly motionless."],
+                        2: ["You admire the obelisk.",
+                            "It fills you with a deep curiosity."],
+                        3: ["You scrutinize the obelisk.",
+                            "Voices slowly begin to manifest in your mind."],
+                        # 4: DialogueWin step
+                        5: ["The voices are gone."],
+                        6: ["The obelisk."]}
 
+    def interact(self):
         if self.step == 4:
             DialogueWin(self.game, self).enter_state()
-        elif self.step < len(strings.keys()) + 1:
-            NotifyWin(self.game, 1, *strings.get(self.step)).enter_state()
-            if self.step < len(strings.keys()):
+        elif self.step < len(self.strings.keys()) + 1:
+            NotifyWin(self.game, 1, *self.strings.get(self.step)).enter_state()
+            if self.step < len(self.strings.keys()):
                 self.step += 1
 
 
