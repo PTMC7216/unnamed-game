@@ -7,7 +7,7 @@ from src.states.notifywin import NotifyWin
 
 
 class NPCCon(Sprite, Stats):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, props):
         self.adjustable_layer = True
         Sprite.__init__(self, game, x, y, game.npcs)
 
@@ -26,6 +26,8 @@ class NPCCon(Sprite, Stats):
             charisma=1,
             alignment=5)
 
+        self.variant = None
+
         self.flags = []
         self.dialogue_section = "check"
         self.dialogue_counter = 0
@@ -34,6 +36,10 @@ class NPCCon(Sprite, Stats):
         self.inventory = []
 
         self.relocation = 0
+
+        if props:
+            if "variant" in props:
+                self.variant = props["variant"]
 
     def apply_inventory(self):
         for i, itemname in enumerate(self.inventory):
@@ -73,8 +79,8 @@ class NPCCon(Sprite, Stats):
 
 
 class Head(NPCCon):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(2, 0, 1, 1))
         self.name = "Head"
         self.inventory = ["Blue Orb"]
@@ -82,35 +88,43 @@ class Head(NPCCon):
 
 
 class Obelisk(NPCCon):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
+    variants = {0: "Obelisk 0",
+                1: "Obelisk 1"}
+
+    strings = {0: ["An immaculate obelisk hovers silently atop a metal plate.",
+                   "Despite being suspended in the air, it appears perfectly motionless."],
+               1: ["You admire the obelisk."],
+               2: ["Voices begin to manifest in your mind."],
+               # 3: DialogueWin step
+               4: ["The voices are gone."],
+               5: ["The obelisk."]}
+
+    step = 0
+
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(0, 4, 1, 1))
         self.name = "Obelisk"
-        self.variance = 0
-        self.step = 0
-
-        self.strings = {0: ["An immaculate obelisk hovers silently atop a metal plate."],
-                        1: ["Despite being suspended in the air, it appears perfectly motionless."],
-                        2: ["You admire the obelisk.",
-                            "It fills you with a deep curiosity."],
-                        3: ["You scrutinize the obelisk.",
-                            "Voices slowly begin to manifest in your mind."],
-                        # 4: DialogueWin step
-                        5: ["The voices are gone."],
-                        6: ["The obelisk."]}
+        if self.variant is not None:
+            self.name = self.variants[self.variant]
 
     def interact(self):
-        if self.step == 4:
+        if self.step == 2:
             DialogueWin(self.game, self).enter_state()
+            NotifyWin(self.game, 1, *self.strings.get(self.step)).enter_state()
+            self.step += 1
         elif self.step < len(self.strings.keys()) + 1:
             NotifyWin(self.game, 1, *self.strings.get(self.step)).enter_state()
-            if self.step < len(self.strings.keys()):
-                self.step += 1
+
+        if self.step < 2:
+            Obelisk.step += 1
+        elif self.step < len(self.strings.keys()):
+            self.step += 1
 
 
 class YellowTest(NPCCon):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((150, 150, 0))
@@ -120,8 +134,8 @@ class YellowTest(NPCCon):
 
 
 class BlueTest(NPCCon):
-    def __init__(self, game, x, y):
-        super().__init__(game, x, y)
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
         # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
         self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
         self.image.fill((0, 0, 150))
@@ -152,6 +166,6 @@ class NPC:
         "Blue Test": BlueTest
     }
 
-    def __init__(self, game, x, y, npc_name):
+    def __init__(self, game, x, y, npc_name, props):
         self.game = game
-        self.npc_dict[npc_name](game, x, y)
+        self.npc_dict[npc_name](game, x, y, props)

@@ -74,7 +74,7 @@ class Game:
             if tile.type == 'relocator':
                 sprites.Relocator(self, tile.x, tile.y, tile.width, tile.height, tile.name)
             if tile.type == 'npc':
-                sprites.NPC(self, tile.x, tile.y, tile.name)
+                sprites.NPC(self, tile.x, tile.y, tile.name, tile.properties)
             if tile.type == 'obstacle':
                 sprites.Obstacles(self, tile.x, tile.y, tile.width, tile.height)
             if tile.type == 'door':
