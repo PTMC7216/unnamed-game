@@ -1,4 +1,5 @@
 import pygame as pg
+import operator
 import src.utils as utils
 from .menu import Menu
 from .overworld import Overworld
@@ -71,7 +72,7 @@ class OptionsMenu(MainMenu):
 
         self.name = "Options Menu"
 
-        self.choices = ["Volume", "Controls"]
+        self.choices = ["Audio", "Controls"]
         self.index = 0
 
     def update(self):
@@ -79,7 +80,7 @@ class OptionsMenu(MainMenu):
         self.move_selector()
         if self.keybind["z"]:
             self.game.select_sound.play()
-            pass
+            self.transition_state()
         elif self.keybind["x"]:
             self.game.select_sound.play()
             self.exit_state()
@@ -96,10 +97,64 @@ class OptionsMenu(MainMenu):
         self.draw_selector()
 
     def transition_state(self):
-        if self.choices[self.index] == "Volume":
-            pass
+        if self.choices[self.index] == "Audio":
+            AudioMenu(self.game).enter_state()
         elif self.choices[self.index] == "Controls":
-            pass
+            pass  # TODO: Options: ControlsMenu
+
+
+class AudioMenu(MainMenu):
+    def __init__(self, game):
+        super().__init__(game)
+        self.game = game
+
+        self.name = "Audio Menu"
+
+        self.choices = ["SFX", "BGM"]
+        self.index = 0
+
+    def adjust_volume(self, addsub):
+        def adjust(x): return round(addsub(x, 0.1), 1)
+        if self.choices[self.index] == "SFX":
+            self.game.selector_sound.set_volume(adjust(self.game.selector_sound.get_volume()))
+            self.game.select_sound.set_volume(adjust(self.game.selector_sound.get_volume()))
+        elif self.choices[self.index] == "BGM":
+            pg.mixer.music.set_volume(adjust(pg.mixer.music.get_volume()))
+
+    def update(self):
+        self.check_events()
+        self.move_selector()
+        if self.keybind["z"]:
+            self.game.select_sound.play()
+            self.transition_state()
+        elif self.keybind["x"]:
+            self.game.select_sound.play()
+            self.exit_state()
+        elif self.keybind["left"]:
+            self.game.select_sound.play()
+            self.adjust_volume(operator.sub)
+        elif self.keybind["right"]:
+            self.game.select_sound.play()
+            self.adjust_volume(operator.add)
+        self.key_reset()
+
+    def render(self):
+        self.game.screen.blit(self.panel["surf"], self.panel["rect"])
+
+        utils.ptext.draw("Audio", center=(self.title_pos["x"], self.title_pos["y"]))
+
+        utils.ptext.draw(self.choices[0], center=(self.pos0["x"] - 30, self.pos0["y"]))
+        utils.ptext.draw(f"{round(self.game.selector_sound.get_volume(), 1)}",
+                         center=(self.pos0["x"] + 30, self.pos0["y"]))
+
+        utils.ptext.draw(self.choices[1], center=(self.pos1["x"] - 30, self.pos1["y"]))
+        utils.ptext.draw(f"{round(pg.mixer.music.get_volume(), 1)}",
+                         center=(self.pos1["x"] + 30, self.pos1["y"]))
+
+        self.draw_selector()
+
+    def transition_state(self):
+        pass
 
 
 class CreditsMenu(MainMenu):

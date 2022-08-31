@@ -24,6 +24,7 @@ class Game:
         # main menu music
         pg.mixer.init()
         pg.mixer.music.load('./data/music/ominous1.ogg')
+        pg.mixer.music.set_volume(1.0)
         pg.mixer.music.play(-1, 0.0, 10000)
 
         # general sounds
@@ -31,8 +32,8 @@ class Game:
         self.select_sound = pg.mixer.Sound('./data/sounds/select.ogg')
 
         # volume
-        self.selector_sound.set_volume(0.0)
-        self.select_sound.set_volume(0.0)
+        self.selector_sound.set_volume(0.5)
+        self.select_sound.set_volume(0.5)
 
         # general spritesheets
         self.player_sheet = utils.Spritesheet(self, 'player_sheet.png')
