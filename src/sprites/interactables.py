@@ -9,66 +9,66 @@ class InteractableCon(Sprite):
     def __init__(self, game, x, y, _):
         self._layer, self.adjustable_layer = -2, False
         super().__init__(game, x, y, game.interactables)
-        self.category = "interactable"
+        self.category = 'interactable'
 
 
 class SwitchCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
-        self.category = "switch"
+        self.category = 'switch'
         self.event = False
         self.flagged_npc = None
         self.flagged_desc = None
 
         if props:
-            if "event" in props:
+            if 'event' in props:
                 self.event = True
-                self.flagged_npc = props["flagged_npc"]
-                self.flagged_desc = props["flagged_desc"]
+                self.flagged_npc = props['flagged_npc']
+                self.flagged_desc = props['flagged_desc']
 
-            if "crystal_type" in props:
-                self.crystal_type = props["crystal_type"]
+            if 'crystal_type' in props:
+                self.crystal_type = props['crystal_type']
 
 
 class CrystalSwitch(SwitchCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        if self.crystal_type == "green":
+        if self.crystal_type == 'green':
             self.active_img = self.spritesheet.image_at(6, 3, 1, 1)
-        elif self.crystal_type == "red":
+        elif self.crystal_type == 'red':
             self.active_img = self.spritesheet.image_at(7, 3, 1, 1)
         self.inert_img = self.spritesheet.image_at(5, 3, 1, 1)
         self.imgrect_topleft(self.active_img)
-        self.name = "Crystal Switch"
+        self.name = 'Crystal Switch'
         self.active = True
 
     def interact(self):
         if self.active:
             NotifyChoiceWin(self.game, self.name,
-                            "Do nothing", "Touch it", 0, 1,
+                            'Do nothing', 'Touch it', 0, 1,
                             f"{self.crystal_type.capitalize()} energy swirls within this crystal").enter_state()
         else:
-            NotifyWin(self.game, 1, "The crystal is powerless.").enter_state()
+            NotifyWin(self.game, 1, 'The crystal is powerless.').enter_state()
 
 
 class PortalCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
-        self.category = "portal"
+        self.category = 'portal'
         self.indentifier = None
         self.target = None
         self.prompt = False
 
         if props:
-            if "identifier" in props:
-                self.identifier = props["identifier"]
+            if 'identifier' in props:
+                self.identifier = props['identifier']
 
-            if "target" in props:
-                self.target = props["target"]
+            if 'target' in props:
+                self.target = props['target']
 
-            if "prompt" in props:
+            if 'prompt' in props:
                 self.prompt = True
 
 
@@ -77,17 +77,17 @@ class TelePortal(PortalCon):
         super().__init__(game, x, y, props)
         img = self.game.other_sheet.image_at(5, 4, 1, 1)
         self.imgrect_topleft(img)
-        self.name = "Tele Portal"
+        self.name = 'Tele Portal'
 
     def interact(self):
         if self.prompt:
             NotifyChoiceWin(self.game, self.name,
-                            "Do nothing", "Reach in", 0, 1,
-                            f"A dark, swirling mass.").enter_state()
+                            'Do nothing', 'Reach in', 0, 1,
+                            'A dark, swirling mass.').enter_state()
         else:
             touched = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
             for interactable in self.game.interactables:
-                if interactable.category == "portal" and interactable.identifier == touched.target:
+                if interactable.category == 'portal' and interactable.identifier == touched.target:
                     self.game.player.sprite.rect.center = interactable.rect.center
                     break
 
@@ -101,7 +101,7 @@ class ScriptCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
-        self.category = "script"
+        self.category = 'script'
         self.variance = 0
         self.step = 0
 
@@ -111,28 +111,28 @@ class SpaceScript(ScriptCon):
         super().__init__(game, x, y, props)
         img = self.spritesheet.image_at(7, 0, 1, 1)
         self.imgrect_topleft(img)
-        self.name = "Space Script"
+        self.name = 'Space Script'
 
 
 class ChestCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.spritesheet = game.other_sheet
-        self.category = "chest"
+        self.category = 'chest'
         self.opened = False
         self.key_req = None
         self.contents = None
 
         if props:
-            if "contents" in props:
-                self.contents = props["contents"]
+            if 'contents' in props:
+                self.contents = props['contents']
 
-            if "key_req" in props:
-                self.key_req = props["key_req"]
+            if 'key_req' in props:
+                self.key_req = props['key_req']
                 self.desc = f"It's locked with {self.key_req.split()[0].lower()}"
 
-            if "opened" in props:
-                self.opened = props["opened"]
+            if 'opened' in props:
+                self.opened = props['opened']
 
     def open(self):
         self.opened = True
@@ -169,7 +169,7 @@ class WoodenChest(ChestCon):
         self.closed_img = self.spritesheet.image_at(5, 0, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 0, 1, 1)
         self.imgrect_topleft(self.closed_img if not self.opened else self.opened_img)
-        self.name = "Wooden Chest"
+        self.name = 'Wooden Chest'
 
 
 class IronChest(ChestCon):
@@ -178,7 +178,7 @@ class IronChest(ChestCon):
         self.closed_img = self.spritesheet.image_at(5, 1, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 1, 1, 1)
         self.imgrect_topleft(self.closed_img if not self.opened else self.opened_img)
-        self.name = "Iron Chest"
+        self.name = 'Iron Chest'
 
 
 class CoffinChest(ChestCon):
@@ -187,18 +187,18 @@ class CoffinChest(ChestCon):
         self.closed_img = self.spritesheet.image_at(5, 2, 1, 1)
         self.opened_img = self.spritesheet.image_at(6, 2, 1, 1)
         self.imgrect_topleft(self.closed_img if not self.opened else self.opened_img)
-        self.name = "Coffin"
+        self.name = 'Coffin'
 
 
 class Interactable:
     interactable_dict = {
-        "Crystal Switch": CrystalSwitch,
-        "Map Portal": MapPortal,
-        "Tele Portal": TelePortal,
-        "Space Script": SpaceScript,
-        "Wooden Chest": WoodenChest,
-        "Iron Chest": IronChest,
-        "Coffin Chest": CoffinChest
+        'Crystal Switch': CrystalSwitch,
+        'Map Portal': MapPortal,
+        'Tele Portal': TelePortal,
+        'Space Script': SpaceScript,
+        'Wooden Chest': WoodenChest,
+        'Iron Chest': IronChest,
+        'Coffin Chest': CoffinChest
     }
 
     def __init__(self, game, x, y, interactable_name, props):

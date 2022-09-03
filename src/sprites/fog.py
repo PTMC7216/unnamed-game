@@ -12,7 +12,7 @@ class Fog(Sprite):
         img.set_colorkey((1, 1, 1))
         self.imgrect_topleft(img)
 
-        self.name = "fog"
+        self.name = 'fog'
     #     self.visible = False
     #     self.explored = False
     #

@@ -1,4 +1,5 @@
 import pygame as pg
+import os.path
 import json
 import random
 import src.utils as utils
@@ -12,7 +13,7 @@ class DialogueWin(Menu):
         self.game = game
         self.npc = npc
 
-        self.name = "Dialogue Window"
+        self.name = 'Dialogue Window'
 
         self.typewriter = utils.Typewriter(self.game)
 
@@ -46,8 +47,8 @@ class DialogueWin(Menu):
         self.choices = []
         self.index_spacing = 30
 
-        self.text_kwargs = {"width": self.text_panel["rect"].w - self.padding}
-        self.choice_kwargs = {"width": self.choices_panel["rect"].w - self.padding, "fontsize": 35}
+        self.text_kwargs = {'width': self.text_panel['rect'].w - self.padding}
+        self.choice_kwargs = {'width': self.choices_panel['rect'].w - self.padding, 'fontsize': 35}
 
         self.speaker = None
         self.portrait = None
@@ -90,33 +91,34 @@ class DialogueWin(Menu):
         self.dialogue = self.text[self.text_index]
 
     def dialogue_base(self):
-        self.npc.dialogue_section = "n_0000"
+        self.npc.dialogue_section = 'n_0000'
         self.get_dialogue()
 
     def get_dialogue(self):
-        dialogue_file = self.npc.name.lower().replace(" ", "")
-        with open(f'./data/dialogues/{dialogue_file}.json', 'r') as f:
+        dialogue_file = f"./data/dialogues/{self.npc.name.lower().replace(' ', '')}.json"
+
+        with open(dialogue_file, 'r') as f:
             data = json.loads(f.read())
             priority = []
 
             # INTRO CHECK
-            if self.npc.dialogue_section == "check":
+            if self.npc.dialogue_section == 'check':
                 for checker in data[self.npc.dialogue_section]:
 
-                    if "event_item" in checker:
-                        if self.game.player.sprite.inventory and checker["event_item"] != "pass":
+                    if 'event_item' in checker:
+                        if self.game.player.sprite.inventory and checker['event_item'] != 'pass':
                             for item in self.game.player.sprite.inventory:
-                                if item.name == checker["event_item"]:
-                                    priority.append(checker["event_link"])
+                                if item.name == checker['event_item']:
+                                    priority.append(checker['event_link'])
                         else:
                             self.dialogue_base()
                             break
 
-                    if "event_other" in checker:
-                        if self.npc.flags and checker["event_other"] != "pass":
+                    if 'event_other' in checker:
+                        if self.npc.flags and checker['event_other'] != 'pass':
                             for flag in self.npc.flags:
-                                if flag == checker["event_other"]:
-                                    priority.append(checker["event_link"])
+                                if flag == checker['event_other']:
+                                    priority.append(checker['event_link'])
                         else:
                             self.dialogue_base()
                             break
@@ -129,7 +131,7 @@ class DialogueWin(Menu):
 
             else:
                 # IDENTITY
-                if data[self.npc.dialogue_section]['speaker'] == "Player":
+                if data[self.npc.dialogue_section]['speaker'] == 'Player':
                     self.speaker = self.game.player.sprite.name
                 else:
                     self.speaker = data[self.npc.dialogue_section]['speaker']
@@ -138,55 +140,55 @@ class DialogueWin(Menu):
                 self.portrait = pg.image.load(
                     f"./data/images/portraits/{data[self.npc.dialogue_section]['portrait']}.jpg").convert()
                 self.portrait = pg.transform.scale(self.portrait,
-                                                   (self.portrait_panel["rect"].w - self.padding * 2,
-                                                    self.portrait_panel["rect"].h - self.padding * 2))
+                                                   (self.portrait_panel['rect'].w - self.padding * 2,
+                                                    self.portrait_panel['rect'].h - self.padding * 2))
 
                 # TEXT
-                if "text" in data[self.npc.dialogue_section]:
+                if 'text' in data[self.npc.dialogue_section]:
                     self.text = data[self.npc.dialogue_section]['text']
                     self.set_dialogue()
 
-                if "text_random" in data[self.npc.dialogue_section]:
+                if 'text_random' in data[self.npc.dialogue_section]:
                     self.text = data[self.npc.dialogue_section]['text_random'][
                         random.randint(0, len(data[self.npc.dialogue_section]['text_random']) - 1)]
                     self.set_dialogue()
 
                 # CHOICES
-                if "choices" in data[self.npc.dialogue_section]:
-                    for choice in data[self.npc.dialogue_section]["choices"]:
+                if 'choices' in data[self.npc.dialogue_section]:
+                    for choice in data[self.npc.dialogue_section]['choices']:
                         self.choices.append(choice)
 
-                if "choices_conditional" in data[self.npc.dialogue_section]:
-                    for condition in data[self.npc.dialogue_section]["choices_conditional"]:
+                if 'choices_conditional' in data[self.npc.dialogue_section]:
+                    for condition in data[self.npc.dialogue_section]['choices_conditional']:
 
-                        if "memory" in condition:
-                            if condition["memory"][0] in self.npc.dialogue_memory:
-                                for choice in condition["memory"][1:]:
+                        if 'memory' in condition:
+                            if condition['memory'][0] in self.npc.dialogue_memory:
+                                for choice in condition['memory'][1:]:
                                     self.choices.append(choice)
 
                 # COMMANDS
-                if "commands" in data[self.npc.dialogue_section]:
-                    for command in data[self.npc.dialogue_section]["commands"]:
+                if 'commands' in data[self.npc.dialogue_section]:
+                    for command in data[self.npc.dialogue_section]['commands']:
 
-                        if "counter" in command and self.npc.dialogue_counter < (command["counter"] - 1):
+                        if 'counter' in command and self.npc.dialogue_counter < (command['counter'] - 1):
                             self.npc.dialogue_counter += 1
                             break
 
-                        if "memorize" in command:
-                            if command["memorize"] not in self.npc.dialogue_memory:
-                                self.npc.dialogue_memory.append(command["memorize"])
+                        if 'memorize' in command:
+                            if command['memorize'] not in self.npc.dialogue_memory:
+                                self.npc.dialogue_memory.append(command['memorize'])
 
-                        if "event_item" in command:
+                        if 'event_item' in command:
                             if self.game.player.sprite.inventory:
                                 for item in self.game.player.sprite.inventory:
-                                    if item.name == command["event_item"]:
-                                        priority.append(command["event_link"])
+                                    if item.name == command['event_item']:
+                                        priority.append(command['event_link'])
 
-                        if "event_other" in command:
+                        if 'event_other' in command:
                             if self.npc.flags:
                                 for flag in self.npc.flags:
-                                    if flag == command["event_other"]:
-                                        priority.append(command["event_link"])
+                                    if flag == command['event_other']:
+                                        priority.append(command['event_link'])
 
                         if priority:
                             self.event_link = priority[-1]
@@ -195,27 +197,27 @@ class DialogueWin(Menu):
                             self.refresh_dialogue()
                             self.set_dialogue()
 
-                        if "link" in command:
+                        if 'link' in command:
                             self.npc.dialogue_counter = 0
-                            self.link = command["link"]
+                            self.link = command['link']
 
-                        if "quiet_link" in command:
+                        if 'quiet_link' in command:
                             self.npc.dialogue_counter = 0
-                            self.quiet_link = command["quiet_link"]
+                            self.quiet_link = command['quiet_link']
 
-                        if "give" in command:
+                        if 'give' in command:
                             self.npc.dialogue_counter = 0
                             self.dropper = True
-                            self.to_drop = command["give"]
+                            self.to_drop = command['give']
 
-                        if "take" in command:
+                        if 'take' in command:
                             self.npc.dialogue_counter = 0
                             self.taker = True
-                            self.to_take = command["take"]
+                            self.to_take = command['take']
 
-                        if "set_step" in command:
+                        if 'set_step' in command:
                             self.npc.dialogue_counter = 0
-                            self.npc.step = command["set_step"]
+                            self.npc.step = command['set_step']
 
     def advance_dialogue(self):
         # if still typewriting, instantly display full text block
@@ -269,33 +271,33 @@ class DialogueWin(Menu):
 
     def draw_selector(self):
         if self.selecting:
-            utils.ptext.draw(">", self.selector_rect.center, **self.choice_kwargs)
+            utils.ptext.draw('>', self.selector_rect.center, **self.choice_kwargs)
 
     def move_selector(self):
         if self.choices and self.selecting:
-            if self.keybind["up"]:
+            if self.keybool['up']:
                 self.game.selector_sound.play()
                 self.index = (self.index - 1) % len(self.choices)
-                self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
+                self.selector_rect.centery = (self.pos0['y'] + self.selector_offset['y']) + \
                                              (self.index * self.index_spacing)
 
-            elif self.keybind["down"]:
+            elif self.keybool['down']:
                 self.game.selector_sound.play()
                 self.index = (self.index + 1) % len(self.choices)
-                self.selector_rect.centery = (self.pos0["y"] + self.selector_offset["y"]) + \
+                self.selector_rect.centery = (self.pos0['y'] + self.selector_offset['y']) + \
                                              (self.index * self.index_spacing)
 
     def update(self):
         self.check_events()
         self.move_selector()
-        if self.keybind["z"]:
+        if self.keybool['z']:
             self.advance_dialogue()
             self.game.select_sound.play()
-        elif self.keybind["x"]:
+        elif self.keybool['x']:
             if not self.selecting:
                 self.advance_dialogue()
             self.game.select_sound.play()
-        elif self.keybind["esc"]:
+        elif self.keybool['esc']:
             self.game.select_sound.play()
             self.exit_state()
         self.key_reset()
@@ -303,20 +305,20 @@ class DialogueWin(Menu):
     def render(self):
         self.prev_state.render()
 
-        self.game.screen.blit(self.portrait_panel["surf"], self.portrait_panel["rect"])
-        self.game.screen.blit(self.portrait, (self.portrait_pos["x"], self.portrait_pos["y"]))
+        self.game.screen.blit(self.portrait_panel['surf'], self.portrait_panel['rect'])
+        self.game.screen.blit(self.portrait, (self.portrait_pos['x'], self.portrait_pos['y']))
 
-        self.game.screen.blit(self.text_panel["surf"], self.text_panel["rect"])
-        utils.ptext.draw(self.speaker, (self.speaker_pos["x"], self.speaker_pos["y"]),
+        self.game.screen.blit(self.text_panel['surf'], self.text_panel['rect'])
+        utils.ptext.draw(self.speaker, (self.speaker_pos['x'], self.speaker_pos['y']),
                          **self.text_kwargs)
-        utils.ptext.draw(self.typewriter.print(self.dialogue), (self.text_pos["x"], self.text_pos["y"]),
+        utils.ptext.draw(self.typewriter.print(self.dialogue), (self.text_pos['x'], self.text_pos['y']),
                          **self.text_kwargs)
 
         if self.selecting:
-            self.game.screen.blit(self.choices_panel["surf"], self.choices_panel["rect"])
-            utils.ptext.draw(self.c1, (self.pos0["x"], self.pos0["y"]), **self.choice_kwargs)
-            utils.ptext.draw(self.c2, (self.pos1["x"], self.pos1["y"]), **self.choice_kwargs)
-            utils.ptext.draw(self.c3, (self.pos2["x"], self.pos2["y"]), **self.choice_kwargs)
-            utils.ptext.draw(self.c4, (self.pos3["x"], self.pos3["y"]), **self.choice_kwargs)
+            self.game.screen.blit(self.choices_panel['surf'], self.choices_panel['rect'])
+            utils.ptext.draw(self.c1, (self.pos0['x'], self.pos0['y']), **self.choice_kwargs)
+            utils.ptext.draw(self.c2, (self.pos1['x'], self.pos1['y']), **self.choice_kwargs)
+            utils.ptext.draw(self.c3, (self.pos2['x'], self.pos2['y']), **self.choice_kwargs)
+            utils.ptext.draw(self.c4, (self.pos3['x'], self.pos3['y']), **self.choice_kwargs)
 
         self.draw_selector()

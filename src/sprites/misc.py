@@ -9,10 +9,10 @@ class Entity(pg.sprite.Sprite):
 
         self.rect = pg.Rect(x, y, w, h)
 
-        self.name = "? ? ?"
+        self.name = '? ? ?'
 
         self.flags = []
-        self.dialogue_section = "check"
+        self.dialogue_section = 'check'
         self.dialogue_counter = 0
         self.dialogue_memory = []
 
@@ -49,13 +49,13 @@ class Relocator:
         nums = []
         contained = False
         for char in self.name:
-            if char == "(":
+            if char == '(':
                 contained = True
             elif contained and char.isdigit():
                 nums.append(char)
-            elif char == ")":
+            elif char == ')':
                 contained = False
-        self.relocation = "".join(nums)
+        self.relocation = ''.join(nums)
 
         self.game.relocators.append(self)
 

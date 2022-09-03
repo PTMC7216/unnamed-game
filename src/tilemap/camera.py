@@ -16,12 +16,12 @@ class Camera:
         return rect.move(self.camera.topleft)
 
     def update(self, target):
-        x = -target.rect.centerx + int(self.game.screen_res["x"] / 2)
-        y = -target.rect.centery + int(self.game.screen_res["y"] / 2)
+        x = -target.rect.centerx + int(self.game.screen_res['x'] / 2)
+        y = -target.rect.centery + int(self.game.screen_res['y'] / 2)
 
         x = min(0, x)
         y = min(0, y)
-        x = max(-(self.width - self.game.screen_res["x"]), x)
-        y = max(-(self.height - self.game.screen_res["y"]), y)
+        x = max(-(self.width - self.game.screen_res['x']), x)
+        y = max(-(self.height - self.game.screen_res['y']), y)
 
         self.camera = pg.Rect(x, y, self.width, self.height)

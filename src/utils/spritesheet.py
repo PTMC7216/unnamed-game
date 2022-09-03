@@ -7,7 +7,7 @@ class Spritesheet:
         self.x = self.game.tilesize
         self.y = self.game.tilesize
 
-        image_dir = f'./data/images/spritesheets/{filename}'
+        image_dir = f"./data/images/spritesheets/{filename}"
         self.sheet = pg.image.load(image_dir)
 
     def image_at(self, col, row, col_span, row_span, colorkey=(0, 0, 0)):

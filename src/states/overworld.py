@@ -9,7 +9,7 @@ class Overworld(State):
         self.game = game
         pg.mixer.music.unload()
 
-        self.name = "Overworld"
+        self.name = 'Overworld'
 
         self.rays = 120
         self.radius = 300

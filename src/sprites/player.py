@@ -12,8 +12,8 @@ class Player(Sprite, Stats):
         self.adjustable_layer = True
         Sprite.__init__(self, game, x, y, game.player)
 
-        self.name = "Nameless"
-        self.title = ". . ."
+        self.name = 'Nameless'
+        self.title = '. . .'
         self.spritesheet = game.player_sheet
 
         self.imgrect_topleft(self.spritesheet.image_at(1, 0, 1, 1))
@@ -53,13 +53,14 @@ class Player(Sprite, Stats):
         self.dy = []
         self.dx = []
 
-        self.item_collision_kwargs = {"sprite": self, "group": self.game.items, "dokill": False}
+        self.item_collision_kwargs = {'sprite': self, 'group': self.game.items, 'dokill': False}
 
-        self.door_collision_kwargs = {"sprite": self, "group": self.game.closed_doors, "dokill": False,
-                                      "collided": pg.sprite.collide_rect_ratio(1.1)}
-        self.interactable_collision_kwargs = {"sprite": self, "group": self.game.interactables, "dokill": False}
+        self.door_collision_kwargs = {'sprite': self, 'group': self.game.closed_doors, 'dokill': False,
+                                      'collided': pg.sprite.collide_rect_ratio(1.1)}
 
-        self.npc_collision_kwargs = {"sprite": self, "group": self.game.npcs, "dokill": False}
+        self.interactable_collision_kwargs = {'sprite': self, 'group': self.game.interactables, 'dokill': False}
+
+        self.npc_collision_kwargs = {'sprite': self, 'group': self.game.npcs, 'dokill': False}
 
     def inv_add(self, item):
         if len(self.inventory) < 4:
@@ -67,7 +68,7 @@ class Player(Sprite, Stats):
             self.inventory.append(item)
             NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
         else:
-            NotifyWin(self.game, 1, f"Inventory full.").enter_state()
+            NotifyWin(self.game, 1, "Inventory full.").enter_state()
 
     def interact(self):
         # TODO: shift key modifier for prioritizing certain actions during overlap
@@ -109,38 +110,38 @@ class Player(Sprite, Stats):
                     self.game.draw_debug = not self.game.draw_debug
                 if event.key == pg.K_ESCAPE:
                     self.menu()
-                if event.key == pg.K_z:
+                if event.key == self.game.control['select']:
                     self.interact()
-                if event.key == pg.K_x:
+                if event.key == self.game.control['back']:
                     self.menu()
-                if event.key == pg.K_LSHIFT:
+                if event.key == self.game.control['mod']:
                     pass
-                if event.key == pg.K_UP:
+                if event.key == self.game.control['up']:
                     self.dy.insert(0, -self.movespeed)
                     self.direction.insert(0, 'up')
-                if event.key == pg.K_DOWN:
+                if event.key == self.game.control['down']:
                     self.dy.insert(0, self.movespeed)
                     self.direction.insert(0, 'down')
-                if event.key == pg.K_LEFT:
+                if event.key == self.game.control['left']:
                     self.dx.insert(0, -self.movespeed)
                     self.direction.insert(0, 'left')
-                if event.key == pg.K_RIGHT:
+                if event.key == self.game.control['right']:
                     self.dx.insert(0, self.movespeed)
                     self.direction.insert(0, 'right')
 
             elif event.type == pg.KEYUP:
-                if event.key == pg.K_LSHIFT:
+                if event.key == self.game.control['mod']:
                     pass
-                if event.key == pg.K_UP and self.dy:
+                if event.key == self.game.control['up'] and self.dy:
                     self.dy.remove(-self.movespeed)
                     self.direction.remove('up')
-                if event.key == pg.K_DOWN and self.dy:
+                if event.key == self.game.control['down'] and self.dy:
                     self.dy.remove(self.movespeed)
                     self.direction.remove('down')
-                if event.key == pg.K_LEFT and self.dx:
+                if event.key == self.game.control['left'] and self.dx:
                     self.dx.remove(-self.movespeed)
                     self.direction.remove('left')
-                if event.key == pg.K_RIGHT and self.dx:
+                if event.key == self.game.control['right'] and self.dx:
                     self.dx.remove(self.movespeed)
                     self.direction.remove('right')
 

@@ -4,7 +4,7 @@ def game_intro(self):
             if seq > 0:
                 resets[seq]()
             self.dialogue.typewriter_center(
-                msg, (self.screen_res["x"] // 2, self.screen_res["y"] // 2), spd)
+                msg, (self.screen_res['x'] // 2, self.screen_res['y'] // 2), spd)
 
     # create a list of timeframes for use with the timer
     def list_increment(start, stop, step):
@@ -50,7 +50,7 @@ def game_intro(self):
     # outer time object
     t0 = time()
     # intro loop
-    while self.state == "Intro":
+    while self.state == 'Intro':
         # self.game.dt
 
         t1 = time()
@@ -73,6 +73,6 @@ def game_intro(self):
         pass
 
         if intro_time >= 0.1:
-            self.state = "Overworld"
+            self.state = 'Overworld'
 
         self.render()

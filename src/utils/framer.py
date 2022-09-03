@@ -15,10 +15,10 @@ class Framer:
         :param divy: Pulls up on the Rect's lower edge
         :return: Rect
         """
-        width = self.game.screen_res["x"] // divxy
-        height = self.game.screen_res["y"] // divy
-        posx = ((self.game.screen_res["x"]) - (self.game.screen_res["x"] // divxy)) // 2
-        posy = ((self.game.screen_res["y"]) - (self.game.screen_res["y"] // divxy)) // 2
+        width = self.game.screen_res['x'] // divxy
+        height = self.game.screen_res['y'] // divy
+        posx = ((self.game.screen_res['x']) - (self.game.screen_res['x'] // divxy)) // 2
+        posy = ((self.game.screen_res['y']) - (self.game.screen_res['y'] // divxy)) // 2
         return pg.Rect(posx, posy, width, height)
 
     def make_center_frame(self, divx=1, divy=1):
@@ -31,10 +31,10 @@ class Framer:
         :param divy: Shrinks Rect along the "y" axis
         :return: Rect
         """
-        width = self.game.screen_res["x"] // divx
-        height = self.game.screen_res["y"] // divy
-        posx = ((self.game.screen_res["x"]) - (self.game.screen_res["x"] // divx)) // 2
-        posy = ((self.game.screen_res["y"]) - (self.game.screen_res["y"] // divy)) // 2
+        width = self.game.screen_res['x'] // divx
+        height = self.game.screen_res['y'] // divy
+        posx = ((self.game.screen_res['x']) - (self.game.screen_res['x'] // divx)) // 2
+        posy = ((self.game.screen_res['y']) - (self.game.screen_res['y'] // divy)) // 2
         return pg.Rect(posx, posy, width, height)
 
     def make_lower_frame(self, divxy=1, divy=3):
@@ -47,10 +47,10 @@ class Framer:
         :param divy: Pulls down on the Rect's upper edge
         :return: Rect
         """
-        width = self.game.screen_res["x"] // divxy
-        height = self.game.screen_res["y"] // divy
-        posx = ((self.game.screen_res["x"]) - (self.game.screen_res["x"] // divxy)) // 2
-        posy = self.game.screen_res["y"] - height - posx
+        width = self.game.screen_res['x'] // divxy
+        height = self.game.screen_res['y'] // divy
+        posx = ((self.game.screen_res['x']) - (self.game.screen_res['x'] // divxy)) // 2
+        posy = self.game.screen_res['y'] - height - posx
         return pg.Rect(posx, posy, width, height)
 
     @staticmethod
@@ -67,7 +67,7 @@ class Framer:
         surf = pg.Surface((surfw, surfh)).convert()
         surf.fill(color)
         rect = surf.get_rect(**kwargs)
-        return {"surf": surf, "rect": rect}
+        return {'surf': surf, 'rect': rect}
 
     @staticmethod
     def set_pos(panel, padding=0, x=0, y=0):
@@ -81,6 +81,6 @@ class Framer:
         :param y: Position on the y-axis
         :return: dict containing "x", "y" key value pairs
         """
-        return {"x": panel["rect"].x + padding + x,
-                "y": panel["rect"].y + padding + y}
+        return {'x': panel['rect'].x + padding + x,
+                'y': panel['rect'].y + padding + y}
 

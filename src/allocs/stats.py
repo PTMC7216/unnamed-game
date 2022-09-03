@@ -5,13 +5,13 @@ class Stats:
     def __init__(self, lv, hp, mp, strength, dexterity, agility, vitality, intelligence, charisma, alignment):
 
         # equipment
-        self.hand = ["None"] * 2
-        self.accessory = ["None"] * 2
-        self.head = "None"
-        self.torso = "None"
-        self.hands = "None"
-        self.legs = "None"
-        self.feet = "None"
+        self.hand = ['None'] * 2
+        self.accessory = ['None'] * 2
+        self.head = 'None'
+        self.torso = 'None'
+        self.hands = 'None'
+        self.legs = 'None'
+        self.feet = 'None'
 
         # stats
         self.lv = lv
@@ -35,7 +35,7 @@ class Stats:
     def attack_power_update(self):
         power = 0
         for item in self.hand:
-            if item != "None":
+            if item != 'None':
                 power += item.damage
         power += math.pow(self.strength, 1.4)
         self.attack_power = power

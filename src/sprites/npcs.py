@@ -29,7 +29,7 @@ class NPCCon(Sprite, Stats):
         self.variant = None
 
         self.flags = []
-        self.dialogue_section = "check"
+        self.dialogue_section = 'check'
         self.dialogue_counter = 0
         self.dialogue_memory = []
 
@@ -38,8 +38,8 @@ class NPCCon(Sprite, Stats):
         self.relocation = 0
 
         if props:
-            if "variant" in props:
-                self.variant = props["variant"]
+            if 'variant' in props:
+                self.variant = props['variant']
 
     def apply_inventory(self):
         for i, itemname in enumerate(self.inventory):
@@ -82,14 +82,16 @@ class Head(NPCCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(2, 0, 1, 1))
-        self.name = "Head"
-        self.inventory = ["Blue Orb"]
+        self.name = 'Head'
+        self.inventory = ['Blue Orb']
         self.apply_inventory()
 
 
 class Obelisk(NPCCon):
-    variants = {0: "Obelisk 0",
-                1: "Obelisk 1"}
+    variants = {}
+    variations = 5
+    for x in range(variations):
+        variants.update({x: f"Obelisk {x}"})
 
     strings = {0: ["An immaculate obelisk hovers silently atop a metal plate.",
                    "Despite being suspended in the air, it appears perfectly motionless."],
@@ -104,7 +106,7 @@ class Obelisk(NPCCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(0, 4, 1, 1))
-        self.name = "Obelisk"
+        self.name = 'Obelisk'
         if self.variant is not None:
             self.name = self.variants[self.variant]
 
@@ -122,48 +124,18 @@ class Obelisk(NPCCon):
             self.step += 1
 
 
-class YellowTest(NPCCon):
+class Altar(NPCCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
-        self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
-        self.image.fill((150, 150, 0))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.name = "Yellow Test"
-
-
-class BlueTest(NPCCon):
-    def __init__(self, game, x, y, props):
-        super().__init__(game, x, y, props)
-        # self.imgrect(self.spritesheet.image_at(4, 3, 1, 1))
-        self.image = pg.Surface((self.game.tilesize, self.game.tilesize)).convert()
-        self.image.fill((0, 0, 150))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.name = "Blue Test"
-
-    #     self.base_time = 0
-    #     self.vel = 1
-    #
-    # def update(self):
-    #     current_time = pg.time.get_ticks()
-    #     if current_time - self.base_time > 1000:
-    #         self.base_time = current_time
-    #         if self.vel == 1:
-    #             self.vel = -1
-    #         else:
-    #             self.vel = 1
-    #
-    #     self.rect.x += self.vel
+        self.imgrect_topleft(self.spritesheet.image_at(3, 0, 1, 1))
+        self.name = 'Altar'
 
 
 class NPC:
     npc_dict = {
-        "Head": Head,
-        "Obelisk": Obelisk,
-        "Yellow Test": YellowTest,
-        "Blue Test": BlueTest
+        'Head': Head,
+        'Obelisk': Obelisk,
+        'Altar': Altar
     }
 
     def __init__(self, game, x, y, npc_name, props):

@@ -14,7 +14,7 @@ class Game:
 
         self.tilesize = 32
         self.framerate = 60
-        self.screen_res = {"x": 800, "y": 600}
+        self.screen_res = {'x': 800, 'y': 600}
         self.screen = pg.display.set_mode((self.screen_res["x"], self.screen_res["y"]))
         self.active = True
 
@@ -87,9 +87,20 @@ class Game:
         # for coord in self.map.fog_xy:
         #     sprites.Fog(self, coord[0], coord[1])
 
-        # camera & rect borders
+        # camera & rect debug
         self.camera = tilemap.Camera(self)
         self.draw_debug = False
+
+        # control scheme
+        self.control = {
+            'up': pg.K_UP,
+            'down': pg.K_DOWN,
+            'left': pg.K_LEFT,
+            'right': pg.K_RIGHT,
+            'select': pg.K_z,
+            'back': pg.K_x,
+            'mod': pg.K_LSHIFT
+        }
 
         # delta time
         self.clk = pg.time.Clock()
