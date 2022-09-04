@@ -1,4 +1,5 @@
 import pygame as pg
+from pathlib import Path
 from .sprite import Sprite
 from .items import Item
 from src.allocs.stats import Stats
@@ -29,6 +30,8 @@ class NPCCon(Sprite, Stats):
         self.variant = None
 
         self.flags = []
+        self.dialogue_font = Path('monaco.ttf')
+        self.dialogue_speed = 60
         self.dialogue_section = 'check'
         self.dialogue_counter = 0
         self.dialogue_memory = []
@@ -83,6 +86,8 @@ class Head(NPCCon):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(2, 0, 1, 1))
         self.name = 'Head'
+        self.dialogue_font = Path('amaticsc.ttf')
+        self.dialogue_speed = 20
         self.inventory = ['Blue Orb']
         self.apply_inventory()
 

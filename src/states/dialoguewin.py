@@ -311,8 +311,8 @@ class DialogueWin(Menu):
         self.game.screen.blit(self.text_panel['surf'], self.text_panel['rect'])
         utils.ptext.draw(self.speaker, (self.speaker_pos['x'], self.speaker_pos['y']),
                          **self.text_kwargs)
-        utils.ptext.draw(self.typewriter.print(self.dialogue), (self.text_pos['x'], self.text_pos['y']),
-                         **self.text_kwargs)
+        utils.ptext.draw(self.typewriter.print(self.dialogue, self.npc.dialogue_speed),
+                         (self.text_pos['x'], self.text_pos['y']), fontname=self.npc.dialogue_font, **self.text_kwargs)
 
         if self.selecting:
             self.game.screen.blit(self.choices_panel['surf'], self.choices_panel['rect'])
