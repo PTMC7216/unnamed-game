@@ -1,5 +1,4 @@
 import pygame as pg
-import os.path
 import json
 import random
 import src.utils as utils
@@ -32,7 +31,7 @@ class DialogueWin(Menu):
                                    topleft=(self.frame.x + self.frame.h + self.gap, self.frame.y))
 
         self.choices_panel = \
-            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.5, (10, 10, 10),
+            self.framer.make_panel(self.frame.w - self.frame.h - self.gap, self.frame.h / 1.2, (10, 10, 10),
                                    bottomleft=(self.frame.x + self.frame.h + self.gap, self.frame.y - self.gap))
 
         self.speaker_pos = self.framer.set_pos(self.text_panel, self.padding)
