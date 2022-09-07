@@ -66,7 +66,7 @@ class Menu(State):
             self.game.player.sprite.direction.insert(0, 'up')
         if pg.key.get_pressed()[self.game.control['down']]:
             self.game.player.sprite.dy.insert(0, self.game.player.sprite.movespeed)
-            self.game.player.sprite.direction.insert(0, down)
+            self.game.player.sprite.direction.insert(0, 'down')
         if pg.key.get_pressed()[self.game.control['left']]:
             self.game.player.sprite.dx.insert(0, -self.game.player.sprite.movespeed)
             self.game.player.sprite.direction.insert(0, 'left')
