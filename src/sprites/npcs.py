@@ -50,11 +50,17 @@ class NPCCon(Sprite, Stats):
             item = pg.sprite.spritecollide(self.game.cleaner.sprite, self.game.items, True)[0]
             self.inventory[i] = item
 
-    def drop_item(self, name):
+    def give_item(self, name):
+        player = self.game.player.sprite
         for item in self.inventory:
             if item.name == name:
                 self.inventory.remove(item)
-                Item(self.game, self.rect.centerx, self.rect.centery, item.name)
+                if len(player.inventory) < player.inventory_size:
+                    player.inventory.append(item)
+                    NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
+                else:
+                    Item(self.game, self.rect.centerx, self.rect.centery, item.name)
+                    NotifyWin(self.game, 1, 'Inventory full.', f"Dropped {item.name}.").enter_state()
                 break
 
     def drop_all(self):
