@@ -60,9 +60,9 @@ class DialogueWin(Menu):
         self.event_link = None
         self.link = None
         self.quiet_link = None
-        self.dropper = False
+        self.giver = False
         self.taker = False
-        self.to_drop = None
+        self.to_give = None
         self.to_take = None
         self.dialogue = None
 
@@ -205,8 +205,8 @@ class DialogueWin(Menu):
 
                         if 'give' in command:
                             self.npc.dialogue_counter = 0
-                            self.dropper = True
-                            self.to_drop = command['give']
+                            self.giver = True
+                            self.to_give = command['give']
 
                         if 'take' in command:
                             self.npc.dialogue_counter = 0
@@ -248,23 +248,24 @@ class DialogueWin(Menu):
 
         elif self.text_index == (len(self.text) - 1) and self.quiet_link:
             self.npc.dialogue_section = self.quiet_link
-            self.transferrals()
             self.movement_key_check()
             self.exit_state()
+            self.transferrals()
 
         else:
-            self.transferrals()
             self.movement_key_check()
             self.exit_state()
+            self.transferrals()
 
     def transferrals(self):
-        if self.dropper:
-            self.npc.drop_item(self.to_drop)
+        if self.giver:
+            self.npc.give_item(self.to_give)
         elif self.taker:
             self.npc.take_item(self.to_take)
 
     def select_choice(self):
         self.npc.dialogue_section = list(self.choices[self.index])[0]
+        self.position_selector(self.pos0, -11, -2)
         self.refresh_dialogue()
 
     def draw_selector(self):
