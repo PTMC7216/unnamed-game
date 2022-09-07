@@ -6,7 +6,6 @@ from .menu import Menu
 class NotifyWin(Menu):
     def __init__(self, game, state_exits, *notices):
         super().__init__(game)
-        self.game = game
         self.state_exits = state_exits
         self.notices = notices
         self.notice = 0

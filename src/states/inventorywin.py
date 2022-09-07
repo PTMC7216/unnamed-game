@@ -7,7 +7,6 @@ from .invcontextwin import *
 class InventoryWin(Menu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
 
         self.name = 'Inventory Window'
         self.choices = ["- - -"] * self.game.player.sprite.inventory_size

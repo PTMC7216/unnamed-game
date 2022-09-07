@@ -9,7 +9,6 @@ from .notifywin import NotifyChoiceWin
 class PauseWin(Menu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
 
         self.name = 'Pause Window'
         self.choices = ['Resume', 'Inventory', 'Status', 'Quit']

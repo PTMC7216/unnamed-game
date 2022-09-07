@@ -6,7 +6,6 @@ from src.states.menu import Menu
 class StatusWin(Menu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
 
         self.name = "Status Window"
 

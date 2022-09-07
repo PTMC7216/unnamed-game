@@ -6,7 +6,6 @@ from .state import State
 class Menu(State):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
 
         self.framer = utils.Framer(self.game)
 

@@ -9,7 +9,6 @@ from .pausewin import PauseWin
 class DialogueWin(Menu):
     def __init__(self, game, npc):
         super().__init__(game)
-        self.game = game
         self.npc = npc
 
         self.name = 'Dialogue Window'

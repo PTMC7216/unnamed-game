@@ -8,7 +8,6 @@ from .overworld import Overworld
 class MainMenu(Menu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
         self.name = 'Main Menu'
         self.choices = ['Start', 'Options', 'Quit']
 
@@ -55,7 +54,6 @@ class MainMenu(Menu):
 class OptionsMenu(MainMenu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
         self.name = 'Options Menu'
         self.choices = ['Audio', 'Keybinds']
         self.index = 0
@@ -88,7 +86,6 @@ class OptionsMenu(MainMenu):
 class AudioMenu(MainMenu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
         self.name = 'Audio Menu'
         self.choices = ['SFX', 'BGM']
         self.index = 0
@@ -138,7 +135,6 @@ class AudioMenu(MainMenu):
 class KeybindsMenu(MainMenu):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
         self.name = 'Keybinds Menu'
         self.choices = ['UP', 'DOWN', 'LEFT', 'RIGHT', 'SELECT', 'BACK', 'MOD']
         self.index = 0

@@ -7,7 +7,6 @@ from .notifywin import NotifyWin
 class InvContextWin(Menu):
     def __init__(self, game, item):
         super().__init__(game)
-        self.game = game
         self.item = item
 
         self.name = 'Inventory Context Window'
