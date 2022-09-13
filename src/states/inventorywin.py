@@ -42,11 +42,11 @@ class InventoryWin(Menu):
             self.transition_state()
         elif self.keybool['x']:
             self.game.select_sound.play()
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_states(2)
         elif self.keybool['esc']:
             self.game.select_sound.play()
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_states(2)
         self.key_reset()
 

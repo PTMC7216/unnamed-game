@@ -100,6 +100,21 @@ class Player(Sprite, Stats):
         self.dy.clear()
         self.direction.clear()
 
+    def movement_key_check(self):
+        self.clear_stacks()
+        if pg.key.get_pressed()[self.game.control['up']]:
+            self.dy.insert(0, -self.movespeed)
+            self.direction.insert(0, 'up')
+        if pg.key.get_pressed()[self.game.control['down']]:
+            self.dy.insert(0, self.movespeed)
+            self.direction.insert(0, 'down')
+        if pg.key.get_pressed()[self.game.control['left']]:
+            self.dx.insert(0, -self.movespeed)
+            self.direction.insert(0, 'left')
+        if pg.key.get_pressed()[self.game.control['right']]:
+            self.dx.insert(0, self.movespeed)
+            self.direction.insert(0, 'right')
+
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:

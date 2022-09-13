@@ -248,12 +248,12 @@ class DialogueWin(Menu):
 
         elif self.text_index == (len(self.text) - 1) and self.quiet_link:
             self.npc.dialogue_section = self.quiet_link
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_state()
             self.transferrals()
 
         else:
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_state()
             self.transferrals()
 

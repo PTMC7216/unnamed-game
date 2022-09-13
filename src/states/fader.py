@@ -42,6 +42,7 @@ class Fader(State):
                     self.alpha -= 8
                     if self.alpha <= 0:
                         self.exit_states(self.state_exits)
+                        self.game.player.sprite.movement_key_check()
 
                 self.surf.set_alpha(self.alpha)
                 self.game.screen.blit(self.surf, (0, 0))

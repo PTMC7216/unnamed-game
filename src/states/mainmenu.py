@@ -41,7 +41,7 @@ class MainMenu(Menu):
 
     def transition_state(self):
         if self.choices[self.index] == 'Start':
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             Overworld(self.game).enter_state()
 
         elif self.choices[self.index] == 'Options':

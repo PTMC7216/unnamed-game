@@ -1,6 +1,8 @@
 import pygame as pg
+import json
 import src.utils as utils
 from .menu import Menu
+from .fader import Fader
 
 
 class NotifyWin(Menu):
@@ -30,7 +32,7 @@ class NotifyWin(Menu):
                 self.notice += 1
             else:
                 self.game.select_sound.play()
-                self.movement_key_check()
+                self.game.player.sprite.movement_key_check()
                 self.exit_states(self.state_exits)
 
         self.key_reset()
@@ -94,7 +96,7 @@ class NotifyChoiceWin(NotifyWin):
                 self.notice += 1
             else:
                 self.game.select_sound.play()
-                self.movement_key_check()
+                self.game.player.sprite.movement_key_check()
                 self.exit_states(self.state_exits)
 
         self.key_reset()
@@ -146,7 +148,7 @@ class NotifyChoiceWin(NotifyWin):
                         interactable.image = interactable.inert_img
                         break
 
-                self.movement_key_check()
+                self.game.player.sprite.movement_key_check()
                 NotifyWin(self.game, 2, "The energy within the crystal fades away.").enter_state()
 
         elif self.obj == 'Tele Portal':
@@ -160,12 +162,12 @@ class NotifyChoiceWin(NotifyWin):
                 self.game.select_sound.play()
                 touched = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
                 if touched.target is None:
-                    self.movement_key_check()
+                    self.game.player.sprite.movement_key_check()
                     NotifyWin(self.game, 2, "You are pushed away from the swirling mass.").enter_state()
                 else:
                     for interactable in self.game.interactables:
                         if interactable.category == "portal" and interactable.identifier == touched.target:
                             self.game.player.sprite.rect.center = interactable.rect.center
                             break
-                    self.movement_key_check()
+                    self.game.player.sprite.movement_key_check()
                     NotifyWin(self.game, 2, "You are pulled into the swirling mass. . .").enter_state()

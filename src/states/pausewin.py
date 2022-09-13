@@ -37,11 +37,11 @@ class PauseWin(Menu):
             self.transition_state()
         elif self.keybool['x']:
             self.game.select_sound.play()
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_state()
         elif self.keybool['esc']:
             self.game.select_sound.play()
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_state()
         self.key_reset()
 
@@ -60,7 +60,7 @@ class PauseWin(Menu):
 
     def transition_state(self):
         if self.choices[self.index] == 'Resume':
-            self.movement_key_check()
+            self.game.player.sprite.movement_key_check()
             self.exit_state()
 
         elif self.choices[self.index] == 'Inventory':

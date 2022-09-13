@@ -59,21 +59,6 @@ class Menu(State):
         self.keybool['z'] = False
         self.keybool['x'] = False
 
-    def movement_key_check(self):
-        self.game.player.sprite.clear_stacks()
-        if pg.key.get_pressed()[self.game.control['up']]:
-            self.game.player.sprite.dy.insert(0, -self.game.player.sprite.movespeed)
-            self.game.player.sprite.direction.insert(0, 'up')
-        if pg.key.get_pressed()[self.game.control['down']]:
-            self.game.player.sprite.dy.insert(0, self.game.player.sprite.movespeed)
-            self.game.player.sprite.direction.insert(0, 'down')
-        if pg.key.get_pressed()[self.game.control['left']]:
-            self.game.player.sprite.dx.insert(0, -self.game.player.sprite.movespeed)
-            self.game.player.sprite.direction.insert(0, 'left')
-        if pg.key.get_pressed()[self.game.control['right']]:
-            self.game.player.sprite.dx.insert(0, self.game.player.sprite.movespeed)
-            self.game.player.sprite.direction.insert(0, 'right')
-
     def position_selector(self, pos, offx, offy):
         self.selector_offset = {'x': offx, 'y': offy}
         self.selector_rect.center = ((pos['x'] + self.selector_offset['x']),
