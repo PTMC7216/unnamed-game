@@ -9,13 +9,13 @@ class InteractableCon(Sprite):
     def __init__(self, game, x, y, _):
         self._layer, self.adjustable_layer = -2, False
         super().__init__(game, x, y, game.interactables)
+        self.spritesheet = game.other_sheet
         self.category = 'interactable'
 
 
 class SwitchCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        self.spritesheet = game.other_sheet
         self.category = 'switch'
         self.event = False
         self.flagged_npc = None
@@ -55,7 +55,6 @@ class CrystalSwitch(SwitchCon):
 class PortalCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        self.spritesheet = game.other_sheet
         self.category = 'portal'
         self.indentifier = None
         self.target = None
@@ -75,8 +74,7 @@ class PortalCon(InteractableCon):
 class TelePortal(PortalCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        img = self.game.other_sheet.image_at(5, 4, 1, 1)
-        self.imgrect_topleft(img)
+        self.imgrect_topleft(self.spritesheet.image_at(5, 4, 1, 1))
         self.name = 'Tele Portal'
 
     def interact(self):
@@ -100,7 +98,6 @@ class MapPortal(PortalCon):
 class ScriptCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        self.spritesheet = game.other_sheet
         self.category = 'script'
         self.variance = 0
         self.step = 0
@@ -109,15 +106,13 @@ class ScriptCon(InteractableCon):
 class SpaceScript(ScriptCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        img = self.spritesheet.image_at(7, 0, 1, 1)
-        self.imgrect_topleft(img)
+        self.imgrect_topleft(self.spritesheet.image_at(7, 0, 1, 1))
         self.name = 'Space Script'
 
 
 class ChestCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
-        self.spritesheet = game.other_sheet
         self.category = 'chest'
         self.opened = False
         self.key_req = None
