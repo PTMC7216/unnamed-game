@@ -63,7 +63,7 @@ class Player(Sprite, Stats):
         self.npc_collision_kwargs = {'sprite': self, 'group': self.game.npcs, 'dokill': False}
 
     def inv_add(self, item):
-        if len(self.inventory) < 4:
+        if len(self.inventory) < self.inventory_size:
             item.kill()
             self.inventory.append(item)
             NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
