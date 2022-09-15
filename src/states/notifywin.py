@@ -111,27 +111,28 @@ class NotifyChoiceWin(NotifyWin):
             utils.ptext.draw(self.c2, (self.c_pos['x'], self.c_pos['y'] + 30), **self.text_kwargs)
             utils.ptext.draw('>', self.selector_rect.center)
 
+    def _generic_exit(self):
+        self.game.select_sound.play()
+        self.game.player.sprite.movement_key_check()
+        self.exit_states(self.state_exits)
+
     def flag_handler(self):
         if self.obj == 'Pause Window':
 
-            if self.flag == 'Yes':
+            if self.flag == 'No':
+                self._generic_exit()
+
+            elif self.flag == 'Yes':
                 self.game.select_sound.play()
                 pg.mixer.music.load('./data/music/ominous1.ogg')
                 pg.mixer.music.play(-1, 0.0, 10000)
                 while len(self.game.state_stack) > 1:
-                    self.game.state_stack.pop()
-
-            elif self.flag == 'No':
-                self.game.select_sound.play()
-                self.movement_key_check()
-                self.exit_states(self.state_exits)
+                    self.exit_state()
 
         elif self.obj == 'Crystal Switch':
 
             if self.flag == 'Do nothing':
-                self.game.select_sound.play()
-                self.movement_key_check()
-                self.exit_states(self.state_exits)
+                self._generic_exit()
 
             elif self.flag == 'Touch it':
                 self.game.select_sound.play()
@@ -154,9 +155,7 @@ class NotifyChoiceWin(NotifyWin):
         elif self.obj == 'Tele Portal':
 
             if self.flag == 'Do nothing':
-                self.game.select_sound.play()
-                self.movement_key_check()
-                self.exit_states(self.state_exits)
+                self._generic_exit()
 
             elif self.flag == 'Reach in':
                 self.game.select_sound.play()
