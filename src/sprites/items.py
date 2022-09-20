@@ -1,6 +1,6 @@
 import pygame as pg
 from .sprite import Sprite
-from src.states.notifywin import NotifyWin
+from src.states.notifywin import NotifyWin, NotifyChoiceWin
 
 
 class ItemCon(Sprite):
@@ -18,6 +18,43 @@ class ItemCon(Sprite):
     def pickup(self):
         self.game.player.sprite.inv_add(self)
 
+    def _use_key(self, category, **collision_kwargs):
+        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
+
+        if obj.category == category:
+            if obj.key_req == self.name:
+                NotifyWin(self.game, 4, f"Opened the {obj.name.lower()} with the {self.name.lower()}.").enter_state()
+                obj.open()
+
+            elif obj.key_req is None:
+                NotifyWin(self.game, 2, f"The {obj.name.lower()} is already unlocked.").enter_state()
+
+            elif obj.key_req != self.name:
+                NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
+
+        else:
+            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
+
+    def _use_orb(self, category, **collision_kwargs):
+        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
+
+        if obj.category == category:
+            if obj.rune_type == self.orb_type or self.orb_type == 'all':
+                notice = f"The runes fade away and the {obj.name.split()[-1].lower()} swings open."
+                NotifyWin(self.game, 4, notice).enter_state()
+                obj.open()
+
+            elif obj.rune_type != self.orb_type:
+                notice = f"The {obj.rune_type} runes fail to react to the orb."
+                NotifyWin(self.game, 2, notice).enter_state()
+
+            elif obj.rune_type is None:
+                notice = f"There are no runes sealing this {obj.name.split()[-1].lower()}."
+                NotifyWin(self.game, 2, notice).enter_state()
+
+        else:
+            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
+
     def use(self):
         if not self.usable:
             NotifyWin(self.game, 1, f"Can't use the {self.name}.").enter_state()
@@ -31,104 +68,97 @@ class ItemCon(Sprite):
 
             elif self.category == 'key':
                 if pg.sprite.spritecollide(**self.game.player.sprite.door_collision_kwargs):
-                    self.__use_key('door', **self.game.player.sprite.door_collision_kwargs)
+                    self._use_key('door', **self.game.player.sprite.door_collision_kwargs)
                 elif pg.sprite.spritecollide(**self.game.player.sprite.interactable_collision_kwargs):
-                    self.__use_key('chest', **self.game.player.sprite.interactable_collision_kwargs)
+                    self._use_key('chest', **self.game.player.sprite.interactable_collision_kwargs)
                 else:
                     NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
             elif self.category == 'orb':
                 if pg.sprite.spritecollide(**self.game.player.sprite.door_collision_kwargs):
-                    self.__use_orb('door', **self.game.player.sprite.door_collision_kwargs)
+                    self._use_orb('door', **self.game.player.sprite.door_collision_kwargs)
                 else:
                     NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
+
+            elif self.category == 'story':
+                self.use_action()
 
             else:
                 NotifyWin(self.game, 2, f"Used the {self.name}, but nothing happened.").enter_state()
 
-    def __use_key(self, category, **collision_kwargs):
-        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
-        if obj.category == category:
-            if obj.key_req == self.name:
-                notice = f"Opened the {obj.name.lower()} with the {self.name.lower()}."
-                NotifyWin(self.game, 4, notice).enter_state()
-                obj.open()
-            elif obj.key_req is None:
-                NotifyWin(self.game, 2, f"The {obj.name.lower()} is already unlocked.").enter_state()
-            elif obj.key_req != self.name:
-                NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
-        else:
-            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
-
-    def __use_orb(self, category, **collision_kwargs):
-        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
-        if obj.category == category:
-            if obj.rune_type == self.orb_type or self.orb_type == 'all':
-                notice = f"The runes fade away and the {obj.name.split()[-1].lower()} swings open."
-                NotifyWin(self.game, 4, notice).enter_state()
-                obj.open()
-            elif obj.rune_type != self.orb_type:
-                notice = f"The {obj.rune_type} runes fail to react to the orb."
-                NotifyWin(self.game, 2, notice).enter_state()
-            elif obj.rune_type is None:
-                notice = f"There are no runes sealing this {obj.name.split()[-1].lower()}."
-                NotifyWin(self.game, 2, notice).enter_state()
-        else:
-            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
-
     def equip(self):
-        if not self.equipable:
-            NotifyWin(self.game, 1, f"Can't equip the {self.name}.").enter_state()
-        elif not self.equipped:
+        player = self.game.player.sprite
+
+        if not self.equipped:
+            update = False
+
             if self.category == 'weapon':
-                self.game.player.sprite.hand[0] = self
+                if player.hand[0] == 'None':
+                    player.hand[0] = self
+                    update = True
+
             elif self.category == 'armor':
                 pass
+
             elif self.category == 'accessory':
-                pass
-            self.equipped = not self.equipped
-            self.game.player.sprite.update_substats()
-            NotifyWin(self.game, 2, f"Equipped the {self.name}.").enter_state()
+                if player.available_slot(player.accessory):
+                    player.set_slot(player.accessory, 'None', self)
+                    update = True
+
+            if update:
+                self.equipped = not self.equipped
+                player.update_substats()
+                player.inv_remove(self)
+                player.inv_refresh()
+                NotifyWin(self.game, 2, f"Equipped the {self.name}.").enter_state()
+            else:
+                NotifyWin(self.game, 2, f"Can't equip the {self.name}.\n\nEquipment slots are full.").enter_state()
+
         else:
             NotifyWin(self.game, 1, f"The {self.name} is already equipped.").enter_state()
 
     def unequip(self):
         if self.equipped:
-            if self.category == 'weapon':
-                for i, item in enumerate(self.game.player.sprite.hand):
-                    if item == self:
-                        self.game.player.sprite.hand[i] = 'None'
-            elif self.category == 'armor':
-                pass
-            elif self.category == 'accessory':
-                pass
-            self.equipped = not self.equipped
-            self.game.player.sprite.update_substats()
-            NotifyWin(self.game, 2, f"Unequipped the {self.name}.").enter_state()
+            if len(self.game.player.sprite.inventory) < self.game.player.sprite.inventory_size:
+
+                if self.category == 'weapon':
+                    self.game.player.sprite.set_slot(self.game.player.sprite.hand, self, 'None')
+
+                elif self.category == 'armor':
+                    pass
+
+                elif self.category == 'accessory':
+                    self.game.player.sprite.set_slot(self.game.player.sprite.accessory, self, 'None')
+
+                self.equipped = not self.equipped
+                self.game.player.sprite.update_substats()
+                self.game.player.sprite.inv_add(self, notify=False)
+                self.game.player.sprite.inv_refresh()
+                NotifyWin(self.game, 2, f"Unequipped the {self.name}.").enter_state()
+
+            else:
+                NotifyWin(self.game, 2, f"Inventory full. Can't unequip.").enter_state()
 
     def examine(self):
         NotifyWin(self.game, 1, self.desc).enter_state()
 
     def drop(self):
         if self.equipped:
+
             if self.category == 'weapon':
-                for i, item in enumerate(self.game.player.sprite.hand):
-                    if item == self:
-                        self.game.player.sprite.hand[i] = 'None'
+                self.game.player.sprite.set_slot(self.game.player.sprite.hand, self, 'None')
+
             elif self.category == 'armor':
                 pass
+
             elif self.category == 'accessory':
-                pass
+                self.game.player.sprite.set_slot(self.game.player.sprite.accessory, self, 'None')
+
             self.equipped = not self.equipped
             self.game.player.sprite.update_substats()
 
-        if self in self.game.player.sprite.inventory:
-            self.game.player.sprite.inventory.remove(self)
-
-        for i, name in enumerate(self.game.state_stack):
-            if repr(name) == 'Inventory Window':
-                self.game.state_stack[i].refresh()
-                break
+        self.game.player.sprite.inv_remove(self)
+        self.game.player.sprite.inv_refresh()
 
         NotifyWin(self.game, 2, f"Dropped the {self.name}.").enter_state()
         Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, self.name)
@@ -286,6 +316,8 @@ class StoryCon(ItemCon):
         self.equipable = False
         self.usable = False
 
+    def use_action(self):
+        raise NotImplementedError
 
 class Item:
     item_dict = {

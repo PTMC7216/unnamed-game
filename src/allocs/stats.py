@@ -32,6 +32,25 @@ class Stats:
         # substats
         self.attack_power = math.pow(self.strength, 1.4)
 
+    @staticmethod
+    def available_slot(slot):
+        if isinstance(slot, list):
+            for i in slot:
+                if i == 'None':
+                    return True
+        else:
+            if slot == 'None':
+                return True
+
+        return False
+
+    @staticmethod
+    def set_slot(slot, from_, to):
+        for i, item in enumerate(slot):
+            if item == from_:
+                slot[i] = to
+                break
+
     def attack_power_update(self):
         power = 0
         for item in self.hand:

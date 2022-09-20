@@ -62,13 +62,28 @@ class Player(Sprite, Stats):
 
         self.npc_collision_kwargs = {'sprite': self, 'group': self.game.npcs, 'dokill': False}
 
-    def inv_add(self, item):
+    def inv_add(self, item, notify=True):
+        full = True
         if len(self.inventory) < self.inventory_size:
+            full = False
             item.kill()
             self.inventory.append(item)
-            NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
-        else:
-            NotifyWin(self.game, 1, "Inventory full.").enter_state()
+
+        if notify:
+            if full:
+                NotifyWin(self.game, 1, "Inventory full.").enter_state()
+            else:
+                NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
+
+    def inv_remove(self, item):
+        if item in self.inventory:
+            self.inventory.remove(item)
+
+    def inv_refresh(self):
+        for i, name in enumerate(self.game.state_stack):
+            if repr(name) == 'Inventory Window':
+                self.game.state_stack[i].refresh()
+                break
 
     def interact(self):
         # TODO: shift key modifier for prioritizing certain actions during overlap

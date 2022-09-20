@@ -1,7 +1,7 @@
 import pygame as pg
 import src.utils as utils
 from .menu import Menu
-from .invcontextwin import *
+from .invcontextwin import InvContextWin
 
 
 class InventoryWin(Menu):

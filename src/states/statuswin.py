@@ -1,9 +1,14 @@
 import pygame as pg
 import src.utils as utils
 from src.states.menu import Menu
+from .invcontextwin import InvContextWin
 
 
 class StatusWin(Menu):
+
+    STAT_COL = 0
+    SLOT_COL = 1
+
     def __init__(self, game):
         super().__init__(game)
 
@@ -53,12 +58,13 @@ class StatusWin(Menu):
 
         self.col1 = {'choices': ['STR', 'DEX', 'AGI', 'INT', 'CHA'],
                      'pos': self.pos0}
-        self.col2 = {'choices': ['R Hand', 'L Hand',
-                                 'Accessory 1', 'Accessory 2',
+
+        self.col2 = {'choices': ['R Hand', 'L Hand', 'Accessory 1', 'Accessory 2',
                                  'Head', 'Torso', 'Hands', 'Legs', 'Feet'],
                      'pos': self.e_pos0}
+
         self.cols = [self.col1, self.col2]
-        self.col = 0
+        self.col = self.STAT_COL
 
         self.choices = self.cols[self.col]
         self.index_spacing = 30
@@ -136,19 +142,39 @@ class StatusWin(Menu):
         self.draw_selector()
 
     def transition_state(self):
-        if self.choices['choices'][self.index] == '1':
-            pass
+        slot = 'None'
 
-        elif self.choices['choices'][self.index] == '2':
-            pass
+        if self.choices['choices'][self.index] == 'R Hand':
+            slot = self.game.player.sprite.hand[0]
 
-        elif self.choices['choices'][self.index] == '3':
-            pass
+        elif self.choices['choices'][self.index] == 'L Hand':
+            slot = self.game.player.sprite.hand[1]
 
-        elif self.choices['choices'][self.index] == '4':
-            pass
+        elif self.choices['choices'][self.index] == 'Accessory 1':
+            slot = self.game.player.sprite.accessory[0]
 
-    def row_move(self, direction):
+        elif self.choices['choices'][self.index] == 'Accessory 2':
+            slot = self.game.player.sprite.accessory[1]
+
+        elif self.choices['choices'][self.index] == 'Head':
+            slot = self.game.player.sprite.head
+
+        elif self.choices['choices'][self.index] == 'Torso':
+            slot = self.game.player.sprite.torso
+
+        elif self.choices['choices'][self.index] == 'Hands':
+            slot = self.game.player.sprite.hands
+
+        elif self.choices['choices'][self.index] == 'Legs':
+            slot = self.game.player.sprite.legs
+
+        elif self.choices['choices'][self.index] == 'Feet':
+            slot = self.game.player.sprite.feet
+
+        if slot != 'None':
+            InvContextWin(self.game, slot).enter_state()
+
+    def _row_move(self, direction):
         """Pass an "up" or "down" argument to move the selector in that direction by 1 row."""
         if direction == 'up':
             direction = -1
@@ -159,7 +185,7 @@ class StatusWin(Menu):
         self.selector_rect.centery = (self.choices['pos'].get('y') + self.selector_offset['y']) + \
                                      (self.index * self.index_spacing)
 
-    def col_move(self, direction):
+    def _col_move(self, direction):
         """Pass a "left" or "right" argument to move the selector in that direction by 1 column."""
         if direction == 'left':
             direction = -1
@@ -173,13 +199,13 @@ class StatusWin(Menu):
 
     def move_selector(self):
         if self.keybool['up']:
-            self.row_move('up')
+            self._row_move('up')
 
         elif self.keybool['down']:
-            self.row_move('down')
+            self._row_move('down')
 
         elif self.keybool['left']:
-            self.col_move('left')
+            self._col_move('left')
 
         elif self.keybool['right']:
-            self.col_move('right')
+            self._col_move('right')
