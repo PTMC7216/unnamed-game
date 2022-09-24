@@ -116,11 +116,11 @@ class ChestCon(InteractableCon):
         self.category = 'chest'
         self.opened = False
         self.key_req = None
-        self.contents = None
+        self.contents = []
 
         if props:
             if 'contents' in props:
-                self.contents = props['contents']
+                self.contents = props['contents'].split(", ")
 
             if 'key_req' in props:
                 self.key_req = props['key_req']
@@ -148,11 +148,23 @@ class ChestCon(InteractableCon):
         if self.opened:
             if not switch:
                 notices.append(f"Looked inside the {self.name.lower()}.")
+
             if self.contents:
-                notices.append(f"Found {self.contents}.")
+                for itemname in self.contents[:]:
+                    Item(self.game, self.game.cleaner.sprite.x, self.game.cleaner.sprite.y, itemname)
+                    item = pg.sprite.spritecollide(self.game.cleaner.sprite, self.game.items, True)[0]
+                    notices.append(f"Found {item.name}.")
+
+                    if len(self.game.player.sprite.inventory) < self.game.player.sprite.inventory_size:
+                        self.game.player.sprite.inventory.append(item)
+                        self.contents.remove(itemname)
+                        notices.append(f"{item.name} added to inventory.")
+                    else:
+                        notices.append(f"Inventory full, can't take the {item.name}.")
+                        break
+
                 NotifyWin(self.game, 1, *notices).enter_state()
-                Item(self.game, self.rect.centerx, self.rect.centery, self.contents)
-                self.contents = None
+
             else:
                 notices.append("It's empty.")
                 NotifyWin(self.game, 1, *notices).enter_state()
