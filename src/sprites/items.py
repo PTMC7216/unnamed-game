@@ -21,13 +21,10 @@ class ItemCon(Sprite):
     def _use_key(self, category, **collision_kwargs):
         obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
 
-        if obj.category == category:
+        if obj.category == category and not obj.opened:
             if obj.key_req == self.name:
                 NotifyWin(self.game, 4, f"Opened the {obj.name.lower()} with the {self.name.lower()}.").enter_state()
                 obj.open()
-
-            elif obj.key_req is None:
-                NotifyWin(self.game, 2, f"The {obj.name.lower()} is already unlocked.").enter_state()
 
             elif obj.key_req != self.name:
                 NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
@@ -44,12 +41,12 @@ class ItemCon(Sprite):
                 NotifyWin(self.game, 4, notice).enter_state()
                 obj.open()
 
-            elif obj.rune_type != self.orb_type:
-                notice = f"The {obj.rune_type} runes fail to react to the orb."
-                NotifyWin(self.game, 2, notice).enter_state()
-
             elif obj.rune_type is None:
                 notice = f"There are no runes sealing this {obj.name.split()[-1].lower()}."
+                NotifyWin(self.game, 2, notice).enter_state()
+
+            elif obj.rune_type != self.orb_type:
+                notice = f"The {obj.rune_type} runes fail to react to the orb."
                 NotifyWin(self.game, 2, notice).enter_state()
 
         else:

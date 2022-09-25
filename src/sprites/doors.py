@@ -12,7 +12,7 @@ class DoorCon(Sprite):
         self.rune_type = None
         self.shielded = False
         self.jammed = False
-        self.spawn_open = False
+        self.opened = False
         self.event = False
         self.flagged_npc = None
         self.flagged_desc = None
@@ -41,8 +41,8 @@ class DoorCon(Sprite):
             if 'jammed' in props:
                 self.jammed = props['jammed']
 
-            if 'spawn_open' in props:
-                self.spawn_open = props['spawn_open']
+            if 'opened' in props:
+                self.opened = props['spawn_open']
 
             if 'event' in props:
                 self.event = True
@@ -52,24 +52,26 @@ class DoorCon(Sprite):
     def open(self):
         if self.event:
             self.set_flag(self.flagged_npc, self.flagged_desc)
+        self.opened = True
         self.kill()
         self.add(self.game.opened_doors, self.game.all_sprites)
         self.image = self.opened_img
 
     def interact(self):
-        if self.jammed:
-            NotifyWin(self.game, 1, 'The door is jammed.').enter_state()
-        else:
-            if self.shielded:
-                NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
-            elif self.key_req is None and self.rune_type is None:
-                self.open()
-                NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
+        if not self.opened:
+            if self.jammed:
+                NotifyWin(self.game, 1, 'The door is jammed.').enter_state()
             else:
-                NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+                if self.shielded:
+                    NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
+                elif self.key_req is None and self.rune_type is None:
+                    self.open()
+                    NotifyWin(self.game, 1, f"Opened the {self.name.lower()}.").enter_state()
+                else:
+                    NotifyWin(self.game, 1, f"{self.desc}.").enter_state()
 
-    def check(self):
-        if self.spawn_open:
+    def check_opened(self):
+        if self.opened:
             self.open()
 
 
@@ -80,7 +82,7 @@ class WoodenDoor(DoorCon):
         self.opened_img = self.game.other_sheet.image_at(0, 1, 1, 1)
         self.imgrect_topleft(self.closed_img)
         self.name = 'Wooden Door'
-        self.check()
+        self.check_opened()
 
 
 class WoodenGate(DoorCon):
@@ -94,7 +96,7 @@ class WoodenGate(DoorCon):
             self.opened_img = self.game.other_sheet.image_at(1, 1, 2, 1)
         self.imgrect_topleft(self.closed_img)
         self.name = 'Wooden Gate'
-        self.check()
+        self.check_opened()
 
 
 class RunedDoor(DoorCon):
