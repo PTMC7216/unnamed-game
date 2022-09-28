@@ -92,6 +92,7 @@ class Head(NPCCon):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(2, 0, 1, 1))
         self.name = 'Head'
+        self.portrait = pg.image.load('./data/images/portraits/head_neutral.jpg').convert()
         self.dialogue_font = Path('amaticsc.ttf')
         self.dialogue_speed = 20
         self.inventory = ['Blue Orb']
@@ -118,6 +119,7 @@ class Obelisk(NPCCon):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(0, 4, 1, 1))
         self.name = 'Obelisk'
+        self.portrait = pg.image.load('./data/images/portraits/obelisk_neutral.jpg').convert()
         if self.variant is not None:
             self.name = self.variants[self.variant]
 
@@ -140,6 +142,8 @@ class Altar(NPCCon):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(3, 0, 1, 1))
         self.name = 'Altar'
+        self.portrait = pg.image.load('./data/images/portraits/altar_neutral.jpg').convert()
+        self.dialogue_speed = 20
 
 
 class NPC:

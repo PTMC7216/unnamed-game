@@ -4,6 +4,7 @@ from src.game.stats import Stats
 from src.states.pausewin import PauseWin
 from src.states.notifywin import NotifyWin
 from math import ceil
+from pathlib import Path
 
 
 class Player(Sprite, Stats):
@@ -30,6 +31,10 @@ class Player(Sprite, Stats):
         self.cooldown = 175
         self.frames = len(self.up) - 1
         self.frame = 0
+
+        self.portrait = pg.image.load('./data/images/portraits/player_neutral.jpg').convert()
+        self.dialogue_font = Path('monaco.ttf')
+        self.dialogue_speed = 30
 
         Stats.__init__(
             self,

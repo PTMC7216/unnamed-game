@@ -65,6 +65,8 @@ class DialogueWin(Menu):
         self.to_give = None
         self.to_take = None
         self.dialogue = None
+        self.dialogue_font = None
+        self.dialogue_speed = 0
 
         self.get_dialogue()
 
@@ -104,7 +106,7 @@ class DialogueWin(Menu):
                 for checker in data[self.npc.dialogue_section]:
 
                     if 'event_item' in checker:
-                        if self.game.player.sprite.inventory and checker['event_item'] != 'pass':
+                        if checker['event_item'] in self.game.player.sprite.inventory:
                             for item in self.game.player.sprite.inventory:
                                 if item.name == checker['event_item']:
                                     priority.append(checker['event_link'])
@@ -113,7 +115,7 @@ class DialogueWin(Menu):
                             break
 
                     if 'event_other' in checker:
-                        if self.npc.flags and checker['event_other'] != 'pass':
+                        if checker['event_other'] in self.npc.flags:
                             for flag in self.npc.flags:
                                 if flag == checker['event_other']:
                                     priority.append(checker['event_link'])
@@ -131,15 +133,14 @@ class DialogueWin(Menu):
                 # IDENTITY
                 if data[self.npc.dialogue_section]['speaker'] == 'Player':
                     self.speaker = self.game.player.sprite.name
+                    self.portrait = self.game.player.sprite.portrait
+                    self.dialogue_font = self.game.player.sprite.dialogue_font
+                    self.dialogue_speed = self.game.player.sprite.dialogue_speed
                 else:
                     self.speaker = data[self.npc.dialogue_section]['speaker']
-
-                # TODO: remove image scaling once ui size is decided & preload images
-                self.portrait = pg.image.load(
-                    f"./data/images/portraits/{data[self.npc.dialogue_section]['portrait']}.jpg").convert()
-                self.portrait = pg.transform.scale(self.portrait,
-                                                   (self.portrait_panel['rect'].w - self.padding * 2,
-                                                    self.portrait_panel['rect'].h - self.padding * 2))
+                    self.portrait = self.npc.portrait
+                    self.dialogue_font = self.npc.dialogue_font
+                    self.dialogue_speed = self.npc.dialogue_speed
 
                 # TEXT
                 if 'text' in data[self.npc.dialogue_section]:
@@ -308,10 +309,10 @@ class DialogueWin(Menu):
         self.game.screen.blit(self.portrait, (self.portrait_pos['x'], self.portrait_pos['y']))
 
         self.game.screen.blit(self.text_panel['surf'], self.text_panel['rect'])
-        utils.ptext.draw(self.speaker, (self.speaker_pos['x'], self.speaker_pos['y']),
+        utils.ptext.draw(self.speaker, (self.speaker_pos['x'], self.speaker_pos['y']), **self.text_kwargs)
+        utils.ptext.draw(self.typewriter.print(self.dialogue, self.dialogue_speed),
+                         (self.text_pos['x'], self.text_pos['y']), fontname=self.dialogue_font,
                          **self.text_kwargs)
-        utils.ptext.draw(self.typewriter.print(self.dialogue, self.npc.dialogue_speed),
-                         (self.text_pos['x'], self.text_pos['y']), fontname=self.npc.dialogue_font, **self.text_kwargs)
 
         if self.selecting:
             self.game.screen.blit(self.choices_panel['surf'], self.choices_panel['rect'])
