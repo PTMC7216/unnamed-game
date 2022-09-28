@@ -209,12 +209,28 @@ class ArmorCon(ItemCon):
         self.usable = False
 
 
+class OldBones(ArmorCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(2, 0, 1, 1))
+        self.name = 'Old Bones'
+        self.desc = 'A pair of strangely shaped bones.'
+
+
 class AccessoryCon(ItemCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
         self.category = 'accessory'
         self.equipable = True
         self.usable = False
+
+
+class MossyRing(AccessoryCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(2, 1, 1, 1))
+        self.name = 'Mossy Ring'
+        self.desc = 'This ring is covered with a thick layer of moss.'
 
 
 class KeyCon(ItemCon):
@@ -239,6 +255,33 @@ class BrassKey(KeyCon):
         self.imgrect_center(self.spritesheet.image_at(0, 1, 1, 1))
         self.name = 'Brass Key'
         self.desc = 'A simple brass key.'
+
+
+class FakeBrassKey(KeyCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(0, 1, 1, 1))
+        self.name = 'Brass Key'
+        self.desc = 'A simple brass key?'
+
+    def __repr__(self):
+        return 'Fake Brass Key'
+
+    def _use_key(self, category, **collision_kwargs):
+        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
+
+        if obj.category == category and not obj.opened:
+            if obj.key_req == self.name:
+                NotifyWin(self.game, 4, 'The key disintegrates.').enter_state()
+                self.kill()
+                self.game.player.sprite.inv_remove(self)
+                self.game.player.sprite.inv_refresh()
+
+            elif obj.key_req != self.name:
+                NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
+
+        else:
+            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
 
 class IronKey(KeyCon):
@@ -323,10 +366,27 @@ class StoryCon(ItemCon):
     def use_action(self):
         raise NotImplementedError
 
+
+class PoisonFlask(StoryCon):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        self.imgrect_center(self.spritesheet.image_at(3, 0, 1, 1))
+        self.name = 'Poison Flask'
+        self.desc = 'A fuming black liquid is contained within the flask.'
+        self.usable = True
+
+    def use_action(self):
+        NotifyChoiceWin(self.game, self.name, 'No', 'Yes', 0, 1,
+                        'Drink from the flask?').enter_state()
+
+
 class Item:
     item_dict = {
+        'Old Bones': OldBones,
+        'Mossy Ring': MossyRing,
         'Rusted Key': RustedKey,
         'Brass Key': BrassKey,
+        'Fake Brass Key': FakeBrassKey,
         'Iron Key': IronKey,
         'Magic Key': MagicKey,
         'Adamantite Key': AdamantiteKey,
@@ -335,6 +395,7 @@ class Item:
         'Yellow Orb': YellowOrb,
         'Brilliant Orb': BrilliantOrb,
         'Rusted Sword': RustedSword
+        'Poison Flask': PoisonFlask
     }
 
     def __init__(self, game, x, y, item_name):
