@@ -164,7 +164,7 @@ class ItemCon(Sprite):
         self.game.player.sprite.inv_refresh()
 
         NotifyWin(self.game, 2, f"Dropped the {self.name}.").enter_state()
-        Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, self.name)
+        Item(self.game, self.game.player.sprite.rect.centerx, self.game.player.sprite.rect.centery, repr(self))
 
 
 class ConsumableCon(ItemCon):
@@ -297,24 +297,40 @@ class MagicKey(KeyCon):
         super().__init__(game, x, y)
         self.imgrect_center(self.spritesheet.image_at(0, 3, 1, 1))
         self.name = 'Magic Key'
-        self.desc = 'A faintly humming blue key. \n\n' \
-                    'It feels unusually fragile.'
-        # TODO: single-use
+        self.desc = 'A pale blue key.'
+
+    def _use_key(self, category, **collision_kwargs):
+        obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
+
+        if obj.category == category and not obj.opened:
+            if obj.key_req == self.name:
+                NotifyWin(self.game, 4, f"Opened the {obj.name.lower()} with the {self.name.lower()}.",
+                          f"The {self.name.lower()} fades out of existence.").enter_state()
+                obj.open()
+                self.kill()
+                self.game.player.sprite.inv_remove(self)
+                self.game.player.sprite.inv_refresh()
+
+            elif obj.key_req != self.name:
+                NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
+
+        else:
+            NotifyWin(self.game, 1, f"Nothing to use the {self.name.lower()} on.").enter_state()
 
 
-class AdamantiteKey(KeyCon):
+class GreenKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
         self.imgrect_center(self.spritesheet.image_at(0, 4, 1, 1))
-        self.name = 'Adamantite Key'
+        self.name = 'Green Key'
         self.desc = 'A jagged green metal key.'
 
 
-class AurichalcumKey(KeyCon):
+class RedKey(KeyCon):
     def __init__(self, game, x, y):
         super().__init__(game, x, y)
         self.imgrect_center(self.spritesheet.image_at(0, 5, 1, 1))
-        self.name = 'Aurichalcum Key'
+        self.name = 'Red Key'
         self.desc = 'A fine red metal key.'
 
 
@@ -353,7 +369,7 @@ class BrilliantOrb(OrbCon):
         self.charges = float('inf')
         self.name = 'Brilliant Orb'
         self.desc = 'The energy within this orb appears limitless. \n\n' \
-                    'It continuously shifts through every color in the visible spectrum.'
+                    'It shifts through every color in the visible spectrum.'
 
 
 class StoryCon(ItemCon):
@@ -382,6 +398,7 @@ class PoisonFlask(StoryCon):
 
 class Item:
     item_dict = {
+        'Rusted Sword': RustedSword,
         'Old Bones': OldBones,
         'Mossy Ring': MossyRing,
         'Rusted Key': RustedKey,
@@ -389,12 +406,11 @@ class Item:
         'Fake Brass Key': FakeBrassKey,
         'Iron Key': IronKey,
         'Magic Key': MagicKey,
-        'Adamantite Key': AdamantiteKey,
-        'Aurichalcum Key': AurichalcumKey,
+        'Green Key': GreenKey,
+        'Red Key': RedKey,
         'Blue Orb': BlueOrb,
         'Yellow Orb': YellowOrb,
         'Brilliant Orb': BrilliantOrb,
-        'Rusted Sword': RustedSword
         'Poison Flask': PoisonFlask
     }
 
