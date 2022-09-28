@@ -11,7 +11,7 @@ class PauseWin(Menu):
         super().__init__(game)
 
         self.name = 'Pause Window'
-        self.choices = ['Resume', 'Inventory', 'Status', 'Quit']
+        self.choices = ['Resume', 'Inventory', 'Status', 'Main Menu']
 
         self.frame = self.framer.make_center_frame(3, 2)
         self.panel = self.framer.make_panel(self.frame.w, self.frame.h, (10, 10, 10),
@@ -69,6 +69,6 @@ class PauseWin(Menu):
         elif self.choices[self.index] == 'Status':
             StatusWin(self.game).enter_state()
 
-        elif self.choices[self.index] == 'Quit':
+        elif self.choices[self.index] == 'Main Menu':
             NotifyChoiceWin(self.game, self.name,
-                            'No', 'Yes', 0, 1, 'Quit to main menu?').enter_state()
+                            'No', 'Yes', 0, 1, 'Return to main menu?').enter_state()

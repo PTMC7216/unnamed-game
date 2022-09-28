@@ -40,7 +40,8 @@ class MainMenu(Menu):
         self.draw_selector()
 
     def transition_state(self):
-        if self.choices[self.index] == 'Start':
+        if self.choices[self.index] == self.choices[0]:
+            self.choices[0] = "Resume"
             self.game.player.sprite.movement_key_check()
             Overworld(self.game).enter_state()
 
