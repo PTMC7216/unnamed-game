@@ -17,15 +17,17 @@ class DoorCon(Sprite):
         self.flagged_npc = None
         self.flagged_desc = None
 
+        self.descs = {'Rusted Key': 'The door is held shut by a rusted lock',
+                      'Brass Key': 'The door is locked with brass',
+                      'Iron Key': 'The door is locked with iron',
+                      'Magic Key': 'The door is held shut by a pale blue lock',
+                      'Green Key': 'The door is held shut by a green lock',
+                      'Red Key': 'The door is held shut by a fine metal lock'}
+
         if props:
             if 'key_req' in props:
                 self.key_req = props['key_req']
-                if self.key_req == 'Rusted Key':
-                    self.desc = 'The door is held shut by a rusted lock'
-                elif self.key_req == 'Magic Key':
-                    self.desc = 'The door is held shut by a faintly humming blue lock'
-                else:
-                    self.desc = f"The door is locked with {self.key_req.split()[0].lower()}"
+                self.desc = self.descs[props['key_req']]
 
             if 'shield_type' in props:
                 self.shield_type = props['shield_type']
