@@ -2,7 +2,7 @@ import pygame as pg
 from pathlib import Path
 from .sprite import Sprite
 from .items import Item
-from src.allocs.stats import Stats
+from src.game.stats import Stats
 from src.states.dialoguewin import DialogueWin
 from src.states.notifywin import NotifyWin
 
@@ -95,7 +95,7 @@ class Head(NPCCon):
         self.portrait = pg.image.load('./data/images/portraits/head_neutral.jpg').convert()
         self.dialogue_font = Path('amaticsc.ttf')
         self.dialogue_speed = 20
-        self.inventory = ['Blue Orb']
+        self.inventory = ['Poison Flask']
         self.apply_inventory()
 
 
@@ -105,15 +105,13 @@ class Obelisk(NPCCon):
     for x in range(variations):
         variants.update({x: f"Obelisk {x}"})
 
-    strings = {0: ["An immaculate obelisk hovers silently atop a metal plate.",
-                   "Despite being suspended in the air, it appears perfectly motionless."],
+    step = 0
+    strings = {0: ["An immaculate obelisk hovers silently atop a metal plate."],
                1: ["You admire the obelisk."],
                2: ["Voices begin to manifest in your mind."],
                # 3: DialogueWin step
                4: ["The voices are gone."],
                5: ["The obelisk."]}
-
-    step = 0
 
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
@@ -144,6 +142,8 @@ class Altar(NPCCon):
         self.name = 'Altar'
         self.portrait = pg.image.load('./data/images/portraits/altar_neutral.jpg').convert()
         self.dialogue_speed = 20
+        self.inventory = ['Magic Key']
+        self.apply_inventory()
 
 
 class NPC:
