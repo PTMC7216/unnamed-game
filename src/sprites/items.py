@@ -37,8 +37,14 @@ class ItemCon(Sprite):
 
         if obj.category == category:
             if obj.rune_type == self.orb_type or self.orb_type == 'all':
-                notice = f"The runes fade away and the {obj.name.split()[-1].lower()} swings open."
-                NotifyWin(self.game, 4, notice).enter_state()
+                notices = [f"The runes fade away and the {obj.name.split()[-1].lower()} swings open."]
+                self.charges -= 1
+                if self.charges <= 0:
+                    notices.append(f"The {self.name.lower()} shatters.")
+                    self.kill()
+                    self.game.player.sprite.inv_remove(self)
+                    self.game.player.sprite.inv_refresh()
+                NotifyWin(self.game, 4, *notices).enter_state()
                 obj.open()
 
             elif obj.rune_type is None:
@@ -275,7 +281,7 @@ class OrbCon(ItemCon):
         self.category = 'orb'
         self.equipable = False
         self.usable = True
-        # TODO: orb charges
+        self.charges = 1
 
 
 class BlueOrb(OrbCon):
@@ -301,6 +307,7 @@ class BrilliantOrb(OrbCon):
         super().__init__(game, x, y)
         self.imgrect_center(self.spritesheet.image_at(1, 4, 1, 1))
         self.orb_type = 'all'
+        self.charges = float('inf')
         self.name = 'Brilliant Orb'
         self.desc = 'The energy within this orb appears limitless. \n\n' \
                     'It continuously shifts through every color in the visible spectrum.'
