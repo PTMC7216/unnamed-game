@@ -58,6 +58,7 @@ class PortalCon(InteractableCon):
         self.category = 'portal'
         self.indentifier = None
         self.target = None
+        self.charges = None
         self.prompt = False
 
         if props:
@@ -67,8 +68,18 @@ class PortalCon(InteractableCon):
             if 'target' in props:
                 self.target = props['target']
 
+            if 'charges' in props:
+                self.charges = props['charges']
+
             if 'prompt' in props:
                 self.prompt = True
+
+    def teleport(self):
+        touched = pg.sprite.spritecollide(self.game.player.sprite, self.game.interactables, False)[-1]
+        for interactable in self.game.interactables:
+            if interactable.category == 'portal' and interactable.identifier == touched.target:
+                self.game.player.sprite.rect.center = interactable.rect.center
+                break
 
 
 class TelePortal(PortalCon):
