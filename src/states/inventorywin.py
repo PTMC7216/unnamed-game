@@ -64,11 +64,9 @@ class InventoryWin(Menu):
         self.draw_selector()
 
     def transition_state(self):
-        selection = self.choices[self.index]
-        for item in self.game.player.sprite.inventory:
-            if item.name == selection:
-                InvContextWin(self.game, item).enter_state()
-                break
+        if len(self.game.player.sprite.inventory) > self.index:
+            selection = self.game.player.sprite.inventory[self.index]
+            InvContextWin(self.game, selection).enter_state()
 
 
 class TransferWin(InventoryWin):

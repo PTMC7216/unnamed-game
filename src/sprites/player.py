@@ -1,7 +1,6 @@
 import pygame as pg
 from .sprite import Sprite
-from .items import Item
-from src.allocs.stats import Stats
+from src.game.stats import Stats
 from src.states.pausewin import PauseWin
 from src.states.notifywin import NotifyWin
 from math import ceil
@@ -63,17 +62,15 @@ class Player(Sprite, Stats):
         self.npc_collision_kwargs = {'sprite': self, 'group': self.game.npcs, 'dokill': False}
 
     def inv_add(self, item, notify=True):
-        full = True
+        if notify:
+            if len(self.inventory) < self.inventory_size:
+                NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
+            else:
+                NotifyWin(self.game, 1, 'Inventory full.').enter_state()
+
         if len(self.inventory) < self.inventory_size:
-            full = False
             item.kill()
             self.inventory.append(item)
-
-        if notify:
-            if full:
-                NotifyWin(self.game, 1, "Inventory full.").enter_state()
-            else:
-                NotifyWin(self.game, 1, f"{item.name} added to inventory.").enter_state()
 
     def inv_remove(self, item):
         if item in self.inventory:
