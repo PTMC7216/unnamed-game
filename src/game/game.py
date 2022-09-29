@@ -10,7 +10,7 @@ from statistics import mean
 class Game:
     def __init__(self):
         pg.display.set_caption('Unnamed')
-        pg.display.set_icon(pg.image.load('./data/images/icondefault.png'))
+        pg.display.set_icon(pg.image.load('./data/images/icondefault.ico'))
 
         self.tilesize = 32
         self.framerate = 60
