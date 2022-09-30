@@ -10,7 +10,7 @@ from statistics import mean
 class Game:
     def __init__(self):
         pg.display.set_caption('Unnamed')
-        pg.display.set_icon(pg.image.load('./data/images/icondefault.ico'))
+        pg.display.set_icon(pg.image.load(utils.set_path('./data/images/icondefault.ico')))
 
         self.tilesize = 32
         self.framerate = 60
@@ -23,13 +23,13 @@ class Game:
 
         # main menu music
         pg.mixer.init()
-        pg.mixer.music.load('./data/music/ominous1.ogg')
+        pg.mixer.music.load(utils.set_path('./data/music/ominous1.ogg'))
         pg.mixer.music.set_volume(1.0)
         pg.mixer.music.play(-1, 0.0, 10000)
 
         # general sounds
-        self.selector_sound = pg.mixer.Sound('./data/sounds/selector.ogg')
-        self.select_sound = pg.mixer.Sound('./data/sounds/select.ogg')
+        self.selector_sound = pg.mixer.Sound(utils.set_path('./data/sounds/selector.ogg'))
+        self.select_sound = pg.mixer.Sound(utils.set_path('./data/sounds/select.ogg'))
 
         # volume
         self.selector_sound.set_volume(0.5)
@@ -46,7 +46,7 @@ class Game:
         self.state_stack.append(states.MainMenu(self))
 
         # maps
-        self.map = tilemap.TiledMap('./data/maps/map1.tmx')
+        self.map = tilemap.TiledMap(utils.set_path('./data/maps/map1.tmx'))
         self.map_img = self.map.make_map()
         self.map_rect = self.map_img.get_rect()
 

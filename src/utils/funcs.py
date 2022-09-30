@@ -1,4 +1,14 @@
+import os
+import sys
 from math import floor
+
+
+def set_path(path):
+    if hasattr(sys, "_MEIPASS"):
+        # noinspection PyProtectedMember
+        return os.path.join(sys._MEIPASS, path)
+    else:
+        return path
 
 
 def run_once(f):

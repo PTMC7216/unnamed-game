@@ -1,4 +1,5 @@
 import pygame as pg
+import src.utils.funcs as utils
 from .sprite import Sprite
 from src.game.stats import Stats
 from src.states.pausewin import PauseWin
@@ -32,8 +33,8 @@ class Player(Sprite, Stats):
         self.frames = len(self.up) - 1
         self.frame = 0
 
-        self.portrait = pg.image.load('./data/images/portraits/player_neutral.jpg').convert()
-        self.dialogue_font = Path('monaco.ttf')
+        self.portrait = pg.image.load(utils.set_path('./data/images/portraits/player_neutral.jpg')).convert()
+        self.dialogue_font = Path(utils.set_path('monaco.ttf'))
         self.dialogue_speed = 30
 
         Stats.__init__(

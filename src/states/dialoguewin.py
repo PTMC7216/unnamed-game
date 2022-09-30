@@ -95,7 +95,7 @@ class DialogueWin(Menu):
         self.get_dialogue()
 
     def get_dialogue(self):
-        dialogue_file = f"./data/dialogues/{self.npc.name.lower().replace(' ', '')}.json"
+        dialogue_file = utils.set_path(f"./data/dialogues/{self.npc.name.lower().replace(' ', '')}.json")
 
         with open(dialogue_file, 'r') as f:
             data = json.loads(f.read())

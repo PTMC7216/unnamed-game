@@ -3,6 +3,7 @@
 from math import ceil, sin, cos, radians, exp
 from collections import namedtuple
 import pygame
+import src.utils.funcs as utils
 
 DEFAULT_FONT_SIZE = 40
 REFERENCE_FONT_SIZE = 100
@@ -344,7 +345,7 @@ class _GetfontOptions(_Options):
             self.fontsize = DEFAULT_FONT_SIZE
 
     def getfontpath(self):
-        return self.fontname if self.fontname is None else FONT_NAME_TEMPLATE % self.fontname
+        return self.fontname if self.fontname is None else utils.set_path(FONT_NAME_TEMPLATE % self.fontname)
 
 
 class _FitsizeOptions(_Options):
