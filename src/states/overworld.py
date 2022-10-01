@@ -31,8 +31,6 @@ class Overworld(State):
             self.fin_pos = (self.radius * math.cos(2 * math.pi / self.rays * i) + self.src_pos[0],
                             self.radius * math.sin(2 * math.pi / self.rays * i) + self.src_pos[1])
 
-            # self.bresenham_plot(int(self.src_pos[0]), int(self.src_pos[1]),
-            #                     int(self.fin_pos[0]), int(self.fin_pos[1]))
             a = pg.math.Vector2(self.src_pos)
             b = pg.math.Vector2(self.fin_pos)
             angle = pg.math.Vector2().angle_to(a - b)
@@ -65,57 +63,6 @@ class Overworld(State):
                     p_x = self.src_pos[0] + n_2 * (self.fin_pos[0] - self.src_pos[0])
                     p_y = self.src_pos[1] + n_2 * (self.fin_pos[1] - self.src_pos[1])
                     self.fin_pos = (p_x + xmod, p_y + ymod)
-
-    # https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-    def bresenham_plot(self, x0, y0, x1, y1):
-        if abs(y1 - y0) < abs(x1 - x0):
-            if x0 > x1:
-                self.bresenham_plot_low(x1, y1, x0, y0)
-            else:
-                self.bresenham_plot_low(x0, y0, x1, y1)
-        else:
-            if y0 > y1:
-                self.bresenham_plot_high(x1, y1, x0, y0)
-            else:
-                self.bresenham_plot_high(x0, y0, x1, y1)
-
-    def bresenham_plot_low(self, x0, y0, x1, y1):
-        dx = x1 - x0
-        dy = y1 - y0
-        yi = 1
-        if dy < 0:
-            yi = -1
-            dy = -dy
-        d = (2 * dy) - dx
-        y = y0
-
-        for x in range(x0, x1):
-            if x % 32 == 0 and not self.src_pos[0] - 32 < x < self.src_pos[0] + 32:
-                pg.draw.rect(self.game.screen, (125, 1, 1), (x, y, 1, 1))
-            if d > 0:
-                y = y + yi
-                d = d + (2 * (dy - dx))
-            else:
-                d = d + 2 * dy
-
-    def bresenham_plot_high(self, x0, y0, x1, y1):
-        dx = x1 - x0
-        dy = y1 - y0
-        xi = 1
-        if dx < 0:
-            xi = -1
-            dx = -dx
-        d = (2 * dx) - dy
-        x = x0
-
-        for y in range(y0, y1):
-            if y % 32 == 0 and not self.src_pos[1] - 32 < y < self.src_pos[1] + 32:
-                pg.draw.rect(self.game.screen, (125, 1, 1), (x, y, 1, 1))
-            if d > 0:
-                x = x + xi
-                d = d + (2 * (dx - dy))
-            else:
-                d = d + 2 * dx
 
     def update(self):
         self.game.all_sprites.update()
