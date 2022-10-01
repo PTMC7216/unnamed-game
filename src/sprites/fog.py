@@ -13,18 +13,16 @@ class Fog(Sprite):
         self.imgrect_topleft(img)
 
         self.name = 'fog'
-    #     self.visible = False
-    #     self.explored = False
-    #
-    # def in_los(self):
-    #     self.visible = True
-    #     self.explored = True
-    #
-    # def out_los(self):
-    #     self.visible = False
-    #
-    # def update(self):
-    #     if self.visible:
-    #         self.image.set_alpha(0)
-    #     elif self.explored:
-    #         self.image.set_alpha(170)
+        self.visible = False
+        self.explored = False
+
+    def in_los(self):
+        self.visible = True
+        self.explored = True
+
+    def update(self):
+        if self.visible:
+            self.image.set_alpha(0)
+        elif self.explored:
+            self.image.set_alpha(170)
+        # self.visible = False

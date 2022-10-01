@@ -10,39 +10,46 @@ class Overworld(State):
 
         self.name = 'Overworld'
 
-        self.rays = 120
-        self.radius = 300
+        self.rays = 60
+        self.radius = self.game.player.sprite.radius
         self.src_pos = None
         self.fin_pos = None
 
     def line_of_sight(self):
         self.src_pos = self.game.player.sprite.rect.center
 
-        rects = [obstacle.rect for obstacle in self.game.obstacles] + \
-                [door.rect for door in self.game.closed_doors]
+        obstacle_list = pg.sprite.spritecollide(self.game.player.sprite, self.game.obstacles,
+                                                False, pg.sprite.collide_circle_ratio(1.0))
+
+        door_list = pg.sprite.spritecollide(self.game.player.sprite, self.game.closed_doors,
+                                            False, pg.sprite.collide_circle_ratio(1.0))
+
+        fog_list = pg.sprite.spritecollide(self.game.player.sprite, self.game.fog,
+                                           False, pg.sprite.collide_circle_ratio(1.0))
 
         for i in range(self.rays):
             self.fin_pos = (self.radius * math.cos(2 * math.pi / self.rays * i) + self.src_pos[0],
                             self.radius * math.sin(2 * math.pi / self.rays * i) + self.src_pos[1])
 
-            for rect in rects:
-                self.ray_collision((rect.topleft, rect.topright), 0, 2)
-                self.ray_collision((rect.topright, rect.bottomright), -2, 0)
-                self.ray_collision((rect.bottomright, rect.bottomleft), 0, -2)
-                self.ray_collision((rect.bottomleft, rect.topleft), 2, 0)
-
-            # TODO: Complete fog implementation
-            for fog in self.game.fog.sprites():
-                clipped_line = fog.rect.clipline(self.src_pos, self.fin_pos)
-                if clipped_line:
-                    fog.kill()
-                # if clipped_line:
-                #     fog.in_los()
-                # else:
-                #     fog.out_los()
-
             # self.bresenham_plot(int(self.src_pos[0]), int(self.src_pos[1]),
             #                     int(self.fin_pos[0]), int(self.fin_pos[1]))
+            a = pg.math.Vector2(self.src_pos)
+            b = pg.math.Vector2(self.fin_pos)
+            angle = pg.math.Vector2().angle_to(a - b)
+
+            for sprite in obstacle_list + door_list:
+                if -0 >= angle >= -180:
+                    self.ray_collision((sprite.rect.topleft, sprite.rect.topright), 0, 2)
+                if 0 <= angle <= 180:
+                    self.ray_collision((sprite.rect.bottomright, sprite.rect.bottomleft), 0, -2)
+
+                self.ray_collision((sprite.rect.topright, sprite.rect.bottomright), -2, 0)
+
+                self.ray_collision((sprite.rect.bottomleft, sprite.rect.topleft), 2, 0)
+
+            for fog in fog_list:
+                if fog.rect.clipline(self.src_pos, self.fin_pos):
+                    fog.in_los()
 
     # https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
     def ray_collision(self, rect_edge: tuple, xmod: int, ymod: int):
