@@ -84,8 +84,11 @@ class Game:
                 sprites.Interactable(self, tile.x, tile.y, tile.name, tile.properties)
             if tile.type == 'item':
                 sprites.Item(self, tile.x, tile.y, tile.name)
-        # for coord in self.map.fog_xy:
-        #     sprites.Fog(self, coord[0], coord[1])
+
+        # LOS switch & fog tiles
+        self.los = True
+        for coord in self.map.fog_xy:
+            sprites.Fog(self, coord[0], coord[1])
 
         # camera & rect debug
         self.camera = tilemap.Camera(self)

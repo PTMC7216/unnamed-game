@@ -63,7 +63,7 @@ class OptionsMenu(MainMenu):
     def __init__(self, game):
         super().__init__(game)
         self.name = 'Options Menu'
-        self.choices = ['Audio', 'Keybinds']
+        self.choices = ['Graphics', 'Audio', 'Keybinds']
         self.index = 0
 
     def update(self):
@@ -82,13 +82,70 @@ class OptionsMenu(MainMenu):
         utils.ptext.draw('Options', center=(self.title_pos['x'], self.title_pos['y']))
         utils.ptext.draw(self.choices[0], center=(self.pos0['x'], self.pos0['y']))
         utils.ptext.draw(self.choices[1], center=(self.pos1['x'], self.pos1['y']))
+        utils.ptext.draw(self.choices[2], center=(self.pos2['x'], self.pos2['y']))
         self.draw_selector()
 
     def transition_state(self):
-        if self.choices[self.index] == 'Audio':
+        if self.choices[self.index] == 'Graphics':
+            GraphicsMenu(self.game).enter_state()
+        elif self.choices[self.index] == 'Audio':
             AudioMenu(self.game).enter_state()
         elif self.choices[self.index] == 'Keybinds':
             KeybindsMenu(self.game).enter_state()
+
+
+class GraphicsMenu(MainMenu):
+    def __init__(self, game):
+        super().__init__(game)
+        self.name = 'Graphics Menu'
+        self.choices = ['LOS']
+        self.index = 0
+
+        self.switch = {True: 'ON',
+                       False: 'OFF'}
+
+    def adjust_vals(self):
+        if self.choices[self.index] == 'LOS':
+            self.game.los = not self.game.los
+
+            if not self.game.los:
+                for fog in self.game.fog.sprites():
+                    fog.visible = True
+
+            elif self.game.los:
+                for fog in self.game.fog.sprites():
+                    if not fog.explored:
+                        fog.visible = False
+                        fog.image.set_alpha(255)
+
+    def update(self):
+        self.check_events()
+        self.move_selector()
+        if self.keybool['z']:
+            self.game.select_sound.play()
+            self.transition_state()
+        elif self.keybool['x']:
+            self.game.select_sound.play()
+            self.exit_state()
+        elif self.keybool['left']:
+            self.game.select_sound.play()
+            self.adjust_vals()
+        elif self.keybool['right']:
+            self.game.select_sound.play()
+            self.adjust_vals()
+        self.key_reset()
+
+    def render(self):
+        self.game.screen.blit(self.panel['surf'], self.panel['rect'])
+        utils.ptext.draw('Graphics', center=(self.title_pos['x'], self.title_pos['y']))
+
+        utils.ptext.draw(self.choices[0], center=(self.pos0['x'] - 30, self.pos0['y']))
+        utils.ptext.draw(self.switch[self.game.los], center=(self.pos0['x'] + 30, self.pos0['y']))
+
+        self.draw_selector()
+
+    def transition_state(self):
+        pass
 
 
 class AudioMenu(MainMenu):
@@ -98,7 +155,7 @@ class AudioMenu(MainMenu):
         self.choices = ['SFX', 'BGM']
         self.index = 0
 
-    def adjust_volume(self, addsub):
+    def adjust_vals(self, addsub):
         def adjust(x): return round(addsub(x, 0.1), 1)
         if self.choices[self.index] == 'SFX':
             self.game.selector_sound.set_volume(adjust(self.game.selector_sound.get_volume()))
@@ -117,10 +174,10 @@ class AudioMenu(MainMenu):
             self.exit_state()
         elif self.keybool['left']:
             self.game.select_sound.play()
-            self.adjust_volume(operator.sub)
+            self.adjust_vals(operator.sub)
         elif self.keybool['right']:
             self.game.select_sound.play()
-            self.adjust_volume(operator.add)
+            self.adjust_vals(operator.add)
         self.key_reset()
 
     def render(self):
