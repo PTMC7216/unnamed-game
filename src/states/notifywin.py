@@ -171,13 +171,13 @@ class NotifyChoiceWin(NotifyWin):
                     self.game.player.sprite.movement_key_check()
                     NotifyWin(self.game, 2, "You are pulled into the swirling mass. . .").enter_state()
 
-        elif self.obj == 'Poison Flask':
+        elif self.obj.name == 'Poison Flask':
 
             if self.flag == 'No':
                 self._generic_exit()
 
             elif self.flag == 'Yes':
-                dialogue_file = f"./data/dialogues/{self.obj.lower().replace(' ', '')}.json"
+                dialogue_file = f"./data/dialogues/{self.obj.name.lower().replace(' ', '')}.json"
                 with open(dialogue_file, 'r') as f:
                     data = json.loads(f.read())
                     Fader(self.game, 5, 6, NotifyWin(self.game, 1, *data['sentences'])).enter_state()
@@ -187,3 +187,4 @@ class NotifyChoiceWin(NotifyWin):
                         npc.dialogue_section = "n_consumed_0"
                         break
 
+                self.obj.destroy()

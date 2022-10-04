@@ -18,6 +18,11 @@ class ItemCon(Sprite):
     def pickup(self):
         self.game.player.sprite.inv_add(self)
 
+    def destroy(self):
+        self.kill()
+        self.game.player.sprite.inv_remove(self)
+        self.game.player.sprite.inv_refresh()
+
     def _use_key(self, category, **collision_kwargs):
         obj = pg.sprite.spritecollide(**collision_kwargs)[-1]
 
@@ -41,9 +46,7 @@ class ItemCon(Sprite):
                 self.charges -= 1
                 if self.charges <= 0:
                     notices.append(f"The {self.name.lower()} shatters.")
-                    self.kill()
-                    self.game.player.sprite.inv_remove(self)
-                    self.game.player.sprite.inv_refresh()
+                    self.destroy()
                 NotifyWin(self.game, 4, *notices).enter_state()
                 obj.open()
 
@@ -273,9 +276,7 @@ class FakeBrassKey(KeyCon):
         if obj.category == category and not obj.opened:
             if obj.key_req == self.name:
                 NotifyWin(self.game, 4, 'The key disintegrates.').enter_state()
-                self.kill()
-                self.game.player.sprite.inv_remove(self)
-                self.game.player.sprite.inv_refresh()
+                self.destroy()
 
             elif obj.key_req != self.name:
                 NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
@@ -307,9 +308,7 @@ class MagicKey(KeyCon):
                 NotifyWin(self.game, 4, f"Opened the {obj.name.lower()} with the {self.name.lower()}.",
                           f"The {self.name.lower()} fades out of existence.").enter_state()
                 obj.open()
-                self.kill()
-                self.game.player.sprite.inv_remove(self)
-                self.game.player.sprite.inv_refresh()
+                self.destroy()
 
             elif obj.key_req != self.name:
                 NotifyWin(self.game, 2, f"The {self.name.lower()} doesn't fit.").enter_state()
@@ -392,7 +391,7 @@ class PoisonFlask(StoryCon):
         self.usable = True
 
     def use_action(self):
-        NotifyChoiceWin(self.game, self.name, 'No', 'Yes', 0, 1,
+        NotifyChoiceWin(self.game, self, 'No', 'Yes', 0, 1,
                         'Drink from the flask?').enter_state()
 
 
