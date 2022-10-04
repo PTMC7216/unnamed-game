@@ -3,6 +3,7 @@ import operator
 import src.utils as utils
 from .menu import Menu
 from .overworld import Overworld
+from .fader import Fader
 
 
 class MainMenu(Menu):
@@ -41,9 +42,15 @@ class MainMenu(Menu):
 
     def transition_state(self):
         if self.choices[self.index] == self.choices[0]:
-            self.choices[0] = "Resume"
-            self.game.player.sprite.movement_key_check()
-            Overworld(self.game).enter_state()
+            if self.choices[0] == "Start":
+                self.choices[0] = "Resume"
+                Fader(self.game, 1, 2, Overworld(self.game)).enter_state()
+                pg.mixer.music.load(utils.set_path('./data/music/nest.ogg'))
+                pg.mixer.music.play(2, 2.2, 10000)
+            else:
+                self.game.player.sprite.movement_key_check()
+                Overworld(self.game).enter_state()
+                pg.mixer.music.unload()
 
         elif self.choices[self.index] == 'Options':
             OptionsMenu(self.game).enter_state()

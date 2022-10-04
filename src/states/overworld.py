@@ -6,7 +6,6 @@ from .state import State
 class Overworld(State):
     def __init__(self, game):
         State.__init__(self, game)
-        pg.mixer.music.unload()
 
         self.name = 'Overworld'
 
