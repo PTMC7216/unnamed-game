@@ -18,14 +18,14 @@ class Player(Sprite, Stats):
         self.spritesheet = game.player_sheet
 
         self.imgrect_topleft(self.spritesheet.image_at(1, 0, 1, 1))
-        self.image = pg.transform.scale(self.image, (30, 30))
-        self.rect.inflate_ip(-2, -2)
-        self.radius = 300
+        self.image = pg.transform.scale(self.image, (28, 28))
+        self.rect.inflate_ip(-4, -4)
+        self.radius = 200
 
-        self.up = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 3, 1, 1, 3, -1)]
-        self.down = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 0, 1, 1, 3, -1)]
-        self.left = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 1, 1, 1, 3, -1)]
-        self.right = [pg.transform.scale(img, (30, 30)) for img in self.spritesheet.image_strip(0, 2, 1, 1, 3, -1)]
+        self.up = [pg.transform.scale(img, (28, 28)) for img in self.spritesheet.image_strip(0, 3, 1, 1, 3, -1)]
+        self.down = [pg.transform.scale(img, (28, 28)) for img in self.spritesheet.image_strip(0, 0, 1, 1, 3, -1)]
+        self.left = [pg.transform.scale(img, (28, 28)) for img in self.spritesheet.image_strip(0, 1, 1, 1, 3, -1)]
+        self.right = [pg.transform.scale(img, (28, 28)) for img in self.spritesheet.image_strip(0, 2, 1, 1, 3, -1)]
 
         self.anim_timer = pg.time.get_ticks()
         self.direction = []
