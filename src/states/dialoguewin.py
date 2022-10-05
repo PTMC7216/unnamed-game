@@ -103,22 +103,23 @@ class DialogueWin(Menu):
 
             # INTRO CHECK
             if self.npc.dialogue_section == 'check':
-                for checker in data[self.npc.dialogue_section]:
+                for check in data[self.npc.dialogue_section]:
 
-                    if 'event_item' in checker:
-                        if checker['event_item'] in self.game.player.sprite.inventory:
-                            for item in self.game.player.sprite.inventory:
-                                if item.name == checker['event_item']:
-                                    priority.append(checker['event_link'])
+                    if 'event_item' in check:
+                        if check['event_item'] in self.game.player.sprite.inventory + self.game.player.sprite.equipment:
+                            for item in self.game.player.sprite.inventory + self.game.player.sprite.equipment:
+                                if item != 'None' and item.name == check['event_item']:
+                                    priority.append(check['event_link'])
+
                         else:
                             self.dialogue_base()
                             break
 
-                    if 'event_other' in checker:
-                        if checker['event_other'] in self.npc.flags:
+                    if 'event_other' in check:
+                        if check['event_other'] in self.npc.flags:
                             for flag in self.npc.flags:
-                                if flag == checker['event_other']:
-                                    priority.append(checker['event_link'])
+                                if flag == check['event_other']:
+                                    priority.append(check['event_link'])
                         else:
                             self.dialogue_base()
                             break
@@ -178,10 +179,9 @@ class DialogueWin(Menu):
                                 self.npc.dialogue_memory.append(command['memorize'])
 
                         if 'event_item' in command:
-                            if self.game.player.sprite.inventory:
-                                for item in self.game.player.sprite.inventory:
-                                    if item.name == command['event_item']:
-                                        priority.append(command['event_link'])
+                            for item in self.game.player.sprite.inventory + self.game.player.sprite.equipment:
+                                if item != 'None' and item.name == command['event_item']:
+                                    priority.append(command['event_link'])
 
                         if 'event_other' in command:
                             if self.npc.flags:

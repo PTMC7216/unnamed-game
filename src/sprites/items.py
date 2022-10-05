@@ -113,7 +113,7 @@ class ItemCon(Sprite):
 
             if update:
                 self.equipped = not self.equipped
-                player.update_substats()
+                player.update_stats()
                 player.inv_remove(self)
                 player.inv_refresh()
                 NotifyWin(self.game, 2, f"Equipped the {self.name}.").enter_state()
@@ -137,7 +137,7 @@ class ItemCon(Sprite):
                     self.game.player.sprite.set_slot(self.game.player.sprite.accessory, self, 'None')
 
                 self.equipped = not self.equipped
-                self.game.player.sprite.update_substats()
+                self.game.player.sprite.update_stats()
                 self.game.player.sprite.inv_add(self, notify=False)
                 self.game.player.sprite.inv_refresh()
                 NotifyWin(self.game, 2, f"Unequipped the {self.name}.").enter_state()
@@ -161,7 +161,7 @@ class ItemCon(Sprite):
                 self.game.player.sprite.set_slot(self.game.player.sprite.accessory, self, 'None')
 
             self.equipped = not self.equipped
-            self.game.player.sprite.update_substats()
+            self.game.player.sprite.update_stats()
 
         self.game.player.sprite.inv_remove(self)
         self.game.player.sprite.inv_refresh()

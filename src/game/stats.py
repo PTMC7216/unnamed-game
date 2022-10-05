@@ -12,6 +12,7 @@ class Stats:
         self.hands = 'None'
         self.legs = 'None'
         self.feet = 'None'
+        self.equipment = self.hand + self.accessory + [self.head, self.torso, self.hands, self.legs, self.feet]
 
         # stats
         self.lv = lv
@@ -70,5 +71,6 @@ class Stats:
         target.hp += -self.attack_power
         print(target.hp)
 
-    def update_substats(self):
+    def update_stats(self):
+        self.equipment = self.hand + self.accessory + [self.head, self.torso, self.hands, self.legs, self.feet]
         self.attack_power_update()
