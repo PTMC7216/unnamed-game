@@ -107,19 +107,14 @@ class DialogueWin(Menu):
 
                     if 'event_item' in check:
                         if check['event_item'] in self.game.player.sprite.inventory + self.game.player.sprite.equipment:
-                            for item in self.game.player.sprite.inventory + self.game.player.sprite.equipment:
-                                if item != 'None' and item.name == check['event_item']:
-                                    priority.append(check['event_link'])
-
+                            priority.append(check['event_link'])
                         else:
                             self.dialogue_base()
                             break
 
                     if 'event_other' in check:
                         if check['event_other'] in self.npc.flags:
-                            for flag in self.npc.flags:
-                                if flag == check['event_other']:
-                                    priority.append(check['event_link'])
+                            priority.append(check['event_link'])
                         else:
                             self.dialogue_base()
                             break
