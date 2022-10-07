@@ -14,6 +14,7 @@ class ItemCon(Sprite):
         self.equipped = False
         self.equipable = False
         self.usable = False
+        self.droppable = True
 
     def pickup(self):
         self.game.player.sprite.inv_add(self)

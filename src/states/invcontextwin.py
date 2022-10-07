@@ -25,20 +25,17 @@ class InvContextWin(Menu):
         self.c_spacing = 25
         self.position_selector(self.pos0, -60, -2)
 
-        if self.item.usable:
-            self.usable_color = (255, 255, 255)
-        else:
-            self.usable_color = (50, 50, 50)
-
-        if self.item.equipable:
-            self.equipable_color = (255, 255, 255)
-        else:
-            self.equipable_color = (50, 50, 50)
-
         if self.item.equipped:
             self.choices[1] = 'Unequip'
 
         self.text_kwargs = {'fontsize': 32}
+
+    @staticmethod
+    def _restriction(restriction_check):
+        if restriction_check:
+            return 255, 255, 255
+        else:
+            return 50, 50, 50
 
     def update(self):
         self.check_events()
@@ -60,14 +57,16 @@ class InvContextWin(Menu):
         self.prev_state.render()
         self.game.screen.blit(self.panel['surf'], self.panel['rect'])
 
-        utils.ptext.draw(
-            self.choices[0], color=self.usable_color, center=(self.pos0['x'], self.pos0['y']), **self.text_kwargs)
-        utils.ptext.draw(
-            self.choices[1], color=self.equipable_color, center=(self.pos1['x'], self.pos1['y']), **self.text_kwargs)
-        utils.ptext.draw(
-            self.choices[2], center=(self.pos2['x'], self.pos2['y']), **self.text_kwargs)
-        utils.ptext.draw(
-            self.choices[3], center=(self.pos3['x'], self.pos3['y']), **self.text_kwargs)
+        utils.ptext.draw(self.choices[0], color=self._restriction(self.item.usable),
+                         center=(self.pos0['x'], self.pos0['y']), **self.text_kwargs)
+
+        utils.ptext.draw(self.choices[1], color=self._restriction(self.item.equipable),
+                         center=(self.pos1['x'], self.pos1['y']), **self.text_kwargs)
+
+        utils.ptext.draw(self.choices[2], center=(self.pos2['x'], self.pos2['y']), **self.text_kwargs)
+
+        utils.ptext.draw(self.choices[3], color=self._restriction(self.item.droppable),
+                         center=(self.pos3['x'], self.pos3['y']), **self.text_kwargs)
 
         self.draw_selector()
 
@@ -77,16 +76,14 @@ class InvContextWin(Menu):
 
         elif self.choices[self.index] == 'Equip':
             if not self.item.equipable:
-                notice = f"Can't equip the {self.item.name}."
-                NotifyWin(self.game, 1, notice).enter_state()
+                NotifyWin(self.game, 1, f"Can't equip the {self.item.name}.").enter_state()
             else:
                 self.choices[1] = 'Unequip'
                 self.item.equip()
 
         elif self.choices[self.index] == 'Unequip':
             if not self.item.equipped:
-                notice = f"The {self.item.name} is already unequipped."
-                NotifyWin(self.game, 1, notice).enter_state()
+                NotifyWin(self.game, 1, f"The {self.item.name} is already unequipped.").enter_state()
             else:
                 self.choices[1] = 'Equip'
                 self.item.unequip()
@@ -95,4 +92,7 @@ class InvContextWin(Menu):
             self.item.examine()
 
         elif self.choices[self.index] == 'Drop':
-            self.item.drop()
+            if not self.item.droppable:
+                NotifyWin(self.game, 1, f"Can't drop the {self.item.name}.").enter_state()
+            else:
+                self.item.drop()
