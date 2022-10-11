@@ -1,4 +1,6 @@
 import pygame as pg
+import operator
+import math
 from .sprite import Sprite
 from src.states.notifywin import NotifyWin, NotifyChoiceWin
 
@@ -235,6 +237,48 @@ class MossyRing(AccessoryCon):
         self.imgrect_center(self.spritesheet.image_at(2, 1, 1, 1))
         self.name = 'Mossy Ring'
         self.desc = 'This ring is covered with a thick layer of moss.'
+
+    def examine(self):
+        # Get player and altar xy tuples
+        a, b = self.game.player.sprite.rect.center, (0, 0)
+        for npc in self.game.npcs:
+            if npc.name == 'Altar':
+                b = npc.rect.center
+                break
+
+        # Calculate distance
+        dx = b[0] - a[0]
+        dy = b[1] - a[1]
+
+        # Check distance
+        if math.hypot(dx, dy) < 120:
+            self.desc = 'The ring is at rest.'
+            NotifyWin(self.game, 1, self.desc).enter_state()
+            return
+
+        # Calculate angle
+        rads = math.atan2(-dy, dx)
+        rads %= 2 * math.pi
+        degs = math.degrees(rads)
+
+        # Check angle
+        def compass(deg):
+            compass_points = {
+                'east':      0 <= deg < 20 or 340 <= deg <= 360,
+                'northeast': 20 <= deg < 70,
+                'north':     70 <= deg < 110,
+                'northwest': 110 <= deg < 160,
+                'west':      160 <= deg < 200,
+                'southwest': 200 <= deg < 250,
+                'south':     250 <= deg < 290,
+                'southeast': 290 <= deg < 340
+            }
+            for direction, angle in compass_points.items():
+                if angle:
+                    return f"The ring pulls to the {direction}."
+
+        self.desc = compass(degs)
+        NotifyWin(self.game, 1, self.desc).enter_state()
 
 
 class KeyCon(ItemCon):
