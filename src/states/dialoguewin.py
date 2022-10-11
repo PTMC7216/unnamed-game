@@ -256,7 +256,7 @@ class DialogueWin(Menu):
     def transferrals(self):
         if self.giver:
             self.npc.give_item(self.to_give)
-        elif self.taker:
+        if self.taker:
             self.npc.take_item(self.to_take)
 
     def select_choice(self):
