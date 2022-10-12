@@ -70,9 +70,14 @@ class NPCCon(Sprite, Stats):
             Item(self.game, self.rect.centerx, self.rect.centery, item.name)
 
     def take_item(self, name):
-        for item in self.game.player.sprite.inventory:
-            if item.name == name:
-                self.game.player.sprite.inventory.remove(item)
+        for item in self.game.player.sprite.inventory + self.game.player.sprite.equipment:
+            if repr(item) == name:
+                if item in self.game.player.sprite.inventory:
+                    self.game.player.sprite.inventory.remove(item)
+                else:
+                    self.game.player.sprite.set_slot(self.game.player.sprite.accessory, item, 'None')
+                    self.game.player.sprite.update_stats()
+
                 self.inventory.append(item)
                 break
 
