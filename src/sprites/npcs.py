@@ -1,6 +1,5 @@
 import pygame as pg
 import src.utils.funcs as utils
-from pathlib import Path
 from .sprite import Sprite
 from .items import Item
 from src.game.stats import Stats
@@ -32,7 +31,7 @@ class NPCCon(Sprite, Stats):
         self.speaker = True
 
         self.flags = []
-        self.dialogue_font = Path(utils.set_path('monaco.ttf'))
+        self.dialogue_font = 'monaco.ttf'
         self.dialogue_speed = 60
         self.dialogue_section = 'check'
         self.dialogue_counter = 0
@@ -104,7 +103,7 @@ class Head(NPCCon):
         self.sub_image = self.spritesheet.image_at(1, 0, 1, 1)
         self.name = 'Head'
         self.portrait = pg.image.load(utils.set_path('./data/images/portraits/head_neutral.jpg')).convert()
-        self.dialogue_font = Path('amaticsc.ttf')
+        self.dialogue_font = 'amaticsc.ttf'
         self.dialogue_speed = 20
         self.inventory = ['Poison Flask']
         self.apply_inventory()
