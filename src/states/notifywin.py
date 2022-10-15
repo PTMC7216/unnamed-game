@@ -184,7 +184,8 @@ class NotifyChoiceWin(NotifyWin):
 
                 for npc in self.game.npcs:
                     if npc.name == "Head":
-                        npc.dialogue_section = "n_consumed_0"
+                        npc.imgrect_topleft(npc.sub_image)
+                        npc.speaker = False
                         break
 
                 self.obj.destroy()

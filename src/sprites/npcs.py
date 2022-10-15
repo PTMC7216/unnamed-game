@@ -101,6 +101,7 @@ class Head(NPCCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
         self.imgrect_topleft(self.spritesheet.image_at(2, 0, 1, 1))
+        self.sub_image = self.spritesheet.image_at(1, 0, 1, 1)
         self.name = 'Head'
         self.portrait = pg.image.load(utils.set_path('./data/images/portraits/head_neutral.jpg')).convert()
         self.dialogue_font = Path('amaticsc.ttf')
