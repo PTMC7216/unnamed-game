@@ -124,7 +124,7 @@ class NotifyChoiceWin(NotifyWin):
 
             elif self.flag == 'Yes':
                 self.game.select_sound.play()
-                pg.mixer.music.load('./data/music/ominous1.ogg')
+                pg.mixer.music.load(utils.set_path('./data/music/ominous1.ogg'))
                 pg.mixer.music.play(-1, 0.0, 10000)
                 while len(self.game.state_stack) > 1:
                     self.exit_state()
@@ -177,7 +177,7 @@ class NotifyChoiceWin(NotifyWin):
                 self._generic_exit()
 
             elif self.flag == 'Yes':
-                dialogue_file = f"./data/dialogues/{self.obj.name.lower().replace(' ', '')}.json"
+                dialogue_file = utils.set_path(f"./data/dialogues/{self.obj.name.lower().replace(' ', '')}.json")
                 with open(dialogue_file, 'r') as f:
                     data = json.loads(f.read())
                     Fader(self.game, 5, 6, NotifyWin(self.game, 1, *data['sentences'])).enter_state()
