@@ -112,21 +112,22 @@ class CoffinPortal(PortalCon):
             NotifyWin(self.game, 1, 'Looked inside the coffin.', "It's empty.").enter_state()
 
 
+class GreenStairPortal(PortalCon):
+    def __init__(self, game, x, y, props):
+        super().__init__(game, x, y, props)
+        self.imgrect_topleft(self.spritesheet.image_at(5, 5, 1, 1))
+        self.name = 'Green Stair Portal'
+
+    def interact(self):
+        self.teleport()
+
+
 class MapCon(InteractableCon):
     def __init__(self, game, x, y, props):
         super().__init__(game, x, y, props)
 
     def interact(self):
         raise NotImplementedError
-
-
-class GreenStairs(MapCon):
-    def __init__(self, game, x, y, props):
-        super().__init__(game, x, y, props)
-        self.imgrect_topleft(self.spritesheet.image_at(5, 5, 1, 1))
-
-    def interact(self):
-        NotifyWin(self.game, 1, 'The passage is blocked by vines.').enter_state()
 
 
 class ScriptCon(InteractableCon):
@@ -234,9 +235,9 @@ class CoffinChest(ChestCon):
 class Interactable:
     interactable_dict = {
         'Crystal Switch': CrystalSwitch,
-        'Green Stairs': GreenStairs,
         'Tele Portal': TelePortal,
         'Coffin Portal': CoffinPortal,
+        'Green Stair Portal': GreenStairPortal,
         'Space Script': SpaceScript,
         'Wooden Chest': WoodenChest,
         'Iron Chest': IronChest,
