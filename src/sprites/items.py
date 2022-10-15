@@ -221,6 +221,7 @@ class OldBones(ArmorCon):
         self.imgrect_center(self.spritesheet.image_at(2, 0, 1, 1))
         self.name = 'Old Bones'
         self.desc = 'A pair of strangely shaped bones.'
+        self.equipable = False
 
 
 class AccessoryCon(ItemCon):
