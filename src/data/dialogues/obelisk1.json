@@ -1,0 +1,18 @@
+{
+  "check": [
+          {"event_item": "pass"}
+        ],
+
+  "n_0000": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"Have they seen me before?\"",
+      "\"Do I fit in their world?\"",
+      "\"I seem separate from the ground. Not rooted, but dropped out of nothing.\"",
+      "\"I've no threads fastening me to anything.\"",
+      "\"I can go anywhere. I seem to have been given the freedom of this place.\"",
+      "\"What am I then?\""
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "check": [
+          {"event_item": "pass"}
+        ],
+
+  "n_0000": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"This is the nature of the universe.\"",
+      "\"We struggle against it. We fight to deny it, but it is of course pretense.\"",
+      "\"It is a lie.\"",
+      "\"Beneath our poised appearance, the truth is we are all completely out of control.\""
+    ]
+  }
+}

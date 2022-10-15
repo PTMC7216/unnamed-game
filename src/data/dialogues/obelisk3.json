@@ -1,0 +1,16 @@
+{
+  "check": [
+          {"event_item": "pass"}
+        ],
+
+  "n_0000": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"You walk into this room at your own risk, because it leads to the future.\"",
+      "\"Not a future that will be, but one that might be.\"",
+      "\"This is not a new world. It is simply an extension of what began in the old one.\"",
+      "\"It has one iron rule: logic is an enemy and truth is a menace.\""
+    ]
+  }
+}

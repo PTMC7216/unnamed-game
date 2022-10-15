@@ -1,0 +1,17 @@
+{
+  "check": [
+          {"event_item": "pass"}
+        ],
+
+  "n_0000": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"I went astray from the straight road.\"",
+      "\"And woke to find myself alone in a dark wood.\"",
+      "\"How shall I say what wood that was?\"",
+      "\"I never saw so drear, so arduous a wilderness.\"",
+      "\"Its very memory gives a shape to fear.\""
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "check": [
+        {"event_item": "Mossy Ring",
+          "event_link": "n_ei_mossy_0000"}
+      ],
+
+  "n_0000": {
+    "speaker": "Altar",
+    "portrait": "altar_neutral",
+    "text": [
+      ".  .  ."
+    ],
+    "commands": [
+            {"event_item": "Mossy Ring",
+            "event_link": "n_ei_mossy_0000"}
+           ]
+  },
+
+  "n_ei_mossy_0000": {
+    "speaker": "Altar",
+    "portrait": "altar_neutral",
+    "text": [
+      "A l l n o t h i n g s b e g i n t h e r e w h e n",
+      "A c a u s a l s w h i c k e r i n g a w a y",
+      "A w e y o u r s e l f t o w a r d r e - d - - i -"
+    ],
+    "commands": [
+            {"take": "Mossy Ring"},
+            {"give": "Magic Key"},
+            {"quiet_link": "n_0001"}
+           ]
+  },
+
+  "n_0001": {
+    "speaker": "Altar",
+    "portrait": "altar_neutral",
+    "text": [
+      ".  .  ."
+    ]
+  }
+}

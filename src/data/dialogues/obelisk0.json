@@ -1,0 +1,105 @@
+{
+  "check": [
+          {"event_item": "pass"}
+        ],
+
+  "n_0000": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\". . .Who are you? Or, what?\""
+    ],
+    "commands": [
+            {"link": "n_0001"}
+           ]
+  },
+
+  "n_0001": {
+    "speaker": "Familiar voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"I am a traveller.\""
+    ],
+    "commands": [
+      {
+        "link": "n_0002"
+      }
+    ]
+  },
+
+  "n_0002": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"A traveller?\"",
+      "\"What is your destination?\""
+    ],
+    "commands": [
+      {
+        "link": "n_0003"
+      }
+    ]
+  },
+
+  "n_0003": {
+    "speaker": "Familiar voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"Destination?\""
+    ],
+    "commands": [
+      {
+        "link": "n_0004"
+      }
+    ]
+  },
+
+  "n_0004": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"Yes. What place are you trying to reach?\""
+    ],
+    "commands": [
+      {
+        "link": "n_0005"
+      }
+    ]
+  },
+
+  "n_0005": {
+    "speaker": "Familiar voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"Ah, place, no.\"",
+      "\"There is no specific place I wish to go.\""
+    ],
+    "commands": [
+      {
+        "link": "n_0006"
+      }
+    ]
+  },
+
+  "n_0006": {
+    "speaker": "Unknown voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      "\"Then what is the purpose of your journey?\""
+    ],
+    "commands": [
+      {
+        "link": "n_0007"
+      }
+    ]
+  },
+
+  "n_0007": {
+    "speaker": "Familiar voice",
+    "portrait": "obelisk_neutral",
+    "text": [
+      ". . .",
+      "\"Curiosity.\""
+    ]
+  }
+}

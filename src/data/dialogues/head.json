@@ -1,0 +1,68 @@
+{
+  "check": [
+          {"event_item": "pass"}
+        ],
+
+  "n_0000": {
+    "speaker": "Head",
+    "portrait": "head_neutral",
+    "text": [
+      "Your mind is vociferous.",
+      "Addled with worry and doubt.",
+      "We can extinguish these trifles.",
+      "Would you like that?"
+    ],
+    "choices": [
+            {"n_yes_0": "Yes."},
+            {"n_no_0": "No."},
+            {"n_no_0": ". . ."},
+            {"n_no_0": ". . ."}
+        ]
+  },
+
+  "n_yes_0": {
+    "speaker": "Head",
+    "portrait": "head_neutral",
+    "text": [
+      "Then drink from this flask.",
+      "As you die and are reborn, we will reveal your right and singular purpose."
+    ],
+    "commands": [
+            {"give": "Poison Flask"},
+            {"quiet_link": "n_waiting"}
+           ]
+  },
+
+  "n_waiting": {
+    "speaker": "Head",
+    "portrait": "head_neutral",
+    "text": [
+      ". . ."
+    ]
+  },
+
+  "n_no_0": {
+    "speaker": "Head",
+    "portrait": "head_neutral",
+    "text": [
+      ". . ."
+    ],
+    "commands": [
+            {"quiet_link": "n_no_1"}
+        ]
+  },
+
+  "n_no_1": {
+    "speaker": "Head",
+    "portrait": "head_neutral",
+    "text": [
+      "Have you had a change of mind?"
+    ],
+    "choices": [
+            {"n_yes_0": "Yes."},
+            {"n_no_0": "No."},
+            {"n_no_0": ". . ."},
+            {"n_no_0": ". . ."}
+        ]
+  }
+}
