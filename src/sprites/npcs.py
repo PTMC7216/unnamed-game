@@ -29,6 +29,7 @@ class NPCCon(Sprite, Stats):
             alignment=5)
 
         self.variant = None
+        self.speaker = True
 
         self.flags = []
         self.dialogue_font = Path(utils.set_path('monaco.ttf'))
@@ -82,8 +83,11 @@ class NPCCon(Sprite, Stats):
                 break
 
     def interact(self):
-        self.game.select_sound.play()
-        DialogueWin(self.game, self).enter_state()
+        if self.speaker:
+            self.game.select_sound.play()
+            DialogueWin(self.game, self).enter_state()
+        else:
+            NotifyWin(self.game, 1, f"The {self.name.lower()} is unresponsive.").enter_state()
 
     def relocate(self):
         for relocator in self.game.relocators:
