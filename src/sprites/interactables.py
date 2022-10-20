@@ -47,7 +47,7 @@ class CrystalSwitch(SwitchCon):
         if self.active:
             NotifyChoiceWin(self.game, self.name,
                             'Do nothing', 'Touch it', 0, 1,
-                            f"{self.crystal_type.capitalize()} energy swirls within this crystal").enter_state()
+                            f"{self.crystal_type.capitalize()} energy swirls within this crystal.").enter_state()
         else:
             NotifyWin(self.game, 1, 'The crystal is powerless.').enter_state()
 
