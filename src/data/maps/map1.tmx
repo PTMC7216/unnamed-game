@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="1107">
+<map version="1.5" tiledversion="1.7.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="1109">
  <editorsettings>
   <export target="map1.tmx" format="tmx"/>
  </editorsettings>
@@ -19,8 +19,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,128,131,132,0,198,193,199,194,196,197,194,0,310,309,308,0,0,0,0,309,0,0,0,310,0,0,0,308,0,0,0,309,0,0,0,0,309,311,308,310,308,311,308,310,310,308,309,309,308,310,310,311,309,309,310,310,309,309,310,308,310,310,308,309,309,308,0,0,1594,1593,1594,1592,1593,1594,1593,1593,0,0,0,0,0,0,0,0,0,0,0,0,
-132,129,131,129,130,132,128,129,130,131,130,130,128,132,129,0,195,193,193,194,195,195,193,0,311,311,309,309,308,309,311,309,309,310,310,310,311,308,308,308,310,311,309,311,309,310,311,311,311,308,309,309,311,309,309,310,308,311,309,310,308,310,308,311,310,308,309,309,308,308,311,309,308,308,310,309,309,308,311,1592,1592,1592,1592,1593,1593,1594,1592,1594,0,0,0,0,0,0,0,0,0,0,0,0,
-128,132,129,132,129,132,128,128,130,131,128,131,132,128,128,0,195,194,198,193,199,195,196,0,309,309,311,308,308,308,309,309,311,310,310,309,309,311,308,308,311,310,310,309,309,310,310,308,308,309,308,309,308,309,308,311,308,309,308,308,309,310,310,308,309,311,311,311,308,308,311,309,309,309,308,311,310,311,308,1594,1593,1593,1594,1593,1594,1593,1593,1594,0,0,0,0,0,0,0,0,0,0,0,0,
+132,129,131,129,130,132,128,129,130,131,130,0,128,132,129,0,195,193,193,194,195,195,193,0,311,311,309,309,308,309,311,309,309,310,310,310,311,308,308,308,310,311,309,311,309,310,311,311,311,308,309,309,311,309,309,310,308,311,309,310,308,310,308,311,310,308,309,309,308,308,311,309,308,308,310,309,309,308,311,1592,1592,1592,1592,1593,1593,1594,1592,1594,0,0,0,0,0,0,0,0,0,0,0,0,
+128,132,129,132,129,132,128,128,130,131,128,0,132,128,128,0,195,194,198,193,199,195,196,0,309,309,311,308,308,308,309,309,311,310,310,309,309,311,308,308,311,310,310,309,309,310,310,308,308,309,308,309,308,309,308,311,308,309,308,308,309,310,310,308,309,311,311,311,308,308,311,309,309,309,308,311,310,311,308,1594,1593,1593,1594,1593,1594,1593,1593,1594,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,130,131,131,0,194,193,199,196,196,197,199,0,308,309,310,0,0,0,0,308,0,0,0,311,0,0,0,309,0,0,0,311,0,0,0,0,309,311,309,311,311,309,310,308,311,311,311,311,308,310,311,308,308,311,311,308,311,311,311,311,308,308,310,308,308,308,0,0,1593,1593,1592,1594,1593,1594,1593,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,128,131,129,0,193,198,196,197,197,198,199,0,308,311,308,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,309,309,308,311,308,308,310,309,310,311,309,309,309,311,310,311,309,310,311,310,308,311,310,308,309,311,309,310,309,311,0,0,1593,1594,1593,1594,1592,1593,1592,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,131,130,131,0,194,197,193,193,199,197,197,0,308,310,308,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,311,308,309,311,310,308,310,308,310,310,308,308,311,308,311,308,308,308,308,310,310,310,310,309,310,311,310,309,308,309,0,0,1594,1592,1592,1592,1592,1593,1593,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -431,13 +431,13 @@
   <object id="455" type="obstacle" x="1984" y="992" width="96" height="32"/>
   <object id="456" type="obstacle" x="1888" y="1312" width="128" height="32"/>
   <object id="457" type="obstacle" x="2048" y="1312" width="96" height="32"/>
-  <object id="467" type="obstacle" x="1536" y="1472" width="608" height="32"/>
+  <object id="467" type="obstacle" x="1536" y="1472" width="640" height="32"/>
   <object id="468" type="obstacle" x="1472" y="1664" width="288" height="32"/>
   <object id="469" type="obstacle" x="1472" y="1504" width="32" height="160"/>
   <object id="470" type="obstacle" x="1664" y="1504" width="32" height="128"/>
-  <object id="471" type="obstacle" x="1024" y="1472" width="480" height="32"/>
+  <object id="471" type="obstacle" x="992" y="1472" width="512" height="32"/>
   <object id="472" type="obstacle" x="992" y="1344" width="512" height="32"/>
-  <object id="473" type="obstacle" x="2144" y="1376" width="32" height="128"/>
+  <object id="473" type="obstacle" x="2144" y="1344" width="32" height="128"/>
   <object id="475" type="obstacle" x="1441" y="1408" width="30" height="31"/>
   <object id="484" type="obstacle" x="1314" y="1409" width="29" height="30"/>
   <object id="485" type="obstacle" x="1185" y="1408" width="31" height="32"/>
@@ -457,20 +457,20 @@
   <object id="518" type="obstacle" x="800" y="1344" width="64" height="64"/>
   <object id="519" type="obstacle" x="800" y="1440" width="32" height="64"/>
   <object id="520" type="obstacle" x="384" y="1344" width="64" height="64"/>
-  <object id="521" type="obstacle" x="384" y="1440" width="64" height="64"/>
-  <object id="522" type="obstacle" x="416" y="1536" width="32" height="64"/>
+  <object id="521" type="obstacle" x="352" y="1440" width="96" height="64"/>
+  <object id="522" type="obstacle" x="416" y="1536" width="32" height="96"/>
   <object id="523" type="obstacle" x="416" y="1216" width="32" height="96"/>
   <object id="524" type="obstacle" x="800" y="1536" width="32" height="96"/>
-  <object id="525" type="obstacle" x="800" y="1248" width="32" height="64"/>
-  <object id="526" type="obstacle" x="736" y="1216" width="96" height="32"/>
+  <object id="525" type="obstacle" x="800" y="1216" width="32" height="96"/>
+  <object id="526" type="obstacle" x="736" y="1216" width="64" height="32"/>
   <object id="527" type="obstacle" x="640" y="1120" width="64" height="128"/>
   <object id="528" type="obstacle" x="544" y="1216" width="64" height="32"/>
   <object id="529" type="obstacle" x="448" y="1216" width="64" height="32"/>
-  <object id="530" type="obstacle" x="416" y="1600" width="96" height="32"/>
+  <object id="530" type="obstacle" x="448" y="1600" width="64" height="32"/>
   <object id="531" type="obstacle" x="544" y="1600" width="64" height="32"/>
   <object id="532" type="obstacle" x="640" y="1600" width="64" height="32"/>
   <object id="533" type="obstacle" x="736" y="1600" width="64" height="32"/>
-  <object id="543" type="obstacle" x="2048" y="1344" width="128" height="32"/>
+  <object id="543" type="obstacle" x="2048" y="1344" width="96" height="32"/>
   <object id="544" type="obstacle" x="2816" y="2592" width="32" height="256"/>
   <object id="545" type="obstacle" x="2176" y="2048" width="32" height="768"/>
   <object id="546" type="obstacle" x="2528" y="2528" width="320" height="64"/>
@@ -500,12 +500,12 @@
   <object id="574" type="obstacle" x="2080" y="1216" width="32" height="32"/>
   <object id="575" type="obstacle" x="2048" y="1248" width="32" height="32"/>
   <object id="576" type="obstacle" x="2112" y="1248" width="32" height="64"/>
-  <object id="577" type="obstacle" x="352" y="1312" width="32" height="1536"/>
+  <object id="577" type="obstacle" x="352" y="1504" width="32" height="1344"/>
   <object id="578" type="obstacle" x="384" y="2816" width="1440" height="32"/>
   <object id="579" type="obstacle" x="352" y="1280" width="64" height="32"/>
   <object id="582" type="obstacle" x="832" y="1280" width="64" height="32"/>
   <object id="583" type="obstacle" x="864" y="1312" width="32" height="64"/>
-  <object id="584" type="obstacle" x="544" y="1728" width="64" height="544"/>
+  <object id="584" type="obstacle" x="544" y="1792" width="64" height="480"/>
   <object id="587" type="obstacle" x="640" y="2272" width="32" height="224"/>
   <object id="588" type="obstacle" x="672" y="2464" width="32" height="256"/>
   <object id="589" type="obstacle" x="608" y="2208" width="96" height="64"/>
@@ -519,11 +519,11 @@
   <object id="597" type="obstacle" x="672" y="2080" width="128" height="32"/>
   <object id="599" type="obstacle" x="736" y="2144" width="32" height="96"/>
   <object id="600" type="obstacle" x="704" y="1664" width="96" height="32"/>
-  <object id="601" type="obstacle" x="672" y="1632" width="32" height="96"/>
-  <object id="602" type="obstacle" x="384" y="1728" width="160" height="64"/>
+  <object id="601" type="obstacle" x="672" y="1632" width="32" height="128"/>
+  <object id="602" type="obstacle" x="384" y="1728" width="224" height="64"/>
   <object id="603" type="obstacle" x="832" y="1600" width="32" height="128"/>
   <object id="604" type="obstacle" x="736" y="1728" width="224" height="32"/>
-  <object id="605" type="obstacle" x="992" y="1472" width="32" height="128"/>
+  <object id="605" type="obstacle" x="992" y="1504" width="32" height="96"/>
   <object id="606" type="obstacle" x="928" y="1600" width="96" height="32"/>
   <object id="607" type="obstacle" x="896" y="1792" width="32" height="96"/>
   <object id="608" type="obstacle" x="928" y="1856" width="32" height="32"/>
@@ -591,8 +591,8 @@
   <object id="709" type="obstacle" x="864" y="384" width="640" height="32"/>
   <object id="712" type="obstacle" x="864" y="480" width="1120" height="32"/>
   <object id="723" type="obstacle" x="1504" y="352" width="1056" height="64"/>
-  <object id="724" type="obstacle" x="1536" y="608" width="992" height="32"/>
-  <object id="725" type="obstacle" x="1504" y="512" width="32" height="128"/>
+  <object id="724" type="obstacle" x="1504" y="608" width="1024" height="32"/>
+  <object id="725" type="obstacle" x="1504" y="512" width="32" height="96"/>
   <object id="727" type="obstacle" x="2816" y="384" width="32" height="128"/>
   <object id="728" type="obstacle" x="2816" y="544" width="32" height="160"/>
   <object id="729" type="obstacle" x="2816" y="736" width="32" height="160"/>
@@ -617,8 +617,8 @@
   <object id="755" type="obstacle" x="1120" y="1120" width="32" height="224"/>
   <object id="756" type="obstacle" x="1184" y="1024" width="32" height="320"/>
   <object id="757" type="obstacle" x="1120" y="1088" width="64" height="32"/>
-  <object id="758" type="obstacle" x="1024" y="1088" width="64" height="32"/>
-  <object id="759" type="obstacle" x="992" y="896" width="32" height="224"/>
+  <object id="758" type="obstacle" x="992" y="1088" width="96" height="32"/>
+  <object id="759" type="obstacle" x="992" y="896" width="32" height="192"/>
   <object id="760" type="obstacle" x="1024" y="896" width="800" height="32"/>
   <object id="761" type="obstacle" x="1824" y="896" width="32" height="448"/>
   <object id="782" type="obstacle" x="544" y="1632" width="32" height="96"/>
@@ -626,7 +626,7 @@
   <object id="785" type="obstacle" x="384" y="1952" width="160" height="96"/>
   <object id="786" type="obstacle" x="384" y="2080" width="160" height="96"/>
   <object id="787" type="obstacle" x="384" y="2208" width="160" height="64"/>
-  <object id="789" type="obstacle" x="608" y="1728" width="96" height="32"/>
+  <object id="789" type="obstacle" x="608" y="1728" width="64" height="32"/>
   <object id="792" type="obstacle" x="384" y="2368" width="160" height="32"/>
   <object id="793" type="obstacle" x="544" y="2336" width="32" height="160"/>
   <object id="794" type="obstacle" x="640" y="1088" width="96" height="32"/>
@@ -790,6 +790,7 @@
   <object id="1098" type="obstacle" x="2656" y="1248" width="32" height="32"/>
   <object id="1104" type="obstacle" x="2048" y="480" width="448" height="32"/>
   <object id="1105" type="obstacle" x="2560" y="352" width="288" height="32"/>
+  <object id="1108" type="obstacle" x="352" y="1312" width="32" height="128"/>
  </objectgroup>
  <objectgroup id="8" name="Doors">
   <object id="17" name="Wooden Door" type="door" x="1504" y="1472" width="32" height="32">
