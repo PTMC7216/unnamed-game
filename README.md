@@ -1,10 +1,10 @@
 # Unnamed Game
 
-A top-down 2D adventure RPG game created in Python with Pygame & PyTMX.
+A top-down 2D adventure RPG created in Python with Pygame & PyTMX.
 
-Heavily inspired by older RPGMaker games, this game attempts to replicate the overall feeling they provided
-while also introducing a number of unique features, such as: line of sight exploration, seamless area transitions,
-deeper item interactibility, and more.
+This game attempts to recreate the overall feeling provided by older RPGMaker games. It includes a number of features 
+which aren't typically seen in the genre, but still remains true to the experience. For example: line of sight 
+exploration, seamless area transitions, additional item interactibility, and more.
 
 
 ## Default Controls
